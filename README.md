@@ -63,6 +63,14 @@ npm run dev                  # http://localhost:3000
 | `npm run typecheck` | TypeScript in strict mode                                                           |
 | `npm run build`     | Production build                                                                    |
 
+### Without a database
+
+Skip the `DATABASE_URL` and the app runs on the built-in sample catalog. CI uses this mode, so tests never depend on a live database.
+
+### Catalog API
+
+`GET /api/pieces` takes the same params as the catalog page, for example `/api/pieces?regiao=nordeste&material=palha&preco_max=150&ordem=menor-preco`. `GET /api/pieces/{slug}` returns one piece, or a JSON 404.
+
 ### Workflow
 
 - Every change goes through a branch and a pull request. CI runs lint, types, unit tests, build and E2E on each one.

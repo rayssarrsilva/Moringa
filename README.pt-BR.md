@@ -65,6 +65,14 @@ npm run dev                  # http://localhost:3000
 | `npm run typecheck` | TypeScript em modo estrito                                                                      |
 | `npm run build`     | Build de produção                                                                               |
 
+### Sem banco de dados
+
+Sem o `DATABASE_URL`, o app roda com o catálogo de exemplo embutido. A CI usa esse modo, então os testes nunca dependem de um banco no ar.
+
+### API do catálogo
+
+`GET /api/pieces` aceita os mesmos parâmetros da página do catálogo, por exemplo `/api/pieces?regiao=nordeste&material=palha&preco_max=150&ordem=menor-preco`. `GET /api/pieces/{slug}` devolve uma peça, ou um 404 em JSON.
+
 ### Fluxo de trabalho
 
 - Toda mudança passa por uma branch e um pull request. O CI roda lint, tipos, testes unitários, build e E2E em cada um.
