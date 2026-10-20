@@ -6,7 +6,7 @@
 
 [English](./README.md) · **Português**
 
-_Em andamento · dia 3 de 12: design_
+_Em andamento · dia 4 de 12: base do projeto_
 
 </div>
 
@@ -41,9 +41,35 @@ Os documentos de descoberta estão em inglês, o idioma mais usado em times de p
 - [Telas finais e protótipo clicável](https://www.figma.com/design/o3irY2VOsGjlLt3fiAPTU0), feitos só com componentes do Ipê
 - [Decisões de design](./docs/design/README.md) (em inglês)
 
-## Stack planejada
+## Stack
 
 Next.js (App Router) · TypeScript · Ipê + Tailwind CSS v4 · next-intl · Auth.js · Drizzle + Postgres (Neon) · Zustand · TanStack Query · React Hook Form + Zod · Stripe Checkout · Vitest + Testing Library · Playwright · Lighthouse CI · GitHub Actions · Vercel
+
+## Rodando na sua máquina
+
+Requer Node.js 22 (veja `.nvmrc`).
+
+```bash
+npm install
+cp .env.example .env.local   # depois preencha o DATABASE_URL da Neon
+npm run db:push              # cria as tabelas
+npm run db:seed              # adiciona as artesãs, os artesãos e as peças de demonstração
+npm run dev                  # http://localhost:3000
+```
+
+| Comando             | O que faz                                                                                       |
+| ------------------- | ----------------------------------------------------------------------------------------------- |
+| `npm test`          | Testes unitários e de componente (Vitest + Testing Library)                                     |
+| `npm run test:e2e`  | Testes de ponta a ponta e de acessibilidade com axe no Chromium, celular e desktop (Playwright) |
+| `npm run lint`      | ESLint sem nenhum aviso permitido                                                               |
+| `npm run typecheck` | TypeScript em modo estrito                                                                      |
+| `npm run build`     | Build de produção                                                                               |
+
+### Fluxo de trabalho
+
+- Toda mudança passa por uma branch e um pull request. O CI roda lint, tipos, testes unitários, build e E2E em cada um.
+- As mensagens de commit seguem o [Conventional Commits](https://www.conventionalcommits.org/pt-br) e são verificadas pelo commitlint.
+- O trabalho é planejado no [quadro do projeto](https://github.com/users/rayssarrsilva/projects/4) em sprints de uma semana.
 
 ## Autora
 

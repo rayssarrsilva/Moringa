@@ -6,7 +6,7 @@
 
 **English** · [Português](./README.pt-BR.md)
 
-_In progress · day 3 of 12: design_
+_In progress · day 4 of 12: project setup_
 
 </div>
 
@@ -39,9 +39,35 @@ Built with the [Ipê Design System](https://github.com/rayssarrsilva/Ipe).
 - [High-fidelity screens and clickable prototype](https://www.figma.com/design/o3irY2VOsGjlLt3fiAPTU0), built only with Ipê components
 - [Design decisions](./docs/design/README.md)
 
-## Planned stack
+## Stack
 
 Next.js (App Router) · TypeScript · Ipê + Tailwind CSS v4 · next-intl · Auth.js · Drizzle + Postgres (Neon) · Zustand · TanStack Query · React Hook Form + Zod · Stripe Checkout · Vitest + Testing Library · Playwright · Lighthouse CI · GitHub Actions · Vercel
+
+## Run it locally
+
+Requires Node.js 22 (see `.nvmrc`).
+
+```bash
+npm install
+cp .env.example .env.local   # then fill in DATABASE_URL from Neon
+npm run db:push              # create the tables
+npm run db:seed              # add the demo makers and pieces
+npm run dev                  # http://localhost:3000
+```
+
+| Command             | What it does                                                                        |
+| ------------------- | ----------------------------------------------------------------------------------- |
+| `npm test`          | Unit and component tests (Vitest + Testing Library)                                 |
+| `npm run test:e2e`  | End-to-end and axe accessibility tests in Chromium, mobile and desktop (Playwright) |
+| `npm run lint`      | ESLint with zero warnings allowed                                                   |
+| `npm run typecheck` | TypeScript in strict mode                                                           |
+| `npm run build`     | Production build                                                                    |
+
+### Workflow
+
+- Every change goes through a branch and a pull request. CI runs lint, types, unit tests, build and E2E on each one.
+- Commit messages follow [Conventional Commits](https://www.conventionalcommits.org) and are checked by commitlint.
+- Work is planned on the [project board](https://github.com/users/rayssarrsilva/projects/4) in one-week sprints.
 
 ## Author
 
