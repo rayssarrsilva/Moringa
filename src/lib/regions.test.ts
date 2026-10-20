@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { regionOf, statesByRegion } from './regions';
+import { regionOf, stateNames, statesByRegion } from './regions';
 
 describe('regions', () => {
   it('covers all 27 federative units exactly once', () => {
@@ -12,5 +12,10 @@ describe('regions', () => {
     expect(regionOf('pe')).toBe('nordeste');
     expect(regionOf(' SP ')).toBe('sudeste');
     expect(regionOf('XX')).toBeUndefined();
+  });
+
+  it('has a name for every state', () => {
+    const all = Object.values(statesByRegion).flat().toSorted();
+    expect(Object.keys(stateNames).toSorted()).toEqual(all);
   });
 });

@@ -13,12 +13,13 @@ import {
   timestamp,
   uuid,
 } from 'drizzle-orm/pg-core';
+import { materials } from '../lib/catalog/types';
 import { orderStatuses } from '../lib/order-status';
 import { regions } from '../lib/regions';
 
 export const roleEnum = pgEnum('role', ['buyer', 'seller']);
 export const regionEnum = pgEnum('region', regions);
-export const materialEnum = pgEnum('material', ['ceramics', 'straw', 'wood', 'fabric', 'lace']);
+export const materialEnum = pgEnum('material', materials);
 export const pieceStatusEnum = pgEnum('piece_status', ['draft', 'published', 'paused']);
 export const orderStatusEnum = pgEnum('order_status', orderStatuses);
 
