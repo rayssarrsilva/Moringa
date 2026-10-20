@@ -37,7 +37,18 @@
   },
   "Piece": {
     "by": "por {maker}",
-    "price": "Preço"
+    "price": "Preço",
+    "breadcrumb": "Você está aqui",
+    "home": "Início",
+    "madeBy": "Feita por",
+    "shipping": "Frete para todo o Brasil: {price}",
+    "stock": "{count, plural, =0 {Esgotada} one {Última peça disponível} other {# disponíveis}}",
+    "material": "Material",
+    "origin": "Origem",
+    "details": "Sobre a peça",
+    "aboutMaker": "Quem fez",
+    "seeShop": "Ver todas as peças de {name}",
+    "moreFrom": "Mais de {name}"
   },
   "Footer": {
     "tagline": "Uma feira online de quem produz à mão no Brasil.",
@@ -50,5 +61,51 @@
     "title": "Essa página não está na feira.",
     "body": "Talvez o endereço tenha mudado, ou a peça já tenha encontrado uma casa.",
     "back": "Voltar para o início"
+  },
+  "Catalog": {
+    "title": "Peças",
+    "description": "Cerâmica, cestaria, bordado e madeira feitos à mão por artesãs e artesãos de todo o Brasil.",
+    "count": "{count, plural, =0 {Nenhuma peça} one {# peça} other {# peças}}",
+    "filters": "Filtros",
+    "search": "Buscar",
+    "searchPlaceholder": "Nome, material ou quem fez",
+    "region": "Região",
+    "anyRegion": "Todas as regiões",
+    "state": "Estado",
+    "anyState": "Todos os estados",
+    "material": "Material",
+    "anyMaterial": "Todos os materiais",
+    "price": "Preço em reais",
+    "minPrice": "De",
+    "maxPrice": "Até",
+    "sort": "Ordenar por",
+    "sortNew": "Mais recentes",
+    "sortPriceAsc": "Menor preço",
+    "sortPriceDesc": "Maior preço",
+    "apply": "Aplicar filtros",
+    "clear": "Limpar filtros",
+    "active": "Filtros em uso",
+    "remove": "Remover filtro: {label}",
+    "searchChip": "Busca: {q}",
+    "priceFrom": "A partir de {price}",
+    "priceTo": "Até {price}",
+    "emptyTitle": "Nenhuma peça com esses filtros, por enquanto.",
+    "emptyBody": "Tente outra região ou outra faixa de preço. Toda semana chega peça nova na feira."
+  },
+  "Materials": {
+    "ceramics": "Cerâmica",
+    "straw": "Palha",
+    "wood": "Madeira",
+    "fabric": "Tecido",
+    "lace": "Renda"
+  },
+  "Shops": {
+    "title": "Quem faz",
+    "description": "Artesãs e artesãos que vendem na Moringa. Cada loja conta a história de quem está por trás das peças.",
+    "pieceCount": "{count, plural, =0 {Nenhuma peça publicada} one {# peça} other {# peças}}",
+    "story": "A história",
+    "piecesTitle": "Peças de {name}",
+    "empty": "{name} ainda não publicou peças. Volte em breve!",
+    "shopDescription": "{craft} em {city}, {state}. {story}"
   }
 }

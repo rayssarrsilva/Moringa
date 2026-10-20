@@ -12,11 +12,27 @@ describe('PieceCard', () => {
         maker="Dona Lúcia"
         place="SP"
         price="R$ 89"
+        material="ceramics"
       />,
     );
     const link = screen.getByRole('link');
     expect(link).toHaveAttribute('href', '/pt/pecas/tigela-de-ceramica');
     expect(link).toHaveTextContent('Tigela de cerâmica');
     expect(screen.getByRole('heading', { name: 'Tigela de cerâmica' })).toBeInTheDocument();
+  });
+
+  it('keeps the drawing out of the accessibility tree', () => {
+    const { container } = renderWithIntl(
+      <PieceCard
+        slug="x"
+        name="Cesto"
+        maker="Seu Raimundo"
+        place="PE"
+        price="R$ 120"
+        material="straw"
+      />,
+    );
+    expect(container.querySelector('svg')?.closest('[aria-hidden="true"]')).not.toBeNull();
+    expect(screen.queryByRole('img')).not.toBeInTheDocument();
   });
 });

@@ -37,7 +37,18 @@
   },
   "Piece": {
     "by": "by {maker}",
-    "price": "Price"
+    "price": "Price",
+    "breadcrumb": "You are here",
+    "home": "Home",
+    "madeBy": "Made by",
+    "shipping": "Shipping anywhere in Brazil: {price}",
+    "stock": "{count, plural, =0 {Sold out} one {Last one available} other {# available}}",
+    "material": "Material",
+    "origin": "Made in",
+    "details": "About the piece",
+    "aboutMaker": "The maker",
+    "seeShop": "See all pieces by {name}",
+    "moreFrom": "More from {name}"
   },
   "Footer": {
     "tagline": "An online fair for people who make things by hand in Brazil.",
@@ -50,5 +61,51 @@
     "title": "This page is not at the fair.",
     "body": "Maybe the address changed, or the piece already found a home.",
     "back": "Back to the home page"
+  },
+  "Catalog": {
+    "title": "Pieces",
+    "description": "Ceramics, basketry, embroidery and woodwork made by hand by artisans all over Brazil.",
+    "count": "{count, plural, =0 {No pieces} one {# piece} other {# pieces}}",
+    "filters": "Filters",
+    "search": "Search",
+    "searchPlaceholder": "Name, material or maker",
+    "region": "Region",
+    "anyRegion": "All regions",
+    "state": "State",
+    "anyState": "All states",
+    "material": "Material",
+    "anyMaterial": "All materials",
+    "price": "Price in reais",
+    "minPrice": "From",
+    "maxPrice": "To",
+    "sort": "Sort by",
+    "sortNew": "Newest",
+    "sortPriceAsc": "Lowest price",
+    "sortPriceDesc": "Highest price",
+    "apply": "Apply filters",
+    "clear": "Clear filters",
+    "active": "Filters in use",
+    "remove": "Remove filter: {label}",
+    "searchChip": "Search: {q}",
+    "priceFrom": "From {price}",
+    "priceTo": "Up to {price}",
+    "emptyTitle": "No pieces match these filters yet.",
+    "emptyBody": "Try another region or price range. New pieces arrive at the fair every week."
+  },
+  "Materials": {
+    "ceramics": "Ceramics",
+    "straw": "Straw",
+    "wood": "Wood",
+    "fabric": "Fabric",
+    "lace": "Lace"
+  },
+  "Shops": {
+    "title": "Makers",
+    "description": "The artisans who sell on Moringa. Every shop tells the story of the person behind the pieces.",
+    "pieceCount": "{count, plural, =0 {No pieces yet} one {# piece} other {# pieces}}",
+    "story": "Their story",
+    "piecesTitle": "Pieces by {name}",
+    "empty": "{name} has not published any pieces yet. Come back soon!",
+    "shopDescription": "{craft} in {city}, {state}. {story}"
   }
 }
