@@ -16,3 +16,16 @@ describe('seo helpers', () => {
     );
   });
 });
+
+describe('siteUrl', () => {
+  it('prefers the configured address, then the Vercel production domain', async () => {
+    const { siteUrl } = await import('./seo');
+    const saved = { ...process.env };
+    delete process.env.NEXT_PUBLIC_SITE_URL;
+    process.env.VERCEL_PROJECT_PRODUCTION_URL = 'moringa-silk.vercel.app';
+    expect(siteUrl()).toBe('https://moringa-silk.vercel.app');
+    process.env.NEXT_PUBLIC_SITE_URL = 'https://moringa.test';
+    expect(siteUrl()).toBe('https://moringa.test');
+    process.env = saved;
+  });
+});
