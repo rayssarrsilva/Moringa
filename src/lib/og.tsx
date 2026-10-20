@@ -22,7 +22,7 @@ export function OgFrame({
         width: '100%',
         height: '100%',
         display: 'flex',
-        background: '#000000',
+        background: '#121212',
         color: '#FFFFFF',
         padding: 64,
         gap: 56,

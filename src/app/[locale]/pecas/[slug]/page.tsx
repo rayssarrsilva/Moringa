@@ -6,7 +6,7 @@ import { Breadcrumbs } from '@/components/breadcrumbs';
 import { JsonLd } from '@/components/json-ld';
 import { PiecePhoto } from '@/components/material-art';
 import { PieceCard } from '@/components/piece-card';
-import { Badge, Button } from '@rayssarrsilva/ipe';
+import { Badge } from '@rayssarrsilva/ipe';
 import { Link } from '@/i18n/navigation';
 import type { Locale } from '@/i18n/routing';
 import { toBagPiece } from '@/lib/bag/bag';
@@ -69,13 +69,13 @@ export default async function PiecePage({ params }: Props) {
   const url = `${siteUrl()}/${locale}/pecas/${piece.slug}`;
 
   return (
-    <div className="container-page grid gap-12 pb-16 pt-6 md:pt-10">
+    <div className="container-page grid grid-cols-[minmax(0,1fr)] gap-12 pb-16 pt-6 md:pt-10">
       <Breadcrumbs
         locale={locale}
         items={[{ label: tc('title'), href: '/pecas' }, { label: piece.name[locale] }]}
       />
 
-      <article className="grid gap-8 md:grid-cols-2 md:gap-12">
+      <article className="grid grid-cols-[minmax(0,1fr)] gap-8 md:grid-cols-2 md:gap-12">
         <PiecePhoto material={piece.material} className="md:sticky md:top-24" />
 
         <div className="grid content-start gap-6">
@@ -137,11 +137,12 @@ export default async function PiecePage({ params }: Props) {
               </p>
               <p className="text-text-secondary">{shop.story[locale]}</p>
               {shop.quote && <blockquote className="text-lg">“{shop.quote[locale]}”</blockquote>}
-              <div>
-                <Button asChild variant="secondary">
-                  <Link href={`/lojas/${shop.slug}`}>{t('seeShop', { name: shop.name })}</Link>
-                </Button>
-              </div>
+              <Link
+                href={`/lojas/${shop.slug}`}
+                className="text-label inline-flex min-h-11 items-center underline underline-offset-4"
+              >
+                {t('seeShop', { name: shop.name })} <span aria-hidden="true">&nbsp;→</span>
+              </Link>
             </section>
           )}
         </div>

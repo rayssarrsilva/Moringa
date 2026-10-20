@@ -3,9 +3,10 @@ import { Link } from '@/i18n/navigation';
 import { BagLink } from './bag/bag-link';
 import { SearchIcon, UserIcon } from './icons';
 import { LocaleSwitcher } from './locale-switcher';
+import { ThemeToggle } from './theme-toggle';
 
 const iconLink =
-  'relative inline-flex size-11 items-center justify-center rounded-pill text-text-primary hover:bg-bg-surface';
+  'relative inline-flex size-10 shrink-0 sm:size-11 items-center justify-center rounded-pill text-text-primary hover:bg-bg-surface';
 
 export function SiteHeader() {
   const t = useTranslations('Header');
@@ -18,8 +19,13 @@ export function SiteHeader() {
       >
         {t('skip')}
       </a>
-      <div className="container-page flex h-16 items-center justify-between gap-4">
-        <Link href="/" aria-label={t('home')} className="text-heading-sm text-text-primary">
+      <div className="container-page flex h-16 items-center justify-between gap-2 sm:gap-4">
+        <Link
+          href="/"
+          aria-label={t('home')}
+          className="shrink-0 text-xl text-text-primary sm:text-heading-sm"
+          style={{ fontFamily: 'Fraunces, serif' }}
+        >
           Moringa
         </Link>
 
@@ -45,7 +51,9 @@ export function SiteHeader() {
 
         <div className="flex items-center">
           <LocaleSwitcher />
-          <Link href="/pecas" className={iconLink} aria-label={t('search')}>
+          <ThemeToggle className={iconLink} />
+          {/* The catalog has its own search; on small phones the icon gives its space to the others. */}
+          <Link href="/pecas" className={`${iconLink} max-sm:hidden`} aria-label={t('search')}>
             <SearchIcon />
           </Link>
           <Link href="/conta" className={iconLink} aria-label={t('account')}>
