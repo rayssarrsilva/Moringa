@@ -13,12 +13,13 @@ import {
   timestamp,
   uuid,
 } from 'drizzle-orm/pg-core';
+import { materials } from '../lib/catalog/types';
 import { orderStatuses } from '../lib/order-status';
 import { regions } from '../lib/regions';
 
 export const roleEnum = pgEnum('role', ['buyer', 'seller']);
 export const regionEnum = pgEnum('region', regions);
-export const materialEnum = pgEnum('material', ['ceramics', 'straw', 'wood', 'fabric', 'lace']);
+export const materialEnum = pgEnum('material', materials);
 export const pieceStatusEnum = pgEnum('piece_status', ['draft', 'published', 'paused']);
 export const orderStatusEnum = pgEnum('order_status', orderStatuses);
 
@@ -125,7 +126,7 @@ export const orders = pgTable(
     totalCents: integer('total_cents').notNull(),
     address: jsonb('address').$type<AddressSnapshot>().notNull(),
     trackingCode: text('tracking_code'),
-    stripeSessionId: text('stripe_session_id').unique(),
+    stripeSessionId: text('stripe_session_id'),
     paidAt: timestamp('paid_at', { withTimezone: true }),
     preparingAt: timestamp('preparing_at', { withTimezone: true }),
     shippedAt: timestamp('shipped_at', { withTimezone: true }),
@@ -135,6 +136,8 @@ export const orders = pgTable(
   (t) => [
     index('orders_buyer_idx').on(t.buyerId),
     index('orders_shop_status_idx').on(t.shopId, t.status),
+    // One checkout can hold pieces from several makers, so one session id maps to several orders.
+    index('orders_stripe_session_idx').on(t.stripeSessionId),
     check('orders_total_matches', sql`${t.totalCents} = ${t.subtotalCents} + ${t.shippingCents}`),
   ],
 );

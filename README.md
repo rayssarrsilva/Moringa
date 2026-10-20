@@ -63,6 +63,25 @@ npm run dev                  # http://localhost:3000
 | `npm run typecheck` | TypeScript in strict mode                                                           |
 | `npm run build`     | Production build                                                                    |
 
+### Without a database
+
+Skip the `DATABASE_URL` and the app runs on the built-in sample catalog. CI uses this mode, so tests never depend on a live database.
+
+### Catalog API
+
+`GET /api/pieces` takes the same params as the catalog page, for example `/api/pieces?regiao=nordeste&material=palha&preco_max=150&ordem=menor-preco`. `GET /api/pieces/{slug}` returns one piece, or a JSON 404.
+
+### Payments (Stripe test mode)
+
+Without `STRIPE_SECRET_KEY`, checkout runs as a demo and goes straight to the confirmation page. To try the real flow:
+
+1. Create a Stripe account, stay in **test mode**, and copy the secret key (`sk_test_…`) into `.env.local`. Live keys are refused on purpose.
+2. In Dashboard → Settings → Payment methods, turn on **Cards** and **Pix**.
+3. Run `stripe listen --forward-to localhost:3000/api/stripe/webhook` and copy the `whsec_…` secret into `STRIPE_WEBHOOK_SECRET`.
+4. Pay with the test card `4242 4242 4242 4242`, any future date and any CVC. Use `4000 0000 0000 0002` to see a declined card.
+
+Each maker gets their own order. Orders start as `pending` and the webhook moves them to `paid` (card right away, Pix when the bank confirms) or `canceled` (Pix expired), following the order lifecycle in FigJam.
+
 ### Workflow
 
 - Every change goes through a branch and a pull request. CI runs lint, types, unit tests, build and E2E on each one.

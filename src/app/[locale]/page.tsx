@@ -1,25 +1,33 @@
-import { useLocale, useTranslations } from 'next-intl';
-import { setRequestLocale } from 'next-intl/server';
-import { use } from 'react';
+import { getTranslations, setRequestLocale } from 'next-intl/server';
+import { MakerAvatar } from '@/components/maker-avatar';
 import { PieceCard } from '@/components/piece-card';
-import { Button } from '@/components/ui/ipe';
+import { Button } from '@rayssarrsilva/ipe';
 import { Link } from '@/i18n/navigation';
 import type { Locale } from '@/i18n/routing';
+import { catalog } from '@/lib/catalog';
 import { formatPrice } from '@/lib/format';
+import { alternates } from '@/lib/seo';
 import { regions } from '@/lib/regions';
-import { findMaker, makers, pieces } from '@/lib/sample-catalog';
 
-export default function HomePage({ params }: { params: Promise<{ locale: Locale }> }) {
-  const { locale } = use(params);
-  setRequestLocale(locale);
-  return <Home />;
+type Props = { params: Promise<{ locale: Locale }> };
+
+export const revalidate = 300;
+
+export async function generateMetadata({ params }: Props) {
+  const { locale } = await params;
+  return { alternates: alternates(locale, '') };
 }
 
-function Home() {
-  const t = useTranslations('Home');
-  const tr = useTranslations('Regions');
-  const locale = useLocale() as Locale;
-  const spotlight = makers[0]!;
+export default async function HomePage({ params }: Props) {
+  const { locale } = await params;
+  setRequestLocale(locale);
+  const [pieces, makers, t, tr] = await Promise.all([
+    catalog().listPieces({ sort: 'new' }),
+    catalog().listShops(),
+    getTranslations('Home'),
+    getTranslations('Regions'),
+  ]);
+  const spotlight = makers.find((m) => m.slug === 'ceramica-da-lucia') ?? makers[0];
   const states = new Set(makers.map((m) => m.state)).size;
 
   return (
@@ -75,43 +83,45 @@ function Home() {
           </Button>
         </div>
         <ul className="grid grid-cols-2 gap-x-3 gap-y-6 md:grid-cols-3 lg:grid-cols-5">
-          {pieces.map((p) => {
-            const maker = findMaker(p.maker)!;
-            return (
-              <li key={p.slug}>
-                <PieceCard
-                  slug={p.slug}
-                  name={p.name[locale]}
-                  maker={maker.name}
-                  place={maker.state}
-                  price={formatPrice(p.priceCents, locale)}
-                />
-              </li>
-            );
-          })}
+          {pieces.slice(0, 10).map((p) => (
+            <li key={p.slug}>
+              <PieceCard
+                slug={p.slug}
+                name={p.name[locale]}
+                maker={p.shop.name}
+                place={p.shop.state}
+                price={formatPrice(p.priceCents, locale)}
+                material={p.material}
+              />
+            </li>
+          ))}
         </ul>
       </section>
 
-      <section
-        aria-labelledby="maker-title"
-        className="container-page mt-16 grid gap-4 rounded-xl bg-bg-surface p-6 md:grid-cols-[auto_1fr] md:items-center md:gap-8 md:p-10"
-      >
-        <div aria-hidden="true" className="size-20 rounded-pill bg-bg-canvas md:size-32" />
-        <div className="grid gap-3">
-          <h2 id="maker-title" className="text-heading-sm">
-            {t('makerTitle', { name: spotlight.name })}
-          </h2>
-          <p className="text-sm text-text-secondary">
-            {spotlight.craft[locale]} · {spotlight.city}, {spotlight.state}
-          </p>
-          <blockquote className="max-w-[60ch] text-lg">“{spotlight.quote[locale]}”</blockquote>
-          <div>
-            <Button asChild variant="secondary">
-              <Link href={`/lojas/${spotlight.slug}`}>{t('visitShop')}</Link>
-            </Button>
+      {spotlight && (
+        <section
+          aria-labelledby="maker-title"
+          className="container-page mt-16 grid gap-4 rounded-xl bg-bg-surface p-6 md:grid-cols-[auto_1fr] md:items-center md:gap-8 md:p-10"
+        >
+          <MakerAvatar name={spotlight.name} region={spotlight.region} size="lg" />
+          <div className="grid gap-3">
+            <h2 id="maker-title" className="text-heading-sm">
+              {t('makerTitle', { name: spotlight.name })}
+            </h2>
+            <p className="text-sm text-text-secondary">
+              {spotlight.craft[locale]} · {spotlight.city}, {spotlight.state}
+            </p>
+            {spotlight.quote && (
+              <blockquote className="max-w-[60ch] text-lg">“{spotlight.quote[locale]}”</blockquote>
+            )}
+            <div>
+              <Button asChild variant="secondary">
+                <Link href={`/lojas/${spotlight.slug}`}>{t('visitShop')}</Link>
+              </Button>
+            </div>
           </div>
-        </div>
-      </section>
+        </section>
+      )}
     </>
   );
 }

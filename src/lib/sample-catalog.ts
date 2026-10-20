@@ -2,9 +2,10 @@
  * Demo catalog shared by the seed script and by pages before the database is connected.
  * Makers and pieces are fictional. Prices are in cents (BRL).
  */
+import type { Material } from './catalog/types';
 import type { Region } from './regions';
 
-export type Material = 'ceramics' | 'straw' | 'wood' | 'fabric' | 'lace';
+export type { Material };
 
 export interface SampleMaker {
   slug: string;

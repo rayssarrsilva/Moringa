@@ -1,12 +1,13 @@
 import { useTranslations } from 'next-intl';
 import { Link } from '@/i18n/navigation';
-import { BagIcon, SearchIcon, UserIcon } from './icons';
+import { BagLink } from './bag/bag-link';
+import { SearchIcon, UserIcon } from './icons';
 import { LocaleSwitcher } from './locale-switcher';
 
 const iconLink =
   'relative inline-flex size-11 items-center justify-center rounded-pill text-text-primary hover:bg-bg-surface';
 
-export function SiteHeader({ bagCount = 0 }: { bagCount?: number }) {
+export function SiteHeader() {
   const t = useTranslations('Header');
 
   return (
@@ -50,17 +51,7 @@ export function SiteHeader({ bagCount = 0 }: { bagCount?: number }) {
           <Link href="/conta" className={iconLink} aria-label={t('account')}>
             <UserIcon />
           </Link>
-          <Link href="/sacola" className={iconLink} aria-label={t('bag', { count: bagCount })}>
-            <BagIcon />
-            {bagCount > 0 && (
-              <span
-                aria-hidden="true"
-                className="absolute right-1 top-1 inline-flex size-[18px] items-center justify-center rounded-pill bg-action-primary text-[11px] font-semibold text-text-on-accent"
-              >
-                {bagCount}
-              </span>
-            )}
-          </Link>
+          <BagLink className={iconLink} />
         </div>
       </div>
     </header>

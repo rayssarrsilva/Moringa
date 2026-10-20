@@ -65,6 +65,25 @@ npm run dev                  # http://localhost:3000
 | `npm run typecheck` | TypeScript em modo estrito                                                                      |
 | `npm run build`     | Build de produção                                                                               |
 
+### Sem banco de dados
+
+Sem o `DATABASE_URL`, o app roda com o catálogo de exemplo embutido. A CI usa esse modo, então os testes nunca dependem de um banco no ar.
+
+### API do catálogo
+
+`GET /api/pieces` aceita os mesmos parâmetros da página do catálogo, por exemplo `/api/pieces?regiao=nordeste&material=palha&preco_max=150&ordem=menor-preco`. `GET /api/pieces/{slug}` devolve uma peça, ou um 404 em JSON.
+
+### Pagamentos (modo de teste da Stripe)
+
+Sem `STRIPE_SECRET_KEY`, o checkout roda como demonstração e vai direto para a confirmação. Para testar o fluxo de verdade:
+
+1. Crie uma conta na Stripe, fique no **modo de teste** e copie a chave secreta (`sk_test_…`) para o `.env.local`. Chaves de produção são recusadas de propósito.
+2. Em Dashboard → Settings → Payment methods, ative **Cards** e **Pix**.
+3. Rode `stripe listen --forward-to localhost:3000/api/stripe/webhook` e copie o segredo `whsec_…` para `STRIPE_WEBHOOK_SECRET`.
+4. Pague com o cartão de teste `4242 4242 4242 4242`, qualquer data futura e qualquer CVC. Use `4000 0000 0000 0002` para ver um cartão recusado.
+
+Cada artesã recebe o seu próprio pedido. Os pedidos nascem como `pending` e o webhook leva para `paid` (cartão na hora, Pix quando o banco confirma) ou `canceled` (Pix expirado), seguindo o ciclo de vida do pedido no FigJam.
+
 ### Fluxo de trabalho
 
 - Toda mudança passa por uma branch e um pull request. O CI roda lint, tipos, testes unitários, build e E2E em cada um.

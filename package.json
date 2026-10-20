@@ -38,14 +38,19 @@
   "dependencies": {
     "@fontsource/fraunces": "^5.3.0",
     "@fontsource/instrument-sans": "^5.3.0",
+    "@hookform/resolvers": "^5.9.2",
     "@neondatabase/serverless": "^1.2.0",
-    "@rayssarrsilva/ipe": "^1.0.1",
+    "@rayssarrsilva/ipe": "^2.0.0",
     "drizzle-orm": "^0.45.4",
     "next": "^16.4.2",
     "next-intl": "^4.14.9",
     "react": "^19.3.1",
     "react-dom": "^19.3.1",
-    "zod": "^4.6.7"
+    "react-hook-form": "^7.90.0",
+    "server-only": "^0.0.1",
+    "stripe": "^23.0.0",
+    "zod": "^4.6.7",
+    "zustand": "^5.0.15"
   },
   "devDependencies": {
     "@axe-core/playwright": "^4.14.0",
