@@ -1,7 +1,7 @@
 import type { Metadata } from 'next';
 import { getTranslations, setRequestLocale } from 'next-intl/server';
 import { ClearBag } from '@/components/bag/clear-bag';
-import { Button } from '@/components/ui/ipe';
+import { Button } from '@rayssarrsilva/ipe';
 import { Link } from '@/i18n/navigation';
 import type { Locale } from '@/i18n/routing';
 import { formatPrice } from '@/lib/format';

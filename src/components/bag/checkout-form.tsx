@@ -5,7 +5,7 @@ import { useLocale, useTranslations } from 'next-intl';
 import { useEffect, useRef, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { startCheckout } from '@/app/[locale]/finalizar/actions';
-import { Button, Input } from '@/components/ui/ipe';
+import { Button, Input } from '@rayssarrsilva/ipe';
 import { Link, useRouter } from '@/i18n/navigation';
 import type { Locale } from '@/i18n/routing';
 import { bagTotals } from '@/lib/bag/bag';

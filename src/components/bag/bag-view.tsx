@@ -3,7 +3,7 @@
 import { useLocale, useTranslations } from 'next-intl';
 import { useRef, useState } from 'react';
 import { PiecePhoto } from '@/components/material-art';
-import { Button } from '@/components/ui/ipe';
+import { Button } from '@rayssarrsilva/ipe';
 import { Link } from '@/i18n/navigation';
 import type { Locale } from '@/i18n/routing';
 import { type BagItem, groupByShop } from '@/lib/bag/bag';

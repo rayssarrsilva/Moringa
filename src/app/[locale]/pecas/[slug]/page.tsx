@@ -6,7 +6,7 @@ import { Breadcrumbs } from '@/components/breadcrumbs';
 import { JsonLd } from '@/components/json-ld';
 import { PiecePhoto } from '@/components/material-art';
 import { PieceCard } from '@/components/piece-card';
-import { Badge, Button } from '@/components/ui/ipe';
+import { Badge, Button } from '@rayssarrsilva/ipe';
 import { Link } from '@/i18n/navigation';
 import type { Locale } from '@/i18n/routing';
 import { toBagPiece } from '@/lib/bag/bag';

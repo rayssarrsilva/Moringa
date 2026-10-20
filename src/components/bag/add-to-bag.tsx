@@ -2,7 +2,7 @@
 
 import { useTranslations } from 'next-intl';
 import { type FormEvent, useState } from 'react';
-import { Button } from '@/components/ui/ipe';
+import { Button } from '@rayssarrsilva/ipe';
 import { Link } from '@/i18n/navigation';
 import type { BagPiece } from '@/lib/bag/bag';
 import { useBag } from '@/lib/bag/store';

@@ -1,5 +1,5 @@
 import { useTranslations } from 'next-intl';
-import { Button } from '@/components/ui/ipe';
+import { Button } from '@rayssarrsilva/ipe';
 import { Link } from '@/i18n/navigation';
 
 export default function NotFound() {
