@@ -1,0 +1,59 @@
+@import 'tailwindcss';
+@import '@rayssarrsilva/ipe/tokens.css';
+@import '@rayssarrsilva/ipe/tailwind.css';
+@import '@rayssarrsilva/ipe/styles.css';
+
+@layer base {
+  html {
+    background: var(--ipe-bg-canvas);
+    color: var(--ipe-text-primary);
+    font: var(--ipe-typography-body-md);
+    -webkit-font-smoothing: antialiased;
+  }
+
+  body {
+    min-height: 100dvh;
+  }
+
+  :focus-visible {
+    outline: var(--ipe-border-width-focus) solid var(--ipe-border-focus);
+    outline-offset: 2px;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+      scroll-behavior: auto !important;
+      transition-duration: 0.01ms !important;
+      animation-duration: 0.01ms !important;
+    }
+  }
+}
+
+@utility text-display {
+  font: var(--ipe-typography-heading-lg);
+}
+
+@utility text-heading-md {
+  font: var(--ipe-typography-heading-md);
+}
+
+@utility text-heading-sm {
+  font: var(--ipe-typography-heading-sm);
+}
+
+@utility text-label {
+  font: var(--ipe-typography-label-md);
+}
+
+@utility text-caps {
+  font: var(--ipe-typography-label-caps);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+@utility container-page {
+  width: min(100% - 48px, 1280px);
+  margin-inline: auto;
+}
