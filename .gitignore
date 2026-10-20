@@ -16,6 +16,7 @@ test-results/
 # env
 .env*
 !.env.example
+.env.local
 
 # misc
 .DS_Store
