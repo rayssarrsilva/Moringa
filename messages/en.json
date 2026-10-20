@@ -1,0 +1,54 @@
+{
+  "Metadata": {
+    "title": "Moringa · A fair of things made by hand",
+    "description": "Handmade pieces from Brazil, with the story of who made them. Buy straight from ceramists, weavers and woodworkers across the country."
+  },
+  "Header": {
+    "skip": "Skip to content",
+    "home": "Moringa, home",
+    "nav": "Main",
+    "pieces": "Pieces",
+    "makers": "Makers",
+    "sell": "Sell on Moringa",
+    "search": "Search",
+    "account": "My account",
+    "bag": "{count, plural, =0 {Bag, empty} one {Bag, # piece} other {Bag, # pieces}}",
+    "language": "Language"
+  },
+  "Home": {
+    "eyebrow": "Handmade",
+    "title": "Handmade in Brazil, with the story of who made it.",
+    "intro": "Pieces from {makers} makers in {states} states. Every purchase goes straight to the person who made it.",
+    "searchLabel": "Search pieces",
+    "searchPlaceholder": "Bowls, baskets, embroidery…",
+    "searchButton": "Search",
+    "regionsLabel": "Explore by region",
+    "newThisWeek": "New this week",
+    "seeAll": "See all",
+    "makerTitle": "Meet {name}",
+    "visitShop": "Visit the shop"
+  },
+  "Regions": {
+    "norte": "North",
+    "nordeste": "Northeast",
+    "centro-oeste": "Center-West",
+    "sudeste": "Southeast",
+    "sul": "South"
+  },
+  "Piece": {
+    "by": "by {maker}",
+    "price": "Price"
+  },
+  "Footer": {
+    "tagline": "An online fair for people who make things by hand in Brazil.",
+    "madeBy": "Made with care by Rayssa Roberta.",
+    "code": "Code on GitHub",
+    "design": "Design on Figma",
+    "demo": "Portfolio project: payments use Stripe test mode and nothing is charged."
+  },
+  "NotFound": {
+    "title": "This page is not at the fair.",
+    "body": "Maybe the address changed, or the piece already found a home.",
+    "back": "Back to the home page"
+  }
+}

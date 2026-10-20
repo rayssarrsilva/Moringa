@@ -1,0 +1,54 @@
+{
+  "Metadata": {
+    "title": "Moringa · Feira de quem faz à mão",
+    "description": "Peças feitas à mão no Brasil, com a história de quem fez. Compre direto de ceramistas, artesãs e artesãos de todo o país."
+  },
+  "Header": {
+    "skip": "Pular para o conteúdo",
+    "home": "Moringa, página inicial",
+    "nav": "Principal",
+    "pieces": "Peças",
+    "makers": "Quem faz",
+    "sell": "Vender na Moringa",
+    "search": "Buscar",
+    "account": "Minha conta",
+    "bag": "{count, plural, =0 {Sacola, vazia} one {Sacola, # peça} other {Sacola, # peças}}",
+    "language": "Idioma"
+  },
+  "Home": {
+    "eyebrow": "Feito à mão",
+    "title": "Feito à mão no Brasil, com a história de quem fez.",
+    "intro": "Peças de {makers} artesãs e artesãos em {states} estados. Cada compra vai direto para quem fez.",
+    "searchLabel": "Buscar peças",
+    "searchPlaceholder": "Tigelas, cestos, bordados…",
+    "searchButton": "Buscar",
+    "regionsLabel": "Explorar por região",
+    "newThisWeek": "Novidades da semana",
+    "seeAll": "Ver todas",
+    "makerTitle": "Conheça {name}",
+    "visitShop": "Visitar a loja"
+  },
+  "Regions": {
+    "norte": "Norte",
+    "nordeste": "Nordeste",
+    "centro-oeste": "Centro-Oeste",
+    "sudeste": "Sudeste",
+    "sul": "Sul"
+  },
+  "Piece": {
+    "by": "por {maker}",
+    "price": "Preço"
+  },
+  "Footer": {
+    "tagline": "Uma feira online de quem produz à mão no Brasil.",
+    "madeBy": "Feito com carinho por Rayssa Roberta.",
+    "code": "Código no GitHub",
+    "design": "Design no Figma",
+    "demo": "Projeto de portfólio: os pagamentos usam o modo de teste da Stripe e nenhuma cobrança é real."
+  },
+  "NotFound": {
+    "title": "Essa página não está na feira.",
+    "body": "Talvez o endereço tenha mudado, ou a peça já tenha encontrado uma casa.",
+    "back": "Voltar para o início"
+  }
+}
