@@ -6,7 +6,7 @@
 
 [English](./README.md) · **Português**
 
-_Em andamento · dia 1 de 12: descoberta_
+_Em andamento · dia 3 de 12: design_
 
 </div>
 
@@ -34,6 +34,12 @@ Os documentos de descoberta estão em inglês, o idioma mais usado em times de p
 - [Backlog com critérios de aceite](./docs/discovery/BACKLOG.md)
 - [Mapa de requisitos de vaga](./docs/discovery/JOB-REQUIREMENTS.md)
 - [FigJam: jornadas, ciclo do pedido e mapa do site](https://www.figma.com/board/Hfz7wLzJGGltovUDZtSSAc)
+
+## Design
+
+- [Wireframes com notas de UX](https://www.figma.com/design/vp371wwKQRWh4elNOk1S1D)
+- [Telas finais e protótipo clicável](https://www.figma.com/design/o3irY2VOsGjlLt3fiAPTU0), feitos só com componentes do Ipê
+- [Decisões de design](./docs/design/README.md) (em inglês)
 
 ## Stack planejada
 

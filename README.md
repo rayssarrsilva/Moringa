@@ -6,7 +6,7 @@
 
 **English** · [Português](./README.pt-BR.md)
 
-_In progress · day 1 of 12: discovery_
+_In progress · day 3 of 12: design_
 
 </div>
 
@@ -32,6 +32,12 @@ Built with the [Ipê Design System](https://github.com/rayssarrsilva/Ipe).
 - [Backlog with acceptance criteria](./docs/discovery/BACKLOG.md)
 - [Job requirements map](./docs/discovery/JOB-REQUIREMENTS.md)
 - [FigJam: journeys, order lifecycle and sitemap](https://www.figma.com/board/Hfz7wLzJGGltovUDZtSSAc)
+
+## Design
+
+- [Wireframes with UX notes](https://www.figma.com/design/vp371wwKQRWh4elNOk1S1D)
+- [High-fidelity screens and clickable prototype](https://www.figma.com/design/o3irY2VOsGjlLt3fiAPTU0), built only with Ipê components
+- [Design decisions](./docs/design/README.md)
 
 ## Planned stack
 
