@@ -2,6 +2,7 @@
 @import '@rayssarrsilva/ipe/tokens.css';
 @import '@rayssarrsilva/ipe/tailwind.css';
 @import '@rayssarrsilva/ipe/styles.css';
+@import './theme.css';
 
 @layer base {
   html {
