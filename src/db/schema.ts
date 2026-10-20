@@ -127,6 +127,12 @@ export const orders = pgTable(
     address: jsonb('address').$type<AddressSnapshot>().notNull(),
     trackingCode: text('tracking_code'),
     stripeSessionId: text('stripe_session_id'),
+    /**
+     * Orders that belong to one demo sign-in. The demo account is shared by every visitor,
+     * so each sign-in gets its own copy of the demo orders and only sees those.
+     */
+    demoSessionId: text('demo_session_id'),
+    demoExpiresAt: timestamp('demo_expires_at', { withTimezone: true }),
     paidAt: timestamp('paid_at', { withTimezone: true }),
     preparingAt: timestamp('preparing_at', { withTimezone: true }),
     shippedAt: timestamp('shipped_at', { withTimezone: true }),
@@ -138,6 +144,7 @@ export const orders = pgTable(
     index('orders_shop_status_idx').on(t.shopId, t.status),
     // One checkout can hold pieces from several makers, so one session id maps to several orders.
     index('orders_stripe_session_idx').on(t.stripeSessionId),
+    index('orders_demo_session_idx').on(t.demoSessionId),
     check('orders_total_matches', sql`${t.totalCents} = ${t.subtotalCents} + ${t.shippingCents}`),
   ],
 );

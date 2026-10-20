@@ -6,6 +6,7 @@ import type { AddressInput } from '../checkout/schema';
 import { onlyDigits } from '../checkout/schema';
 import { canTransition } from '../order-status';
 import { orderCode } from './code';
+import { demoLifetimeMs } from './demo-orders';
 
 const { orders, orderItems, pieces, shops, users } = schema;
 
@@ -15,13 +16,19 @@ export const ordersEnabled = () => Boolean(process.env.DATABASE_URL);
  * Creates one pending order per maker, in a single transaction.
  * Without sign-in yet, the buyer is found or created by email; Auth.js will reuse that row.
  */
-export async function createPendingOrders(groups: ShopGroup[], address: AddressInput) {
+export async function createPendingOrders(
+  groups: ShopGroup[],
+  address: AddressInput,
+  buyerEmail: string = address.email,
+  /** Set for orders placed with the shared demo account: only that sign-in will see them. */
+  demoSessionId?: string,
+) {
   const database = db();
   const slugs = groups.flatMap((g) => g.items.map((i) => i.slug));
   const [buyer] = await database
     .insert(users)
-    .values({ name: address.name, email: address.email.toLowerCase(), role: 'buyer' })
-    .onConflictDoUpdate({ target: users.email, set: { name: address.name } })
+    .values({ name: address.name, email: buyerEmail.toLowerCase(), role: 'buyer' })
+    .onConflictDoUpdate({ target: users.email, set: { email: buyerEmail.toLowerCase() } })
     .returning({ id: users.id });
   const ids = await database
     .select({ id: pieces.id, slug: pieces.slug, shopId: pieces.shopId, shopSlug: shops.slug })
@@ -59,6 +66,8 @@ export async function createPendingOrders(groups: ShopGroup[], address: AddressI
         shippingCents: o.group.shippingCents,
         totalCents: o.group.subtotalCents + o.group.shippingCents,
         address: snapshot,
+        demoSessionId: demoSessionId ?? null,
+        demoExpiresAt: demoSessionId ? new Date(Date.now() + demoLifetimeMs) : null,
       })),
     ),
     database.insert(orderItems).values(

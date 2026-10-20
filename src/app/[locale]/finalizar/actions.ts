@@ -1,6 +1,7 @@
 'use server';
 
 import { headers } from 'next/headers';
+import { currentViewer } from '@/auth';
 import { catalog } from '@/lib/catalog';
 import { priceCart, type PricingProblem } from '@/lib/checkout/pricing';
 import { checkoutSchema } from '@/lib/checkout/schema';
@@ -9,8 +10,10 @@ import {
   attachSession,
   cancelOrders,
   createPendingOrders,
+  markPaidBySession,
   ordersEnabled,
 } from '@/lib/orders/repository';
+import { isDemoEmail } from '@/lib/orders/demo-orders';
 import { siteUrl } from '@/lib/seo';
 import { stripe, stripeEnabled } from '@/lib/stripe';
 
@@ -32,11 +35,30 @@ export async function startCheckout(raw: unknown): Promise<CheckoutResult> {
   const priced = priceCart(input.items, pieces);
   if (!priced.ok) return { ok: false, error: 'stock', problems: priced.problems };
 
+  // Signed in: the order belongs to the account, whatever email was typed.
+  const viewer = await currentViewer();
+  const buyerEmail = viewer?.email ?? input.address.email;
+  // The demo account is shared: its orders stay with the sign-in that placed them.
+  const demoSid = isDemoEmail(buyerEmail)
+    ? (viewer?.sid ?? `anon_${crypto.randomUUID()}`)
+    : undefined;
+
   if (!stripeEnabled()) {
-    return { ok: true, url: `/${input.locale}/pedido/confirmado?demo=1` };
+    // No Stripe key: the payment is simulated, but with a database the orders are real.
+    if (!ordersEnabled()) return { ok: true, url: `/${input.locale}/pedido/confirmado?demo=1` };
+    const demoSession = `demo_${crypto.randomUUID()}`;
+    const orders = await createPendingOrders(priced.groups, input.address, buyerEmail, demoSid);
+    await attachSession(
+      orders.map((o) => o.id),
+      demoSession,
+    );
+    await markPaidBySession(demoSession);
+    return { ok: true, url: `/${input.locale}/pedido/confirmado?demo=1&session_id=${demoSession}` };
   }
 
-  const orders = ordersEnabled() ? await createPendingOrders(priced.groups, input.address) : [];
+  const orders = ordersEnabled()
+    ? await createPendingOrders(priced.groups, input.address, buyerEmail, demoSid)
+    : [];
   const orderIds = orders.map((o) => o.id);
   try {
     const origin = (await headers()).get('origin') ?? siteUrl();
