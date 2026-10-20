@@ -1,6 +1,8 @@
 # Moringa theme
 
-Moringa uses the Ipê components with its own theme: solid, neutral surfaces instead of Ipê's cream palette. Pure white or pure black backgrounds, and a solid forest green for the main action. The theme only remaps Ipê's semantic tokens in [`src/app/theme.css`](../../src/app/theme.css); no component was changed, which is what semantic tokens are for.
+Moringa uses Ipê 2.0, which already ships pure white and pure black surfaces. Moringa's theme only changes the actions: a solid forest green for the main action with white text, and black or white for secondary actions and focus. It remaps four semantic tokens in [`src/app/theme.css`](../../src/app/theme.css); no component was changed, which is what semantic tokens are for.
+
+> History: Moringa started on Ipê 1.0, whose cream palette did not fit. The fix first lived here as a full override, then moved into Ipê itself as the 2.0 neutral palette, and this file shrank to the Moringa-specific choices.
 
 ## Contrast (WCAG 2.2)
 

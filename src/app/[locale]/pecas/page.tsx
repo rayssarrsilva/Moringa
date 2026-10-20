@@ -3,7 +3,7 @@ import { getTranslations, setRequestLocale } from 'next-intl/server';
 import { Breadcrumbs } from '@/components/breadcrumbs';
 import { FiltersDisclosure } from '@/components/filters-disclosure';
 import { PieceCard } from '@/components/piece-card';
-import { Button } from '@/components/ui/ipe';
+import { Button } from '@rayssarrsilva/ipe';
 import { Link } from '@/i18n/navigation';
 import type { Locale } from '@/i18n/routing';
 import { catalog, materials, type CatalogQuery } from '@/lib/catalog';

@@ -1,65 +1,30 @@
 /*
- * Moringa theme: Ipê semantic tokens remapped to solid, neutral surfaces.
- * Pure white or pure black backgrounds, a solid forest green for main actions.
- * Every text/background pair below meets WCAG 2.2 AA (contrast checked in docs/design/THEME.md).
+ * Moringa on Ipê 2.0. Ipê already gives pure white and pure black surfaces;
+ * Moringa only changes its actions: a solid forest green for the main action
+ * (white text), and black or white for secondary actions and focus.
+ * Contrast for every pair is checked in docs/design/THEME.md.
  */
 
 :root,
 [data-theme='light'] {
-  --ipe-bg-canvas: #ffffff;
-  --ipe-bg-surface: #f4f4f4;
-  --ipe-bg-raised: #ffffff;
-  --ipe-text-primary: #0a0a0a;
-  --ipe-text-secondary: #555555;
-  --ipe-text-on-accent: #ffffff;
-  --ipe-text-on-strong: #ffffff;
-  --ipe-border-subtle: #e5e5e5;
-  --ipe-border-control: #767676;
-  --ipe-border-focus: #0a0a0a;
-  --ipe-action-primary: #1f5a3a;
-  --ipe-action-secondary: #0a0a0a;
-  --ipe-feedback-success: #1f5a3a;
-  --ipe-feedback-danger: #b8431f;
-  --ipe-feedback-info: #264b8f;
-  --ipe-shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.06);
-  --ipe-shadow-md: 0 2px 4px 0 rgb(0 0 0 / 0.04), 0 8px 24px -4px rgb(0 0 0 / 0.1);
-  --ipe-shadow-lg: 0 4px 8px 0 rgb(0 0 0 / 0.05), 0 24px 48px -12px rgb(0 0 0 / 0.18);
+  --ipe-action-primary: var(--ipe-color-mata-700);
+  --ipe-action-secondary: var(--ipe-color-neutral-950);
+  --ipe-text-on-accent: var(--ipe-color-neutral-0);
+  --ipe-border-focus: var(--ipe-color-neutral-950);
 }
 
 [data-theme='dark'] {
-  --ipe-bg-canvas: #000000;
-  --ipe-bg-surface: #141414;
-  --ipe-bg-raised: #1a1a1a;
-  --ipe-text-primary: #ffffff;
-  --ipe-text-secondary: #a3a3a3;
-  --ipe-text-on-accent: #ffffff;
-  --ipe-text-on-strong: #000000;
-  --ipe-border-subtle: #262626;
-  --ipe-border-control: #8a8a8a;
-  --ipe-border-focus: #ffffff;
   --ipe-action-primary: #2e7d4f;
-  --ipe-action-secondary: #ffffff;
-  --ipe-feedback-success: #7cc08a;
-  --ipe-feedback-danger: #f08a62;
-  --ipe-feedback-info: #8fb0ea;
+  --ipe-action-secondary: var(--ipe-color-neutral-0);
+  --ipe-text-on-accent: var(--ipe-color-neutral-0);
+  --ipe-border-focus: var(--ipe-color-neutral-0);
 }
 
 @media (prefers-color-scheme: dark) {
   :root:not([data-theme='light']) {
-    --ipe-bg-canvas: #000000;
-    --ipe-bg-surface: #141414;
-    --ipe-bg-raised: #1a1a1a;
-    --ipe-text-primary: #ffffff;
-    --ipe-text-secondary: #a3a3a3;
-    --ipe-text-on-accent: #ffffff;
-    --ipe-text-on-strong: #000000;
-    --ipe-border-subtle: #262626;
-    --ipe-border-control: #8a8a8a;
-    --ipe-border-focus: #ffffff;
     --ipe-action-primary: #2e7d4f;
-    --ipe-action-secondary: #ffffff;
-    --ipe-feedback-success: #7cc08a;
-    --ipe-feedback-danger: #f08a62;
-    --ipe-feedback-info: #8fb0ea;
+    --ipe-action-secondary: var(--ipe-color-neutral-0);
+    --ipe-text-on-accent: var(--ipe-color-neutral-0);
+    --ipe-border-focus: var(--ipe-color-neutral-0);
   }
 }

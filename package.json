@@ -40,7 +40,7 @@
     "@fontsource/instrument-sans": "^5.3.0",
     "@hookform/resolvers": "^5.9.2",
     "@neondatabase/serverless": "^1.2.0",
-    "@rayssarrsilva/ipe": "^1.0.1",
+    "@rayssarrsilva/ipe": "^2.0.0",
     "drizzle-orm": "^0.45.4",
     "next": "^16.4.2",
     "next-intl": "^4.14.9",
