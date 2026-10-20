@@ -1,6 +1,7 @@
 import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 import { getTranslations, setRequestLocale } from 'next-intl/server';
+import { AddToBag } from '@/components/bag/add-to-bag';
 import { Breadcrumbs } from '@/components/breadcrumbs';
 import { JsonLd } from '@/components/json-ld';
 import { PiecePhoto } from '@/components/material-art';
@@ -8,6 +9,7 @@ import { PieceCard } from '@/components/piece-card';
 import { Badge, Button } from '@/components/ui/ipe';
 import { Link } from '@/i18n/navigation';
 import type { Locale } from '@/i18n/routing';
+import { toBagPiece } from '@/lib/bag/bag';
 import { catalog } from '@/lib/catalog';
 import { sampleRepository } from '@/lib/catalog/sample-repository';
 import { formatPrice } from '@/lib/format';
@@ -105,6 +107,8 @@ export default async function PiecePage({ params }: Props) {
               </Badge>
             </div>
           </div>
+
+          <AddToBag piece={toBagPiece(piece)} name={piece.name[locale]} />
 
           <dl className="grid grid-cols-[auto_1fr] gap-x-6 gap-y-2 border-y border-border-subtle py-4 text-sm">
             <dt className="text-text-secondary">{t('material')}</dt>
