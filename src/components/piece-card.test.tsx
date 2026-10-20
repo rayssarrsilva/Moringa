@@ -12,7 +12,6 @@ describe('PieceCard', () => {
         maker="Dona Lúcia"
         place="SP"
         price="R$ 89"
-        tint="#E8C3A6"
       />,
     );
     const link = screen.getByRole('link');

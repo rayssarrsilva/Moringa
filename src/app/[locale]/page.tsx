@@ -85,7 +85,6 @@ function Home() {
                   maker={maker.name}
                   place={maker.state}
                   price={formatPrice(p.priceCents, locale)}
-                  tint={p.tint}
                 />
               </li>
             );
@@ -97,11 +96,7 @@ function Home() {
         aria-labelledby="maker-title"
         className="container-page mt-16 grid gap-4 rounded-xl bg-bg-surface p-6 md:grid-cols-[auto_1fr] md:items-center md:gap-8 md:p-10"
       >
-        <div
-          aria-hidden="true"
-          className="size-20 rounded-pill md:size-32"
-          style={{ background: spotlight.tint }}
-        />
+        <div aria-hidden="true" className="size-20 rounded-pill bg-bg-canvas md:size-32" />
         <div className="grid gap-3">
           <h2 id="maker-title" className="text-heading-sm">
             {t('makerTitle', { name: spotlight.name })}
