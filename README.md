@@ -71,6 +71,15 @@ Skip the `DATABASE_URL` and the app runs on the built-in sample catalog. CI uses
 
 `GET /api/pieces` takes the same params as the catalog page, for example `/api/pieces?regiao=nordeste&material=palha&preco_max=150&ordem=menor-preco`. `GET /api/pieces/{slug}` returns one piece, or a JSON 404.
 
+### Demo account
+
+The buyer area at `/pt/conta` has a one-click demo login as **Marina**, with orders in every state (paid, shipped with a tracking code, delivered). There are no passwords: a demo login only sees demo data. On Vercel, set `AUTH_SECRET` (run `npx auth secret` to generate one).
+
+### Tests
+
+- `npm test` runs unit, component and database integration tests. The integration tests start a real Postgres in memory with [PGlite](https://pglite.dev), create the schema from `src/db/schema.ts` and run the same Drizzle queries the app sends to Neon.
+- `npm run test:e2e` runs Playwright on mobile and desktop, with axe accessibility checks in both themes.
+
 ### Payments (Stripe test mode)
 
 Without `STRIPE_SECRET_KEY`, checkout runs as a demo and goes straight to the confirmation page. To try the real flow:
