@@ -72,3 +72,24 @@ test.describe('home', () => {
     });
   }
 });
+
+test.describe('small phones', () => {
+  test.use({ viewport: { width: 320, height: 640 } });
+
+  for (const path of [
+    '/pt',
+    '/pt/pecas',
+    '/pt/pecas/moringa-de-barro-com-tampa',
+    '/pt/sacola',
+    '/pt/conta',
+  ]) {
+    test(`fits 320px without sideways scrolling (WCAG 1.4.10): ${path}`, async ({ page }) => {
+      await page.goto(path);
+      const overflow = await page.evaluate(
+        () => document.documentElement.scrollWidth - window.innerWidth,
+      );
+      expect(overflow).toBe(0);
+      await expect(page.getByRole('link', { name: /Sacola/ })).toBeInViewport();
+    });
+  }
+});
