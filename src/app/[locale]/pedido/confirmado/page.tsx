@@ -1,5 +1,6 @@
 import type { Metadata } from 'next';
 import { getTranslations, setRequestLocale } from 'next-intl/server';
+import { currentViewer } from '@/auth';
 import { ClearBag } from '@/components/bag/clear-bag';
 import { Button } from '@rayssarrsilva/ipe';
 import { Link } from '@/i18n/navigation';
@@ -36,15 +37,18 @@ export default async function ConfirmationPage({ params, searchParams }: Props) 
   const { session_id, demo } = await searchParams;
   const state = await readState(session_id, demo);
   const orders =
-    state !== 'open' && state !== 'demo' && session_id && ordersEnabled()
-      ? await ordersBySession(session_id)
-      : [];
+    state !== 'open' && session_id && ordersEnabled() ? await ordersBySession(session_id) : [];
+  const viewer = await currentViewer();
   const t = await getTranslations('Order');
 
   const copy = {
     paid: [t('paidTitle'), t('paidBody', { count: Math.max(orders.length, 1) })],
     pix: [t('pixTitle'), t('pixBody')],
-    demo: [t('demoTitle'), t('demoBody')],
+    // With a database the demo order is real, only the payment is simulated.
+    demo:
+      orders.length > 0
+        ? [t('paidTitle'), t('paidBody', { count: orders.length })]
+        : [t('demoTitle'), t('demoBody')],
     open: [t('openTitle'), t('openBody')],
   }[state];
 
@@ -53,6 +57,9 @@ export default async function ConfirmationPage({ params, searchParams }: Props) 
       {state !== 'open' && <ClearBag />}
       <h1 className="text-heading-md md:text-display">{copy[0]}</h1>
       <p className="max-w-[60ch] text-lg text-text-secondary">{copy[1]}</p>
+      {state === 'demo' && orders.length > 0 && (
+        <p className="text-sm text-text-secondary">{t('demoBody')}</p>
+      )}
 
       {orders.length > 0 && (
         <section
@@ -84,7 +91,15 @@ export default async function ConfirmationPage({ params, searchParams }: Props) 
             <Link href="/sacola">{t('backToBag')}</Link>
           </Button>
         )}
-        <Button asChild variant={state === 'open' ? 'ghost' : 'primary'}>
+        {state !== 'open' && viewer && orders.length > 0 && (
+          <Button asChild>
+            <Link href={`/conta/pedidos/${orders[0]!.code}`}>{t('follow')}</Link>
+          </Button>
+        )}
+        <Button
+          asChild
+          variant={state === 'open' || (viewer && orders.length > 0) ? 'ghost' : 'primary'}
+        >
           <Link href="/pecas">{t('keepBrowsing')}</Link>
         </Button>
       </div>

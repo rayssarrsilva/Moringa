@@ -2,7 +2,9 @@ import { neon } from '@neondatabase/serverless';
 import { drizzle } from 'drizzle-orm/neon-http';
 import * as schema from './schema';
 
-let instance: ReturnType<typeof createDb> | undefined;
+export type Database = ReturnType<typeof createDb>;
+
+let instance: Database | undefined;
 
 function createDb(url: string) {
   return drizzle(neon(url), { schema, casing: 'snake_case' });

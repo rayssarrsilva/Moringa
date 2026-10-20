@@ -12,6 +12,7 @@ import { bagTotals } from '@/lib/bag/bag';
 import { useBag, useHydrated } from '@/lib/bag/store';
 import { type AddressInput, addressSchema, maskCep, onlyDigits } from '@/lib/checkout/schema';
 import { lookupCep } from '@/lib/checkout/viacep';
+import { demoAddress } from '@/lib/orders/sample-orders';
 import { formatPrice } from '@/lib/format';
 import { regions, stateNames, statesByRegion } from '@/lib/regions';
 import { BagSummary } from './bag-summary';
@@ -31,7 +32,11 @@ const fieldOrder: (keyof AddressInput)[] = [
 type CepStatus = 'idle' | 'looking' | 'found' | 'notFound' | 'offline';
 type Problem = 'stock' | 'payment' | 'invalid' | null;
 
-export function CheckoutForm() {
+export function CheckoutForm({
+  account,
+}: {
+  account?: { name: string; email: string; demo: boolean };
+}) {
   const t = useTranslations('Checkout');
   const tb = useTranslations('Bag');
   const tr = useTranslations('Regions');
@@ -58,7 +63,23 @@ export function CheckoutForm() {
     mode: 'onTouched',
     // We focus the first invalid field in screen order ourselves (see onInvalid).
     shouldFocusError: false,
-    defaultValues: { state: '' as AddressInput['state'] },
+    defaultValues: account?.demo
+      ? {
+          // The demo account comes with Marina's made-up address, so nobody types a real one.
+          name: account.name,
+          email: account.email,
+          cep: maskCep(demoAddress.cep),
+          street: demoAddress.street,
+          number: demoAddress.number,
+          neighborhood: demoAddress.neighborhood,
+          city: demoAddress.city,
+          state: demoAddress.state as AddressInput['state'],
+        }
+      : {
+          state: '' as AddressInput['state'],
+          name: account?.name ?? '',
+          email: account?.email ?? '',
+        },
   });
 
   useEffect(() => {
@@ -167,6 +188,7 @@ export function CheckoutForm() {
 
         <fieldset className="grid gap-4">
           <legend className="text-heading-sm mb-4">{t('contact')}</legend>
+          {account?.demo && <p className="rounded-lg bg-bg-surface p-4 text-sm">{t('demoNote')}</p>}
           <Input
             label={t('name')}
             autoComplete="name"

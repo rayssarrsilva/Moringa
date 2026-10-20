@@ -31,7 +31,7 @@ export function AddToBag({ piece, name }: { piece: BagPiece; name: string }) {
 
   return (
     <form onSubmit={onSubmit} className="grid gap-3">
-      <div className="flex items-end gap-3">
+      <div className="flex flex-wrap items-end gap-3">
         <label className="grid gap-1.5">
           <span className="text-label">{t('quantity')}</span>
           <select
@@ -46,7 +46,7 @@ export function AddToBag({ piece, name }: { piece: BagPiece; name: string }) {
             ))}
           </select>
         </label>
-        <div className="flex-1">
+        <div className="min-w-48 flex-1">
           <Button type="submit" size="lg" fullWidth>
             {t('addToBag')}
           </Button>

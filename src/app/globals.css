@@ -55,6 +55,9 @@
 }
 
 @utility container-page {
-  width: min(100% - 48px, 1280px);
+  width: min(100% - 32px, 1280px);
+  @media (width >= 40rem) {
+    width: min(100% - 48px, 1280px);
+  }
   margin-inline: auto;
 }

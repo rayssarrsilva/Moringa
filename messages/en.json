@@ -13,7 +13,9 @@
     "search": "Search",
     "account": "My account",
     "bag": "{count, plural, =0 {Bag, empty} one {Bag, # piece} other {Bag, # pieces}}",
-    "language": "Language"
+    "language": "Language",
+    "themeDark": "Switch to dark theme",
+    "themeLight": "Switch to light theme"
   },
   "Home": {
     "eyebrow": "Handmade",
@@ -169,7 +171,8 @@
       "email": "Enter a valid email, like name@example.com.",
       "cep": "Enter the 8 digits of the CEP, like 01310-100.",
       "tooLong": "This field is too long."
-    }
+    },
+    "demoNote": "You are in Marina's demo account, so her made-up address is already filled in. Please do not use real details here."
   },
   "Order": {
     "paidTitle": "Order confirmed!",
@@ -177,13 +180,68 @@
     "pixTitle": "Just the Pix left.",
     "pixBody": "As soon as the bank confirms the payment, your order goes to the people who made the pieces. It usually takes a few seconds.",
     "demoTitle": "Demo order complete.",
-    "demoBody": "This environment has no Stripe key, so no payment was opened. On the live site you would see the test-mode payment here.",
+    "demoBody": "This environment has no Stripe key, so the payment was simulated and nothing was charged.",
     "openTitle": "The payment was not completed.",
     "openBody": "Your bag is saved. You can try again whenever you like.",
     "codes": "Your orders",
     "orderLine": "{code} · {shop} · {total}",
     "thanks": "Thank you for buying from people who make by hand.",
     "backToBag": "Back to your bag",
-    "keepBrowsing": "Back to the fair"
+    "keepBrowsing": "Back to the fair",
+    "follow": "Follow my order"
+  },
+  "Account": {
+    "title": "My account",
+    "signInTitle": "Sign in to follow your orders.",
+    "signInBody": "On Moringa you see every step of your order, from payment to your door, without having to ask the maker.",
+    "demoTitle": "Demo account",
+    "demoBody": "Sign in as Marina, a sample buyer with three orders at different stages. No password needed and nothing is real.",
+    "demoButton": "Sign in as Marina",
+    "hello": "Hi, {name}!",
+    "signOut": "Sign out",
+    "ordersTitle": "My orders",
+    "noOrders": "You have not placed any orders yet.",
+    "noOrdersBody": "Once you buy something, this is where you follow it.",
+    "browse": "Browse pieces",
+    "placedOn": "Placed on {date}",
+    "items": "{count, plural, one {# piece} other {# pieces}}",
+    "loadError": "We could not load your orders right now.",
+    "retry": "Try again"
+  },
+  "OrderStatus": {
+    "pending": "Awaiting payment",
+    "paid": "Paid",
+    "preparing": "Being prepared",
+    "shipped": "Shipped",
+    "delivered": "Delivered",
+    "canceled": "Canceled"
+  },
+  "OrderPage": {
+    "title": "Order {code}",
+    "from": "Pieces by {name}",
+    "timeline": "Follow your order",
+    "paid": "Payment confirmed. {maker} has been told.",
+    "preparing": "{maker} is preparing it with care.",
+    "shipped": "On its way to you.",
+    "delivered": "Delivered. We are glad it arrived!",
+    "upcoming": "Next step",
+    "pendingNote": "As soon as the payment is confirmed, the order goes to {maker}.",
+    "canceledNote": "This order was canceled and nothing was charged.",
+    "tracking": "Tracking code",
+    "copy": "Copy code",
+    "copied": "Code copied.",
+    "track": "Track with Correios",
+    "confirm": "I received my order",
+    "confirming": "Confirming…",
+    "confirmed": "Thank you for confirming! {maker} will be happy to know.",
+    "confirmError": "We could not confirm right now. Try again in a moment.",
+    "liveNote": "This page updates by itself when the order changes.",
+    "items": "Pieces",
+    "address": "Delivery address",
+    "subtotal": "Pieces",
+    "shipping": "Shipping",
+    "total": "Total",
+    "back": "Back to my orders",
+    "notFound": "We could not find this order in your account."
   }
 }

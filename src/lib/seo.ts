@@ -1,7 +1,16 @@
 import type { Metadata } from 'next';
 import type { Locale } from '@/i18n/routing';
 
-export const siteUrl = () => process.env.NEXT_PUBLIC_SITE_URL ?? 'http://localhost:3000';
+/**
+ * The public address of the site. Falls back to the production domain Vercel provides,
+ * so share cards never point to localhost even if NEXT_PUBLIC_SITE_URL is missing.
+ */
+export function siteUrl(): string {
+  if (process.env.NEXT_PUBLIC_SITE_URL) return process.env.NEXT_PUBLIC_SITE_URL;
+  if (process.env.VERCEL_PROJECT_PRODUCTION_URL)
+    return `https://${process.env.VERCEL_PROJECT_PRODUCTION_URL}`;
+  return 'http://localhost:3000';
+}
 
 /** Canonical address plus hreflang links for both languages. `path` starts with "/" or is "". */
 export function alternates(locale: Locale, path: string): Metadata['alternates'] {

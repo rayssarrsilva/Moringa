@@ -10,8 +10,11 @@ import { hasLocale, NextIntlClientProvider } from 'next-intl';
 import { getTranslations, setRequestLocale } from 'next-intl/server';
 import type { ReactNode } from 'react';
 import { SiteFooter } from '@/components/site-footer';
+import { QueryProvider } from '@/components/query-provider';
 import { SiteHeader } from '@/components/site-header';
+import { themeScript } from '@/components/theme-toggle';
 import { routing } from '@/i18n/routing';
+import { siteUrl } from '@/lib/seo';
 
 const htmlLang = { pt: 'pt-BR', en: 'en' } as const;
 
@@ -26,9 +29,8 @@ export async function generateMetadata({
 }): Promise<Metadata> {
   const { locale } = await params;
   const t = await getTranslations({ locale, namespace: 'Metadata' });
-  const site = process.env.NEXT_PUBLIC_SITE_URL ?? 'http://localhost:3000';
   return {
-    metadataBase: new URL(site),
+    metadataBase: new URL(siteUrl()),
     title: { default: t('title'), template: `%s · Moringa` },
     description: t('description'),
     alternates: { languages: { 'pt-BR': '/pt', en: '/en' } },
@@ -53,14 +55,20 @@ export default async function LocaleLayout({
   setRequestLocale(locale);
 
   return (
-    <html lang={htmlLang[locale]}>
+    // The theme script sets data-theme before React loads, hence suppressHydrationWarning.
+    <html lang={htmlLang[locale]} suppressHydrationWarning>
+      <head>
+        <script dangerouslySetInnerHTML={{ __html: themeScript }} />
+      </head>
       <body className="flex min-h-dvh flex-col">
         <NextIntlClientProvider>
-          <SiteHeader />
-          <main id="content" tabIndex={-1} className="flex-1 focus:outline-none">
-            {children}
-          </main>
-          <SiteFooter />
+          <QueryProvider>
+            <SiteHeader />
+            <main id="content" tabIndex={-1} className="flex-1 focus:outline-none">
+              {children}
+            </main>
+            <SiteFooter />
+          </QueryProvider>
         </NextIntlClientProvider>
       </body>
     </html>
