@@ -11,3 +11,12 @@ export function formatPrice(cents: number, locale: Locale): string {
     minimumFractionDigits: cents % 100 === 0 ? 0 : 2,
   }).format(cents / 100);
 }
+
+/** Dates are always shown in Brasília time, so server and browser render the same text. */
+export function formatDate(iso: string, locale: Locale, withTime = false): string {
+  return new Intl.DateTimeFormat(intlLocale[locale], {
+    dateStyle: 'medium',
+    ...(withTime ? { timeStyle: 'short' } : {}),
+    timeZone: 'America/Sao_Paulo',
+  }).format(new Date(iso));
+}

@@ -13,7 +13,9 @@
     "search": "Buscar",
     "account": "Minha conta",
     "bag": "{count, plural, =0 {Sacola, vazia} one {Sacola, # peça} other {Sacola, # peças}}",
-    "language": "Idioma"
+    "language": "Idioma",
+    "themeDark": "Ativar tema escuro",
+    "themeLight": "Ativar tema claro"
   },
   "Home": {
     "eyebrow": "Feito à mão",
@@ -169,7 +171,8 @@
       "email": "Digite um e-mail válido, como nome@exemplo.com.",
       "cep": "Digite os 8 números do CEP, como 01310-100.",
       "tooLong": "Este campo está longo demais."
-    }
+    },
+    "demoNote": "Você está na conta de demonstração da Marina, então o endereço fictício dela já vem preenchido. Não use dados reais aqui."
   },
   "Order": {
     "paidTitle": "Pedido confirmado!",
@@ -177,13 +180,68 @@
     "pixTitle": "Falta só o Pix.",
     "pixBody": "Assim que o banco confirmar o pagamento, seu pedido vai para quem fez as peças. Isso costuma levar poucos segundos.",
     "demoTitle": "Pedido de demonstração concluído.",
-    "demoBody": "Este ambiente está sem a chave da Stripe, então nenhum pagamento foi aberto. Na versão no ar, aqui você veria o pagamento em modo de teste.",
+    "demoBody": "Este ambiente está sem a chave da Stripe, então o pagamento foi simulado e nenhum valor foi cobrado.",
     "openTitle": "O pagamento não foi concluído.",
     "openBody": "Sua sacola continua guardada. Você pode tentar de novo quando quiser.",
     "codes": "Seus pedidos",
     "orderLine": "{code} · {shop} · {total}",
     "thanks": "Obrigada por comprar de quem faz à mão.",
     "backToBag": "Voltar para a sacola",
-    "keepBrowsing": "Continuar na feira"
+    "keepBrowsing": "Continuar na feira",
+    "follow": "Acompanhar meu pedido"
+  },
+  "Account": {
+    "title": "Minha conta",
+    "signInTitle": "Entre para acompanhar seus pedidos.",
+    "signInBody": "Na Moringa você vê cada passo do pedido, do pagamento até chegar na sua porta, sem precisar perguntar para quem fez.",
+    "demoTitle": "Conta de demonstração",
+    "demoBody": "Entre como a Marina, uma compradora de exemplo, com três pedidos em momentos diferentes. Não precisa de senha e nada é real.",
+    "demoButton": "Entrar como Marina",
+    "hello": "Olá, {name}!",
+    "signOut": "Sair",
+    "ordersTitle": "Meus pedidos",
+    "noOrders": "Você ainda não fez nenhum pedido.",
+    "noOrdersBody": "Quando comprar, é aqui que você acompanha tudo.",
+    "browse": "Ver peças",
+    "placedOn": "Feito em {date}",
+    "items": "{count, plural, one {# peça} other {# peças}}",
+    "loadError": "Não conseguimos carregar seus pedidos agora.",
+    "retry": "Tentar de novo"
+  },
+  "OrderStatus": {
+    "pending": "Aguardando pagamento",
+    "paid": "Pago",
+    "preparing": "Em preparo",
+    "shipped": "Enviado",
+    "delivered": "Entregue",
+    "canceled": "Cancelado"
+  },
+  "OrderPage": {
+    "title": "Pedido {code}",
+    "from": "Peças de {name}",
+    "timeline": "Acompanhe o pedido",
+    "paid": "Pagamento confirmado. {maker} já foi avisada.",
+    "preparing": "{maker} está preparando com cuidado.",
+    "shipped": "A caminho da sua casa.",
+    "delivered": "Entregue. Que bom que chegou!",
+    "upcoming": "Próxima etapa",
+    "pendingNote": "Assim que o pagamento for confirmado, o pedido vai para {maker}.",
+    "canceledNote": "Este pedido foi cancelado e nenhum valor foi cobrado.",
+    "tracking": "Código de rastreio",
+    "copy": "Copiar código",
+    "copied": "Código copiado.",
+    "track": "Rastrear nos Correios",
+    "confirm": "Recebi meu pedido",
+    "confirming": "Confirmando…",
+    "confirmed": "Obrigada por confirmar! {maker} vai ficar feliz em saber.",
+    "confirmError": "Não conseguimos confirmar agora. Tente de novo em instantes.",
+    "liveNote": "Esta página se atualiza sozinha quando o pedido muda.",
+    "items": "Peças",
+    "address": "Endereço de entrega",
+    "subtotal": "Peças",
+    "shipping": "Frete",
+    "total": "Total",
+    "back": "Voltar para meus pedidos",
+    "notFound": "Não encontramos esse pedido na sua conta."
   }
 }

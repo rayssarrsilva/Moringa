@@ -22,3 +22,12 @@ describe('formatPrice', () => {
     expect(() => formatPrice(10.5, 'pt')).toThrow(TypeError);
   });
 });
+
+describe('formatDate', async () => {
+  const { formatDate } = await import('./format');
+  it('shows dates in Brasília time, in the reader language', () => {
+    // 02:30 UTC is still the previous evening in Brasília (UTC−3).
+    expect(formatDate('2026-10-05T02:30:00Z', 'pt')).toBe('4 de out. de 2026');
+    expect(formatDate('2026-10-05T02:30:00Z', 'en', true)).toBe('Oct 4, 2026, 11:30 PM');
+  });
+});
