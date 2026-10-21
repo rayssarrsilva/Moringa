@@ -3,13 +3,10 @@ import { notFound } from 'next/navigation';
 import { getTranslations, setRequestLocale } from 'next-intl/server';
 import { Breadcrumbs } from '@/components/breadcrumbs';
 import { JsonLd } from '@/components/json-ld';
-import { MakerAvatar } from '@/components/maker-avatar';
-import { PieceCard } from '@/components/piece-card';
+import { ShopProfile } from '@/components/shop-profile';
 import type { Locale } from '@/i18n/routing';
 import { catalog } from '@/lib/catalog';
 import { sampleRepository } from '@/lib/catalog/sample-repository';
-import { formatPrice } from '@/lib/format';
-import { stateNames } from '@/lib/regions';
 import { alternates, ogLocale, siteUrl, truncate } from '@/lib/seo';
 
 type Props = { params: Promise<{ locale: Locale; slug: string }> };
@@ -49,7 +46,7 @@ export default async function ShopPage({ params }: Props) {
   setRequestLocale(locale);
   const shop = await catalog().getShop(slug);
   if (!shop) notFound();
-  const [t, tr] = await Promise.all([getTranslations('Shops'), getTranslations('Regions')]);
+  const t = await getTranslations('Shops');
 
   return (
     <div className="container-page grid gap-12 pb-16 pt-6 md:pt-10">
@@ -58,49 +55,7 @@ export default async function ShopPage({ params }: Props) {
         items={[{ label: t('title'), href: '/lojas' }, { label: shop.name }]}
       />
 
-      <header className="grid gap-6 md:grid-cols-[auto_1fr] md:items-center md:gap-10">
-        <MakerAvatar name={shop.name} region={shop.region} size="lg" />
-        <div className="grid gap-3">
-          <p className="text-caps text-text-secondary">
-            {shop.craft[locale]} · {shop.city}, {stateNames[shop.state]} · {tr(shop.region)}
-          </p>
-          <h1 className="text-heading-md md:text-display">{shop.name}</h1>
-          {shop.quote && (
-            <blockquote className="max-w-[48ch] text-xl">“{shop.quote[locale]}”</blockquote>
-          )}
-        </div>
-      </header>
-
-      <section aria-labelledby="story-title" className="grid max-w-[68ch] gap-2">
-        <h2 id="story-title" className="text-heading-sm">
-          {t('story')}
-        </h2>
-        <p className="text-lg">{shop.story[locale]}</p>
-      </section>
-
-      <section aria-labelledby="pieces-title" className="grid gap-6">
-        <h2 id="pieces-title" className="text-heading-sm">
-          {t('piecesTitle', { name: shop.name })}
-        </h2>
-        {shop.pieces.length > 0 ? (
-          <ul className="grid grid-cols-2 gap-x-3 gap-y-8 md:grid-cols-3 lg:grid-cols-4">
-            {shop.pieces.map((p) => (
-              <li key={p.slug}>
-                <PieceCard
-                  slug={p.slug}
-                  name={p.name[locale]}
-                  maker={p.shop.name}
-                  place={`${p.shop.city}, ${p.shop.state}`}
-                  price={formatPrice(p.priceCents, locale)}
-                  material={p.material}
-                />
-              </li>
-            ))}
-          </ul>
-        ) : (
-          <p className="text-text-secondary">{t('empty', { name: shop.name })}</p>
-        )}
-      </section>
+      <ShopProfile shop={shop} pieces={shop.pieces} locale={locale} />
 
       <JsonLd
         data={{
