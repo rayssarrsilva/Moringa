@@ -63,7 +63,8 @@
     "madeBy": "Made with care by Rayssa Roberta.",
     "code": "Code on GitHub",
     "design": "Design on Figma",
-    "demo": "Portfolio project: payments use Stripe test mode and nothing is charged."
+    "demo": "Portfolio project: payments use Stripe test mode and nothing is charged.",
+    "track": "Track an order"
   },
   "NotFound": {
     "title": "This page is not at the fair.",
@@ -188,7 +189,8 @@
     "thanks": "Thank you for buying from people who make by hand.",
     "backToBag": "Back to your bag",
     "keepBrowsing": "Back to the fair",
-    "follow": "Follow my order"
+    "follow": "Follow my order",
+    "guestHint": "Keep the code: with it and your checkout email you can follow the order under “Track an order”, in the footer."
   },
   "Account": {
     "title": "My account",
@@ -347,5 +349,56 @@
       "exists": "You already have a shop."
     },
     "inStock": "{count, plural, =0 {Made to order} other {# in stock}}"
+  },
+  "Lookup": {
+    "title": "Track an order",
+    "intro": "Enter the order code and the email you used at checkout. The code is on the confirmation page and in the email we sent you.",
+    "signInInstead": "Bought while signed in? See My account.",
+    "code": "Order code",
+    "codeHint": "Starts with MOR-, for example MOR-7KQ2XA.",
+    "codeError": "Enter the full code, like MOR-7KQ2XA.",
+    "email": "Checkout email",
+    "emailHint": "The same one you used at checkout.",
+    "emailError": "Enter a valid email.",
+    "submit": "Track",
+    "notFound": "We could not find an order with that code and email. Check both and try again.",
+    "result": "Order {code}"
+  },
+  "Status": {
+    "title": "System status",
+    "intro": "What is configured in this environment. Yes or no only: no keys are shown here.",
+    "state": {
+      "ok": "Working",
+      "off": "Off",
+      "error": "Has a problem"
+    },
+    "database": {
+      "name": "Database (Neon)",
+      "ok": "Connected. Orders, accounts and pieces are saved.",
+      "off": "No DATABASE_URL: the site uses the sample catalog and does not save orders.",
+      "error": "DATABASE_URL is set, but the connection failed. Check the value on Vercel."
+    },
+    "auth": {
+      "name": "Sign-in (Auth.js)",
+      "ok": "AUTH_SECRET is set. The demo sign-in works.",
+      "off": "AUTH_SECRET is missing on Vercel: sign-in does not work live."
+    },
+    "stripe": {
+      "name": "Payments (Stripe, test mode)",
+      "ok": "Test key found. Checkout opens Stripe's page.",
+      "off": "No STRIPE_SECRET_KEY: payment is simulated.",
+      "error": "This is not a test key. Moringa only accepts sk_test_ keys."
+    },
+    "webhook": {
+      "name": "Stripe webhook",
+      "ok": "Webhook secret set. Confirmed payments move the order to Paid.",
+      "off": "No STRIPE_WEBHOOK_SECRET: orders stay as Awaiting payment.",
+      "error": "The secret should start with whsec_. Check the value on Vercel."
+    },
+    "siteUrl": {
+      "name": "Site address",
+      "ok": "Set. Shared links show the right image.",
+      "off": "No address: shared links may show no image."
+    }
   }
 }

@@ -21,6 +21,7 @@ const orders = await import('@/lib/orders/repository');
 const { dbBuyerRepository } = await import('@/lib/orders/db-buyer-repository');
 const { provisionDemoOrders, demoLifetimeMs } = await import('@/lib/orders/demo-orders');
 const { demoAddress, demoBuyer } = await import('@/lib/orders/sample-orders');
+const { guestViewer } = await import('@/lib/orders/lookup');
 
 const address = {
   name: 'Bia Teste',
@@ -126,9 +127,9 @@ describe('orders from checkout to payment (US-07)', () => {
   });
 });
 
-describe('the shared demo account', () => {
-  const marina = (sid: string) => ({ email: demoBuyer.email, sid });
+const marina = (sid: string) => ({ email: demoBuyer.email, sid });
 
+describe('the shared demo account', () => {
   it('gives each sign-in its own copy of the demo orders', async () => {
     await provisionDemoOrders('session-a');
     await provisionDemoOrders('session-b');
@@ -175,5 +176,43 @@ describe('the shared demo account', () => {
     await provisionDemoOrders('session-c', Date.now() + demoLifetimeMs + 60_000);
     expect(await dbBuyerRepository.listForBuyer(marina('session-a'))).toEqual([]);
     expect(await dbBuyerRepository.listForBuyer(marina('session-c'))).toHaveLength(3);
+  });
+});
+
+describe('tracking an order without an account', () => {
+  it('finds a guest order with the code and checkout email, and only then', async () => {
+    const pieces = await dbRepository.getPiecesBySlugs(['cesto-de-palha']);
+    const priced = priceCart([{ slug: 'cesto-de-palha', quantity: 1 }], pieces);
+    if (!priced.ok) throw new Error('cart should price');
+    const [order] = await orders.createPendingOrders(priced.groups, {
+      ...address,
+      email: 'Guest@Example.com',
+    });
+    const [row] = await testDb
+      .select({ code: schema.orders.code })
+      .from(schema.orders)
+      .where(eq(schema.orders.id, order!.id));
+    const code = row!.code;
+
+    const found = await dbBuyerRepository.getForBuyer(
+      guestViewer({ code, email: 'guest@example.com' }),
+      code,
+    );
+    expect(found?.code).toBe(code);
+    expect(
+      await dbBuyerRepository.getForBuyer(guestViewer({ code, email: 'other@example.com' }), code),
+    ).toBeNull();
+  });
+
+  it('never opens the shared demo account’s orders as a guest', async () => {
+    await provisionDemoOrders('session-guest-test');
+    const [mine] = await dbBuyerRepository.listForBuyer(marina('session-guest-test'));
+    expect(mine).toBeDefined();
+    expect(
+      await dbBuyerRepository.getForBuyer(
+        guestViewer({ code: mine!.code, email: demoBuyer.email }),
+        mine!.code,
+      ),
+    ).toBeNull();
   });
 });

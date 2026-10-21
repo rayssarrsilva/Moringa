@@ -63,7 +63,8 @@
     "madeBy": "Feito com carinho por Rayssa Roberta.",
     "code": "Código no GitHub",
     "design": "Design no Figma",
-    "demo": "Projeto de portfólio: os pagamentos usam o modo de teste da Stripe e nenhuma cobrança é real."
+    "demo": "Projeto de portfólio: os pagamentos usam o modo de teste da Stripe e nenhuma cobrança é real.",
+    "track": "Acompanhar pedido"
   },
   "NotFound": {
     "title": "Essa página não está na feira.",
@@ -188,7 +189,8 @@
     "thanks": "Obrigada por comprar de quem faz à mão.",
     "backToBag": "Voltar para a sacola",
     "keepBrowsing": "Continuar na feira",
-    "follow": "Acompanhar meu pedido"
+    "follow": "Acompanhar meu pedido",
+    "guestHint": "Guarde o código: com ele e o e-mail da compra você acompanha o pedido em “Acompanhar pedido”, no rodapé."
   },
   "Account": {
     "title": "Minha conta",
@@ -347,5 +349,56 @@
       "exists": "Você já tem uma loja."
     },
     "inStock": "{count, plural, =0 {Sob encomenda} one {# em estoque} other {# em estoque}}"
+  },
+  "Lookup": {
+    "title": "Acompanhar pedido",
+    "intro": "Digite o código do pedido e o e-mail usado na compra. O código está na página de confirmação e no e-mail que mandamos.",
+    "signInInstead": "Comprou logada? Veja em Minha conta.",
+    "code": "Código do pedido",
+    "codeHint": "Começa com MOR-, por exemplo MOR-7KQ2XA.",
+    "codeError": "Digite o código completo, como MOR-7KQ2XA.",
+    "email": "E-mail da compra",
+    "emailHint": "O mesmo que você usou no checkout.",
+    "emailError": "Digite um e-mail válido.",
+    "submit": "Acompanhar",
+    "notFound": "Não encontramos um pedido com esse código e esse e-mail. Confira os dois e tente de novo.",
+    "result": "Pedido {code}"
+  },
+  "Status": {
+    "title": "Status do sistema",
+    "intro": "O que está configurado neste ambiente. Só mostramos sim ou não: nenhuma chave aparece aqui.",
+    "state": {
+      "ok": "Funcionando",
+      "off": "Desligado",
+      "error": "Com problema"
+    },
+    "database": {
+      "name": "Banco de dados (Neon)",
+      "ok": "Conectado. Pedidos, contas e peças ficam salvos.",
+      "off": "Sem DATABASE_URL: o site usa o catálogo de exemplo e não salva pedidos.",
+      "error": "DATABASE_URL existe, mas a conexão falhou. Confira o valor na Vercel."
+    },
+    "auth": {
+      "name": "Login (Auth.js)",
+      "ok": "AUTH_SECRET definido. O login de demonstração funciona.",
+      "off": "Falta AUTH_SECRET na Vercel: o login não funciona no ar."
+    },
+    "stripe": {
+      "name": "Pagamentos (Stripe, modo de teste)",
+      "ok": "Chave de teste encontrada. O checkout abre a página da Stripe.",
+      "off": "Sem STRIPE_SECRET_KEY: o pagamento é simulado.",
+      "error": "A chave não é de teste. A Moringa só aceita chaves sk_test_."
+    },
+    "webhook": {
+      "name": "Webhook da Stripe",
+      "ok": "Segredo do webhook definido. Pagamentos confirmados mudam o pedido para Pago.",
+      "off": "Sem STRIPE_WEBHOOK_SECRET: os pedidos ficam como Aguardando pagamento.",
+      "error": "O segredo deveria começar com whsec_. Confira o valor na Vercel."
+    },
+    "siteUrl": {
+      "name": "Endereço do site",
+      "ok": "Definido. Os links compartilhados mostram a imagem certa.",
+      "off": "Sem endereço: os links compartilhados podem sair sem imagem."
+    }
   }
 }
