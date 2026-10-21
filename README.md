@@ -6,7 +6,7 @@
 
 **English** · [Português](./README.pt-BR.md)
 
-_In progress · day 4 of 12: project setup_
+_In progress · day 11 of 14: managing pieces and Lighthouse CI_
 
 </div>
 
@@ -85,6 +85,13 @@ Every Vercel build runs `npm run db:migrate` before `next build`, so the databas
 
 - `npm test` runs unit, component and database integration tests. The integration tests start a real Postgres in memory with [PGlite](https://pglite.dev), create the schema from `src/db/schema.ts` and run the same Drizzle queries the app sends to Neon.
 - `npm run test:e2e` runs Playwright on mobile and desktop, with axe accessibility checks in both themes.
+- `npm run lhci` builds the site and runs [Lighthouse CI](https://github.com/GoogleChrome/lighthouse-ci) three times on four pages (home, catalog, piece, shop in English). The pull request fails below these scores:
+
+| Performance | Accessibility | Best practices | SEO |
+| :---------: | :-----------: | :------------: | :-: |
+|    ≥ 90     |      100      |      ≥ 95      | 100 |
+
+Latest run: performance 91–99 (mobile, slow 4G simulated), accessibility 100, best practices 100, SEO 100 on all four pages.
 
 ### Payments (Stripe test mode)
 
