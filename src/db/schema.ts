@@ -53,6 +53,9 @@ export const shops = pgTable('shops', {
   state: char('state', { length: 2 }).notNull(),
   region: regionEnum('region').notNull(),
   tint: text('tint').notNull().default('#E5D9C3'),
+  /** Created by a demo sign-in: only that session sees it, never the public catalog. */
+  demoSessionId: text('demo_session_id'),
+  demoExpiresAt: timestamp('demo_expires_at', { withTimezone: true }),
   createdAt: createdAt(),
 });
 
@@ -74,11 +77,15 @@ export const pieces = pgTable(
     stock: integer('stock').notNull().default(0),
     status: pieceStatusEnum('status').notNull().default('draft'),
     tint: text('tint').notNull().default('#E5D9C3'),
+    /** Created by a demo sign-in: only that session sees it, never the public catalog. */
+    demoSessionId: text('demo_session_id'),
+    demoExpiresAt: timestamp('demo_expires_at', { withTimezone: true }),
     createdAt: createdAt(),
   },
   (t) => [
     index('pieces_shop_idx').on(t.shopId),
     index('pieces_status_idx').on(t.status),
+    index('pieces_demo_session_idx').on(t.demoSessionId),
     check('pieces_price_positive', sql`${t.priceCents} > 0`),
     check('pieces_stock_non_negative', sql`${t.stock} >= 0`),
   ],

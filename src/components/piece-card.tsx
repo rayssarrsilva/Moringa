@@ -9,13 +9,15 @@ export interface PieceCardProps {
   place: string;
   price: string;
   material: Material;
+  /** Defaults to the public piece page. */
+  href?: string;
 }
 
 /** A piece in a grid. The whole card is a single link, so it is one tab stop. */
-export function PieceCard({ slug, name, maker, place, price, material }: PieceCardProps) {
+export function PieceCard({ slug, name, maker, place, price, material, href }: PieceCardProps) {
   return (
     <article className="group">
-      <Link href={`/pecas/${slug}`} className="grid gap-1 rounded-lg">
+      <Link href={href ?? `/pecas/${slug}`} className="grid gap-1 rounded-lg">
         <PiecePhoto
           material={material}
           className="mb-2 transition-transform duration-200 group-hover:scale-[1.01]"

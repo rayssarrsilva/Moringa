@@ -63,7 +63,8 @@
     "madeBy": "Made with care by Rayssa Roberta.",
     "code": "Code on GitHub",
     "design": "Design on Figma",
-    "demo": "Portfolio project: payments use Stripe test mode and nothing is charged."
+    "demo": "Portfolio project: payments use Stripe test mode and nothing is charged.",
+    "track": "Track an order"
   },
   "NotFound": {
     "title": "This page is not at the fair.",
@@ -188,7 +189,8 @@
     "thanks": "Thank you for buying from people who make by hand.",
     "backToBag": "Back to your bag",
     "keepBrowsing": "Back to the fair",
-    "follow": "Follow my order"
+    "follow": "Follow my order",
+    "guestHint": "Keep the code: with it and your checkout email you can follow the order under “Track an order”, in the footer."
   },
   "Account": {
     "title": "My account",
@@ -243,5 +245,160 @@
     "total": "Total",
     "back": "Back to my orders",
     "notFound": "We could not find this order in your account."
+  },
+  "Seller": {
+    "title": "My shop",
+    "landingTitle": "Sell what you make by hand",
+    "landingBody": "On Moringa, your shop tells your story and every sale goes straight to you. Try the maker area with a demo account:",
+    "demoLucia": "Sign in as Dona Lúcia",
+    "demoLuciaHint": "A ceramist in Cunha, SP, with a shop and published pieces.",
+    "demoNew": "Start as a new maker",
+    "demoNewHint": "Create your shop from scratch and publish your first piece.",
+    "demoNote": "Demo accounts: what you create is visible only to you and is deleted after 7 days.",
+    "buyerSignedIn": "You are signed in as a buyer. To see the maker area, sign out and use a maker account.",
+    "hello": "Hello, {name}!",
+    "viewShop": "View my page",
+    "newPiece": "New piece",
+    "piecesTitle": "My pieces",
+    "noPieces": "You have not published any pieces yet.",
+    "noPiecesBody": "Start with the piece you like the most. It takes about three minutes.",
+    "visibility": {
+      "public": "In the catalog",
+      "onlyYou": "Only you (demo)"
+    },
+    "published": "{name} is published!",
+    "publishedDemo": "In the demo account, it is visible only to you.",
+    "seePiece": "See how it looks",
+    "shopCreated": "Your shop is ready!",
+    "shopCreatedBody": "Now publish your first piece. Visitors to your page will get to know your story.",
+    "signOut": "Sign out",
+    "onboardingTitle": "Let's create your shop",
+    "onboardingIntro": "Tell buyers who you are and where you come from. That is what makes someone choose your piece.",
+    "sectionAbout": "About you",
+    "shopName": "Shop name",
+    "shopNameHint": "It can be your name, like “Dona Lúcia”, or your studio's name.",
+    "craft": "What you make",
+    "craftHint": "E.g. ceramist, lacemaker, woodworker.",
+    "sectionPlace": "Where you are",
+    "city": "City",
+    "state": "State",
+    "chooseState": "Choose a state",
+    "region": "Region: {region}",
+    "sectionStory": "Your story",
+    "story": "Tell your story",
+    "storyHint": "How you learned, what inspires you. At least 40 characters.",
+    "quote": "A sentence of yours (optional)",
+    "quoteHint": "It is highlighted on your page.",
+    "english": "Want to write in English too? (optional)",
+    "englishHint": "Visitors who read Moringa in English see this version. If you leave it blank, we show the Portuguese.",
+    "craftEn": "What you make, in English",
+    "storyEn": "Your story, in English",
+    "createShop": "Create my shop",
+    "counter": "{length} of {max} characters",
+    "wizardTitle": "New piece",
+    "stepsLabel": "Steps",
+    "stepOf": "Step {current} of {total}",
+    "steps": {
+      "details": "About the piece",
+      "pricing": "Price and stock",
+      "preview": "Review and publish"
+    },
+    "pieceName": "Piece name",
+    "pieceNameHint": "E.g. Clay moringa with lid.",
+    "material": "Material",
+    "chooseMaterial": "Choose a material",
+    "description": "Description",
+    "descriptionHint": "Size, how it was made, care. At least 20 characters.",
+    "price": "Price (R$)",
+    "priceHint": "E.g. 140 or 89,90.",
+    "shipping": "Shipping (R$)",
+    "shippingHint": "Use 0 for free shipping.",
+    "stock": "How many do you have ready?",
+    "stockHint": "Use 0 if it is made to order.",
+    "continue": "Continue",
+    "back": "Back",
+    "publish": "Publish piece",
+    "previewIntro": "This is how buyers will see your piece.",
+    "previewCard": "In the catalog",
+    "previewPage": "On the piece page",
+    "edit": "Edit {step}",
+    "draftRestored": "We restored the draft you started.",
+    "discard": "Start over",
+    "previewBanner": "Preview: this is how buyers see this page.",
+    "previewDemo": "In the demo account, only you can see this page.",
+    "previewAction": "In the live shop, the “Add to bag” button shows here.",
+    "backToShop": "Back to my shop",
+    "errors": {
+      "required": "Fill in this field.",
+      "shopName": "Write your shop's name.",
+      "craft": "Tell us what you make.",
+      "state": "Choose a state.",
+      "story": "Tell a little more: at least 40 characters.",
+      "pieceName": "Give the piece a name of at least 3 letters.",
+      "material": "Choose a material.",
+      "description": "Describe the piece in at least 20 characters.",
+      "priceRequired": "Enter the price.",
+      "pricePositive": "The price must be more than zero.",
+      "money": "Use numbers only, like 140 or 89,90.",
+      "priceTooHigh": "That seems too high. Please check.",
+      "shippingRequired": "Enter the shipping. Use 0 for free shipping.",
+      "stockRequired": "Enter how many pieces you have.",
+      "stock": "Use a whole number, like 3.",
+      "tooLong": "This text is too long.",
+      "generic": "We could not save right now. Your details are still here, please try again.",
+      "exists": "You already have a shop."
+    },
+    "inStock": "{count, plural, =0 {Made to order} other {# in stock}}"
+  },
+  "Lookup": {
+    "title": "Track an order",
+    "intro": "Enter the order code and the email you used at checkout. The code is on the confirmation page and in the email we sent you.",
+    "signInInstead": "Bought while signed in? See My account.",
+    "code": "Order code",
+    "codeHint": "Starts with MOR-, for example MOR-7KQ2XA.",
+    "codeError": "Enter the full code, like MOR-7KQ2XA.",
+    "email": "Checkout email",
+    "emailHint": "The same one you used at checkout.",
+    "emailError": "Enter a valid email.",
+    "submit": "Track",
+    "notFound": "We could not find an order with that code and email. Check both and try again.",
+    "result": "Order {code}"
+  },
+  "Status": {
+    "title": "System status",
+    "intro": "What is configured in this environment. Yes or no only: no keys are shown here.",
+    "state": {
+      "ok": "Working",
+      "off": "Off",
+      "error": "Has a problem"
+    },
+    "database": {
+      "name": "Database (Neon)",
+      "ok": "Connected. Orders, accounts and pieces are saved.",
+      "off": "No DATABASE_URL: the site uses the sample catalog and does not save orders.",
+      "error": "DATABASE_URL is set, but the connection failed. Check the value on Vercel."
+    },
+    "auth": {
+      "name": "Sign-in (Auth.js)",
+      "ok": "AUTH_SECRET is set. The demo sign-in works.",
+      "off": "AUTH_SECRET is missing on Vercel: sign-in does not work live."
+    },
+    "stripe": {
+      "name": "Payments (Stripe, test mode)",
+      "ok": "Test key found. Checkout opens Stripe's page.",
+      "off": "No STRIPE_SECRET_KEY: payment is simulated.",
+      "error": "This is not a test key. Moringa only accepts sk_test_ keys."
+    },
+    "webhook": {
+      "name": "Stripe webhook",
+      "ok": "Webhook secret set. Confirmed payments move the order to Paid.",
+      "off": "No STRIPE_WEBHOOK_SECRET: orders stay as Awaiting payment.",
+      "error": "The secret should start with whsec_. Check the value on Vercel."
+    },
+    "siteUrl": {
+      "name": "Site address",
+      "ok": "Set. Shared links show the right image.",
+      "off": "No address: shared links may show no image."
+    }
   }
 }

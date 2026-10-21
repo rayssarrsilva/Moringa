@@ -63,7 +63,8 @@
     "madeBy": "Feito com carinho por Rayssa Roberta.",
     "code": "Código no GitHub",
     "design": "Design no Figma",
-    "demo": "Projeto de portfólio: os pagamentos usam o modo de teste da Stripe e nenhuma cobrança é real."
+    "demo": "Projeto de portfólio: os pagamentos usam o modo de teste da Stripe e nenhuma cobrança é real.",
+    "track": "Acompanhar pedido"
   },
   "NotFound": {
     "title": "Essa página não está na feira.",
@@ -188,7 +189,8 @@
     "thanks": "Obrigada por comprar de quem faz à mão.",
     "backToBag": "Voltar para a sacola",
     "keepBrowsing": "Continuar na feira",
-    "follow": "Acompanhar meu pedido"
+    "follow": "Acompanhar meu pedido",
+    "guestHint": "Guarde o código: com ele e o e-mail da compra você acompanha o pedido em “Acompanhar pedido”, no rodapé."
   },
   "Account": {
     "title": "Minha conta",
@@ -243,5 +245,160 @@
     "total": "Total",
     "back": "Voltar para meus pedidos",
     "notFound": "Não encontramos esse pedido na sua conta."
+  },
+  "Seller": {
+    "title": "Minha loja",
+    "landingTitle": "Venda o que você faz à mão",
+    "landingBody": "Na Moringa, sua loja conta a sua história e cada venda vai direto para você. Experimente o painel com uma conta de demonstração:",
+    "demoLucia": "Entrar como Dona Lúcia",
+    "demoLuciaHint": "Ceramista em Cunha, SP, com loja pronta e peças publicadas.",
+    "demoNew": "Começar como artesã nova",
+    "demoNewHint": "Crie sua loja do zero e publique a primeira peça.",
+    "demoNote": "Contas de demonstração: o que você criar fica visível só para você e é apagado em 7 dias.",
+    "buyerSignedIn": "Você entrou como compradora. Para ver o painel da loja, saia e entre com uma conta de artesã.",
+    "hello": "Olá, {name}!",
+    "viewShop": "Ver minha página",
+    "newPiece": "Nova peça",
+    "piecesTitle": "Minhas peças",
+    "noPieces": "Você ainda não publicou peças.",
+    "noPiecesBody": "Comece pela peça de que você mais gosta. Leva uns três minutos.",
+    "visibility": {
+      "public": "No catálogo",
+      "onlyYou": "Só você vê (demonstração)"
+    },
+    "published": "{name} foi publicada!",
+    "publishedDemo": "Na conta de demonstração, ela fica visível só para você.",
+    "seePiece": "Ver como ficou",
+    "shopCreated": "Sua loja está pronta!",
+    "shopCreatedBody": "Agora publique a primeira peça. Quem visitar sua página vai conhecer a sua história.",
+    "signOut": "Sair",
+    "onboardingTitle": "Vamos criar sua loja",
+    "onboardingIntro": "Conte quem você é e de onde vem. É isso que faz alguém escolher a sua peça.",
+    "sectionAbout": "Sobre você",
+    "shopName": "Nome da loja",
+    "shopNameHint": "Pode ser o seu nome, como “Dona Lúcia”, ou o nome do ateliê.",
+    "craft": "O que você faz",
+    "craftHint": "Ex.: ceramista, rendeira, marceneiro.",
+    "sectionPlace": "Onde você está",
+    "city": "Cidade",
+    "state": "Estado",
+    "chooseState": "Escolha o estado",
+    "region": "Região: {region}",
+    "sectionStory": "Sua história",
+    "story": "Conte sua história",
+    "storyHint": "Como você aprendeu, o que te inspira. Pelo menos 40 caracteres.",
+    "quote": "Uma frase sua (opcional)",
+    "quoteHint": "Aparece em destaque na sua página.",
+    "english": "Quer escrever em inglês também? (opcional)",
+    "englishHint": "Quem visita a Moringa em inglês vê esta versão. Se deixar em branco, mostramos o português.",
+    "craftEn": "O que você faz, em inglês",
+    "storyEn": "Sua história, em inglês",
+    "createShop": "Criar minha loja",
+    "counter": "{length} de {max} caracteres",
+    "wizardTitle": "Nova peça",
+    "stepsLabel": "Etapas",
+    "stepOf": "Passo {current} de {total}",
+    "steps": {
+      "details": "Sobre a peça",
+      "pricing": "Preço e estoque",
+      "preview": "Revisar e publicar"
+    },
+    "pieceName": "Nome da peça",
+    "pieceNameHint": "Ex.: Moringa de barro com tampa.",
+    "material": "Material",
+    "chooseMaterial": "Escolha o material",
+    "description": "Descrição",
+    "descriptionHint": "Tamanho, como foi feita, cuidados. Pelo menos 20 caracteres.",
+    "price": "Preço (R$)",
+    "priceHint": "Ex.: 140 ou 89,90.",
+    "shipping": "Frete (R$)",
+    "shippingHint": "Use 0 para frete grátis.",
+    "stock": "Quantas você tem prontas?",
+    "stockHint": "Use 0 se for sob encomenda.",
+    "continue": "Continuar",
+    "back": "Voltar",
+    "publish": "Publicar peça",
+    "previewIntro": "É assim que a sua peça vai aparecer para quem compra.",
+    "previewCard": "No catálogo",
+    "previewPage": "Na página da peça",
+    "edit": "Editar {step}",
+    "draftRestored": "Recuperamos o rascunho que você começou.",
+    "discard": "Começar do zero",
+    "previewBanner": "Prévia: é assim que compradores veem esta página.",
+    "previewDemo": "Na conta de demonstração, só você vê esta página.",
+    "previewAction": "Na loja de verdade, aqui aparece o botão “Adicionar à sacola”.",
+    "backToShop": "Voltar para minha loja",
+    "errors": {
+      "required": "Preencha este campo.",
+      "shopName": "Escreva o nome da loja.",
+      "craft": "Conte o que você faz.",
+      "state": "Escolha o estado.",
+      "story": "Conte um pouco mais: pelo menos 40 caracteres.",
+      "pieceName": "Dê um nome à peça, com pelo menos 3 letras.",
+      "material": "Escolha o material.",
+      "description": "Descreva a peça em pelo menos 20 caracteres.",
+      "priceRequired": "Informe o preço.",
+      "pricePositive": "O preço precisa ser maior que zero.",
+      "money": "Use só números, como 140 ou 89,90.",
+      "priceTooHigh": "Esse valor parece alto demais. Confira.",
+      "shippingRequired": "Informe o frete. Use 0 para frete grátis.",
+      "stockRequired": "Informe quantas peças você tem.",
+      "stock": "Use um número inteiro, como 3.",
+      "tooLong": "Este texto está longo demais.",
+      "generic": "Não conseguimos salvar agora. Seus dados continuam aqui, tente de novo.",
+      "exists": "Você já tem uma loja."
+    },
+    "inStock": "{count, plural, =0 {Sob encomenda} one {# em estoque} other {# em estoque}}"
+  },
+  "Lookup": {
+    "title": "Acompanhar pedido",
+    "intro": "Digite o código do pedido e o e-mail usado na compra. O código está na página de confirmação e no e-mail que mandamos.",
+    "signInInstead": "Comprou logada? Veja em Minha conta.",
+    "code": "Código do pedido",
+    "codeHint": "Começa com MOR-, por exemplo MOR-7KQ2XA.",
+    "codeError": "Digite o código completo, como MOR-7KQ2XA.",
+    "email": "E-mail da compra",
+    "emailHint": "O mesmo que você usou no checkout.",
+    "emailError": "Digite um e-mail válido.",
+    "submit": "Acompanhar",
+    "notFound": "Não encontramos um pedido com esse código e esse e-mail. Confira os dois e tente de novo.",
+    "result": "Pedido {code}"
+  },
+  "Status": {
+    "title": "Status do sistema",
+    "intro": "O que está configurado neste ambiente. Só mostramos sim ou não: nenhuma chave aparece aqui.",
+    "state": {
+      "ok": "Funcionando",
+      "off": "Desligado",
+      "error": "Com problema"
+    },
+    "database": {
+      "name": "Banco de dados (Neon)",
+      "ok": "Conectado. Pedidos, contas e peças ficam salvos.",
+      "off": "Sem DATABASE_URL: o site usa o catálogo de exemplo e não salva pedidos.",
+      "error": "DATABASE_URL existe, mas a conexão falhou. Confira o valor na Vercel."
+    },
+    "auth": {
+      "name": "Login (Auth.js)",
+      "ok": "AUTH_SECRET definido. O login de demonstração funciona.",
+      "off": "Falta AUTH_SECRET na Vercel: o login não funciona no ar."
+    },
+    "stripe": {
+      "name": "Pagamentos (Stripe, modo de teste)",
+      "ok": "Chave de teste encontrada. O checkout abre a página da Stripe.",
+      "off": "Sem STRIPE_SECRET_KEY: o pagamento é simulado.",
+      "error": "A chave não é de teste. A Moringa só aceita chaves sk_test_."
+    },
+    "webhook": {
+      "name": "Webhook da Stripe",
+      "ok": "Segredo do webhook definido. Pagamentos confirmados mudam o pedido para Pago.",
+      "off": "Sem STRIPE_WEBHOOK_SECRET: os pedidos ficam como Aguardando pagamento.",
+      "error": "O segredo deveria começar com whsec_. Confira o valor na Vercel."
+    },
+    "siteUrl": {
+      "name": "Endereço do site",
+      "ok": "Definido. Os links compartilhados mostram a imagem certa.",
+      "off": "Sem endereço: os links compartilhados podem sair sem imagem."
+    }
   }
 }

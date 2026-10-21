@@ -1,5 +1,6 @@
 import { dehydrate, HydrationBoundary, QueryClient } from '@tanstack/react-query';
 import type { Metadata } from 'next';
+import { redirect } from 'next/navigation';
 import { getTranslations, setRequestLocale } from 'next-intl/server';
 import { auth, currentViewer } from '@/auth';
 import { OrdersList } from '@/components/account/orders-list';
@@ -25,6 +26,8 @@ export default async function AccountPage({ params }: Props) {
     currentViewer(),
     getTranslations('Account'),
   ]);
+
+  if (viewer?.role === 'seller') redirect(`/${locale}/loja`);
 
   if (!session || !viewer) {
     return (

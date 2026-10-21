@@ -18,15 +18,34 @@ declare module 'next-auth' {
  * There are no passwords: the only thing a demo login can see is demo data.
  */
 export const demoAccounts = {
-  marina: {
+  marina: () => ({
     id: 'demo-marina',
     name: demoBuyer.name,
     email: demoBuyer.email,
     role: 'buyer' as const,
+  }),
+  /** A maker with a shop already set up, from the seed. */
+  lucia: () => ({
+    id: 'demo-lucia',
+    name: 'Dona Lúcia',
+    email: 'ceramica-da-lucia@demo.moringa.dev',
+    role: 'seller' as const,
+  }),
+  /** A brand-new maker, one per sign-in, who goes through shop onboarding. */
+  nova: () => {
+    const id = crypto.randomUUID().slice(0, 8);
+    return {
+      id: `demo-nova-${id}`,
+      name: 'Nova artesã',
+      email: `nova-${id}@demo.moringa.dev`,
+      role: 'seller' as const,
+    };
   },
 };
 
 export type DemoAccount = keyof typeof demoAccounts;
+export const isDemoAccountName = (value: unknown): value is DemoAccount =>
+  typeof value === 'string' && Object.hasOwn(demoAccounts, value);
 
 /** Production needs AUTH_SECRET. Local runs and CI get a fixed secret so `npm run start` works out of the box. */
 const secret =
@@ -43,7 +62,8 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
       id: 'demo',
       name: 'Demo',
       credentials: { account: {} },
-      authorize: (credentials) => (credentials?.account === 'marina' ? demoAccounts.marina : null),
+      authorize: (credentials) =>
+        isDemoAccountName(credentials?.account) ? demoAccounts[credentials.account]() : null,
     }),
   ],
   callbacks: {
@@ -51,10 +71,11 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
       if (user) {
         token.role = user.role ?? 'buyer';
         token.sid = crypto.randomUUID();
-        // With a database, every demo sign-in gets its own copy of the demo orders.
+        // With a database: clear expired demo data, and give the demo buyer her own orders.
         if (process.env.DATABASE_URL) {
-          const { provisionDemoOrders } = await import('./lib/orders/demo-orders');
-          await provisionDemoOrders(String(token.sid));
+          const demo = await import('./lib/orders/demo-orders');
+          if (user.email === demoBuyer.email) await demo.provisionDemoOrders(String(token.sid));
+          else await demo.cleanupExpiredDemoData();
         }
       }
       return token;
@@ -71,5 +92,7 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
 export async function currentViewer() {
   const session = await auth();
   const email = session?.user?.email;
-  return email ? { email, sid: session.sid, name: session.user.name ?? '' } : null;
+  return email
+    ? { email, sid: session.sid, name: session.user.name ?? '', role: session.user.role }
+    : null;
 }

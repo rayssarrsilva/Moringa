@@ -113,3 +113,45 @@ test.describe('checkout with the demo account', () => {
     await expect(page.getByLabel('Rua')).toHaveValue('Avenida Paulista');
   });
 });
+
+test.describe('track an order without an account', () => {
+  test('is linked from the footer and says clearly when nothing matches', async ({ page }) => {
+    await page.goto('/pt');
+    await page.getByRole('contentinfo').getByRole('link', { name: 'Acompanhar pedido' }).click();
+    await expect(page.getByRole('heading', { level: 1, name: 'Acompanhar pedido' })).toBeVisible();
+    expect((await axe(page)).violations).toEqual([]);
+
+    await page.getByLabel('Código do pedido').fill('MOR-ZZZZZZ');
+    await page.getByLabel('E-mail da compra').fill('ninguem@example.com');
+    await page.getByRole('button', { name: 'Acompanhar' }).click();
+    await expect(
+      page.getByText(/Não encontramos um pedido com esse código e esse e-mail/),
+    ).toBeVisible();
+  });
+
+  test('prefills the code from the confirmation link', async ({ page }) => {
+    await page.goto('/pt/pedido/acompanhar?codigo=mor-7kq2xa');
+    await expect(page.getByLabel('Código do pedido')).toHaveValue('MOR-7KQ2XA');
+  });
+
+  test('answers the same 404 for a wrong code or a wrong email', async ({ request }) => {
+    const res = await request.post('/api/orders/lookup', {
+      data: { code: 'MOR-7KQ2XA', email: 'x@example.com' },
+    });
+    expect(res.status()).toBe(404);
+    expect(await res.json()).toEqual({ error: 'not_found' });
+  });
+});
+
+test.describe('system status', () => {
+  test('shows yes/no checks and never a secret', async ({ page }) => {
+    await page.goto('/pt/status');
+    await expect(
+      page.getByRole('heading', { level: 2, name: 'Banco de dados (Neon)' }),
+    ).toBeVisible();
+    await expect(
+      page.getByText(/sk_test_[A-Za-z0-9]{8,}|whsec_[A-Za-z0-9]{8,}|postgres(ql)?:\/\//),
+    ).toHaveCount(0);
+    expect((await axe(page)).violations).toEqual([]);
+  });
+});

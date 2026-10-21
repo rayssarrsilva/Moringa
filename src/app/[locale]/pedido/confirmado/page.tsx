@@ -40,6 +40,9 @@ export default async function ConfirmationPage({ params, searchParams }: Props) 
     state !== 'open' && session_id && ordersEnabled() ? await ordersBySession(session_id) : [];
   const viewer = await currentViewer();
   const t = await getTranslations('Order');
+  // Signed in: the order is in the account. Guest: tracked with the code and checkout email.
+  const trackHref = (code: string) =>
+    viewer ? `/conta/pedidos/${code}` : `/pedido/acompanhar?codigo=${code}`;
 
   const copy = {
     paid: [t('paidTitle'), t('paidBody', { count: Math.max(orders.length, 1) })],
@@ -71,15 +74,21 @@ export default async function ConfirmationPage({ params, searchParams }: Props) 
           </h2>
           <ul className="grid gap-2">
             {orders.map((o) => (
-              <li key={o.code} className="text-label">
-                {t('orderLine', {
-                  code: o.code,
-                  shop: o.shopName,
-                  total: formatPrice(o.totalCents, locale),
-                })}
+              <li key={o.code}>
+                <Link
+                  href={trackHref(o.code)}
+                  className="text-label inline-flex min-h-11 items-center underline underline-offset-4"
+                >
+                  {t('orderLine', {
+                    code: o.code,
+                    shop: o.shopName,
+                    total: formatPrice(o.totalCents, locale),
+                  })}
+                </Link>
               </li>
             ))}
           </ul>
+          {!viewer && <p className="text-sm text-text-secondary">{t('guestHint')}</p>}
         </section>
       )}
 
@@ -91,15 +100,12 @@ export default async function ConfirmationPage({ params, searchParams }: Props) 
             <Link href="/sacola">{t('backToBag')}</Link>
           </Button>
         )}
-        {state !== 'open' && viewer && orders.length > 0 && (
+        {state !== 'open' && orders.length > 0 && (
           <Button asChild>
-            <Link href={`/conta/pedidos/${orders[0]!.code}`}>{t('follow')}</Link>
+            <Link href={trackHref(orders[0]!.code)}>{t('follow')}</Link>
           </Button>
         )}
-        <Button
-          asChild
-          variant={state === 'open' || (viewer && orders.length > 0) ? 'ghost' : 'primary'}
-        >
+        <Button asChild variant={state === 'open' || orders.length > 0 ? 'ghost' : 'primary'}>
           <Link href="/pecas">{t('keepBrowsing')}</Link>
         </Button>
       </div>
