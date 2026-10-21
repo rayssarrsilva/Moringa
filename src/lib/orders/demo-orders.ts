@@ -1,4 +1,5 @@
-import { and, eq, inArray, isNotNull, lt } from 'drizzle-orm';
+import { and, eq, inArray, isNotNull, like, lt, notInArray } from 'drizzle-orm';
+import type { AnyPgColumn } from 'drizzle-orm/pg-core';
 import { db, schema } from '../../db';
 import { orderCode } from './code';
 import { daysAgo, demoAddress, demoBuyer, sampleOrders } from './sample-orders';
@@ -17,10 +18,7 @@ export const isDemoEmail = (email: string) => email.toLowerCase() === demoBuyer.
  */
 export async function provisionDemoOrders(sid: string, now = Date.now()) {
   const database = db();
-
-  await database
-    .delete(orders)
-    .where(and(isNotNull(orders.demoExpiresAt), lt(orders.demoExpiresAt, new Date(now))));
+  await cleanupExpiredDemoData(now);
 
   const [buyer] = await database
     .insert(users)
@@ -99,3 +97,23 @@ export async function provisionDemoOrders(sid: string, now = Date.now()) {
 
 /** Orders of the demo account are scoped to the sign-in that created them. */
 export const demoScope = (sid: string) => eq(orders.demoSessionId, sid);
+
+/**
+ * Removes what demo sessions created once it expires: orders, pieces, shops, and the
+ * one-off "new maker" accounts left without a shop. Runs on every demo sign-in.
+ */
+export async function cleanupExpiredDemoData(now = Date.now()) {
+  const database = db();
+  const expired = (column: AnyPgColumn) => and(isNotNull(column), lt(column, new Date(now)));
+  await database.delete(orders).where(expired(orders.demoExpiresAt));
+  await database.delete(pieces).where(expired(pieces.demoExpiresAt));
+  await database.delete(shops).where(expired(shops.demoExpiresAt));
+  await database
+    .delete(users)
+    .where(
+      and(
+        like(users.email, 'nova-%@demo.moringa.dev'),
+        notInArray(users.id, database.select({ id: shops.ownerId }).from(shops)),
+      ),
+    );
+}

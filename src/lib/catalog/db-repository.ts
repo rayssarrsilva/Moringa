@@ -1,4 +1,17 @@
-import { and, asc, count, desc, eq, gte, ilike, inArray, lte, or, type SQL } from 'drizzle-orm';
+import {
+  and,
+  asc,
+  count,
+  desc,
+  eq,
+  gte,
+  ilike,
+  inArray,
+  isNull,
+  lte,
+  or,
+  type SQL,
+} from 'drizzle-orm';
 import { db, schema } from '../../db';
 import type { CatalogQuery, CatalogRepository, Piece, Shop } from './types';
 
@@ -50,7 +63,12 @@ const toShop = (r: typeof shops.$inferSelect): Shop => ({
   quote: r.quotePt && r.quoteEn ? { pt: r.quotePt, en: r.quoteEn } : null,
 });
 
-const published = eq(pieces.status, 'published');
+/** Public catalog: published pieces only, never anything a demo session created. */
+const published = and(
+  eq(pieces.status, 'published'),
+  isNull(pieces.demoSessionId),
+  isNull(shops.demoSessionId),
+);
 
 function selectPieces(where: SQL | undefined) {
   return db()
@@ -107,14 +125,26 @@ export const dbRepository: CatalogRepository = {
     const rows = await db()
       .select({ shop: shops, pieceCount: count(pieces.id) })
       .from(shops)
-      .leftJoin(pieces, and(eq(pieces.shopId, shops.id), published))
+      .leftJoin(
+        pieces,
+        and(
+          eq(pieces.shopId, shops.id),
+          eq(pieces.status, 'published'),
+          isNull(pieces.demoSessionId),
+        ),
+      )
+      .where(isNull(shops.demoSessionId))
       .groupBy(shops.id)
       .orderBy(asc(shops.name));
     return rows.map((r) => ({ ...toShop(r.shop), pieceCount: r.pieceCount }));
   },
 
   async getShop(slug) {
-    const [row] = await db().select().from(shops).where(eq(shops.slug, slug)).limit(1);
+    const [row] = await db()
+      .select()
+      .from(shops)
+      .where(and(eq(shops.slug, slug), isNull(shops.demoSessionId)))
+      .limit(1);
     if (!row) return null;
     const rows = await selectPieces(eq(pieces.shopId, row.id)).orderBy(...orderBy.new);
     return { ...toShop(row), pieces: rows.map(toPiece) };
