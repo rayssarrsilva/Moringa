@@ -15,7 +15,8 @@
     "bag": "{count, plural, =0 {Sacola, vazia} one {Sacola, # peça} other {Sacola, # peças}}",
     "language": "Idioma",
     "themeDark": "Ativar tema escuro",
-    "themeLight": "Ativar tema claro"
+    "themeLight": "Ativar tema claro",
+    "favorites": "Favoritos"
   },
   "Home": {
     "eyebrow": "Feito à mão",
@@ -449,5 +450,43 @@
     "loadError": "Não conseguimos carregar os pedidos.",
     "retry": "Tentar de novo",
     "demoOrders": "Na demonstração, estes pedidos são de compradores fictícios e só aparecem neste navegador. Compre algo como Marina neste mesmo navegador e o pedido aparece aqui."
+  },
+  "Reviews": {
+    "title": "Avaliações",
+    "summary": "{average} de 5 · {count, plural, one {# avaliação} other {# avaliações}}",
+    "stars": "{rating} de 5 estrelas",
+    "empty": "Esta peça ainda não tem avaliações. Quem comprar primeiro conta como foi.",
+    "on": "sobre {piece}",
+    "onlyYou": "Só você vê (demonstração)",
+    "formTitle": "Avalie {piece}",
+    "ratingLegend": "Sua nota",
+    "ratingOption": "{rating, plural, one {# estrela} other {# estrelas}}",
+    "comment": "Conte como foi (opcional)",
+    "commentHint": "O que você achou da peça e da entrega? Até 500 caracteres.",
+    "submit": "Publicar avaliação",
+    "ratingRequired": "Escolha de 1 a 5 estrelas.",
+    "thanks": "Obrigada! {maker} vai adorar ler.",
+    "yourReview": "Sua avaliação",
+    "demoNote": "Na demonstração, sua avaliação aparece aqui e no painel da loja, só neste navegador. Avaliações de clientes reais vão para a página da peça.",
+    "error": "Não conseguimos salvar sua avaliação. Tente de novo.",
+    "already": "Você já avaliou esta peça.",
+    "sellerTitle": "Avaliações recebidas",
+    "sellerIntro": "O que quem comprou de você está dizendo.",
+    "sellerEmpty": "Você ainda não recebeu avaliações. Elas aparecem aqui assim que alguém avaliar uma peça entregue.",
+    "seeReviews": "Ver avaliações"
+  },
+  "Favorites": {
+    "title": "Favoritos",
+    "save": "Salvar nos favoritos",
+    "remove": "Remover {name} dos favoritos",
+    "removeShort": "Remover",
+    "empty": "Você ainda não salvou nenhuma peça.",
+    "emptyBody": "Toque no coração de uma peça para guardar e voltar depois.",
+    "browse": "Ver peças",
+    "unavailable": "Indisponível",
+    "unavailableBody": "Esta peça foi pausada ou esgotou. Por enquanto, dá pra ver outras peças de quem fez.",
+    "count": "{count, plural, one {# peça salva} other {# peças salvas}}",
+    "note": "Seus favoritos ficam guardados neste navegador, mesmo depois de entrar na sua conta.",
+    "loading": "Carregando seus favoritos…"
   }
 }

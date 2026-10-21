@@ -1,7 +1,7 @@
 import { useTranslations } from 'next-intl';
 import { Link } from '@/i18n/navigation';
 import { BagLink } from './bag/bag-link';
-import { SearchIcon, UserIcon } from './icons';
+import { HeartIcon, SearchIcon, UserIcon } from './icons';
 import { LocaleSwitcher } from './locale-switcher';
 import { ThemeToggle } from './theme-toggle';
 
@@ -55,6 +55,14 @@ export function SiteHeader() {
           {/* The catalog has its own search; on small phones the icon gives its space to the others. */}
           <Link href="/pecas" className={`${iconLink} max-sm:hidden`} aria-label={t('search')}>
             <SearchIcon />
+          </Link>
+          {/* On small phones favorites stay reachable from the piece page and the account. */}
+          <Link
+            href="/favoritos"
+            className={`${iconLink} max-sm:hidden`}
+            aria-label={t('favorites')}
+          >
+            <HeartIcon />
           </Link>
           <Link href="/conta" className={iconLink} aria-label={t('account')}>
             <UserIcon />
