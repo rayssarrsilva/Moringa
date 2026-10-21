@@ -4,7 +4,7 @@ import { canTransition } from '../order-status';
 import { demoScope, isDemoEmail } from './demo-orders';
 import type { BuyerOrdersRepository, OrderDetail, Viewer } from './types';
 
-const { orders, orderItems, pieces, shops, users } = schema;
+const { orders, orderItems, pieces, reviews, shops, users } = schema;
 const iso = (d: Date | null) => d?.toISOString() ?? null;
 
 async function load(viewer: Viewer, code?: string): Promise<OrderDetail[]> {
@@ -33,9 +33,16 @@ async function load(viewer: Viewer, code?: string): Promise<OrderDetail[]> {
       namePt: pieces.namePt,
       nameEn: pieces.nameEn,
       material: pieces.material,
+      reviewRating: reviews.rating,
+      reviewComment: reviews.comment,
+      reviewAt: reviews.createdAt,
     })
     .from(orderItems)
     .innerJoin(pieces, eq(orderItems.pieceId, pieces.id))
+    .leftJoin(
+      reviews,
+      and(eq(reviews.orderId, orderItems.orderId), eq(reviews.pieceId, orderItems.pieceId)),
+    )
     .where(
       inArray(
         orderItems.orderId,
@@ -52,6 +59,14 @@ async function load(viewer: Viewer, code?: string): Promise<OrderDetail[]> {
         material: i.material,
         unitPriceCents: i.unitPriceCents,
         quantity: i.quantity,
+        review:
+          i.reviewRating !== null
+            ? {
+                rating: i.reviewRating,
+                comment: i.reviewComment,
+                createdAt: i.reviewAt!.toISOString(),
+              }
+            : null,
       }));
     return {
       code: o.code,

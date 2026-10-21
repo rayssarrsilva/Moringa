@@ -26,7 +26,11 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 export default async function SellerHome({ params, searchParams }: Props) {
   const { locale } = await params;
   setRequestLocale(locale);
-  const [viewer, t] = await Promise.all([currentViewer(), getTranslations('Seller')]);
+  const [viewer, t, tr] = await Promise.all([
+    currentViewer(),
+    getTranslations('Seller'),
+    getTranslations('Reviews'),
+  ]);
 
   if (!viewer || viewer.role !== 'seller')
     return <Landing locale={locale} buyer={Boolean(viewer)} />;
@@ -94,6 +98,9 @@ export default async function SellerHome({ params, searchParams }: Props) {
         </Button>
         <Button asChild size="lg" variant="secondary">
           <Link href={shopHref}>{t('viewShop')}</Link>
+        </Button>
+        <Button asChild size="lg" variant="ghost">
+          <Link href="/loja/avaliacoes">{tr('seeReviews')}</Link>
         </Button>
       </div>
 

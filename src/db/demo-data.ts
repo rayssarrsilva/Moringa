@@ -1,5 +1,7 @@
 import { eq, inArray, or } from 'drizzle-orm';
-import { demoBuyer } from '../lib/orders/sample-orders';
+import { orderCode } from '../lib/orders/code';
+import { daysAgo, demoBuyer } from '../lib/orders/sample-orders';
+import { sampleReviews } from '../lib/reviews/sample-reviews';
 import { makers, pieces } from '../lib/sample-catalog';
 import type { Database } from './index';
 import * as schema from './schema';
@@ -55,24 +57,88 @@ export async function seedDemoData(database: Database, now = Date.now()) {
     shopIds.set(m.slug, shop!.id);
   }
 
-  await database.insert(schema.pieces).values(
-    pieces.map((p, i) => ({
-      slug: p.slug,
-      shopId: shopIds.get(p.maker)!,
-      namePt: p.name.pt,
-      nameEn: p.name.en,
-      descriptionPt: p.description.pt,
-      descriptionEn: p.description.en,
-      material: p.material,
-      priceCents: p.priceCents,
-      shippingCents: p.shippingCents,
-      stock: p.stock,
-      status: 'published' as const,
-      tint: p.tint,
-      // One minute apart, in file order, so "newest first" matches the sample catalog.
-      createdAt: new Date(now - i * 60_000),
-    })),
-  );
+  const insertedPieces = await database
+    .insert(schema.pieces)
+    .values(
+      pieces.map((p, i) => ({
+        slug: p.slug,
+        shopId: shopIds.get(p.maker)!,
+        namePt: p.name.pt,
+        nameEn: p.name.en,
+        descriptionPt: p.description.pt,
+        descriptionEn: p.description.en,
+        material: p.material,
+        priceCents: p.priceCents,
+        shippingCents: p.shippingCents,
+        stock: p.stock,
+        status: 'published' as const,
+        tint: p.tint,
+        // One minute apart, in file order, so "newest first" matches the sample catalog.
+        createdAt: new Date(now - i * 60_000),
+      })),
+    )
+    .returning();
 
-  return { buyer: buyer!, makers: makers.length, pieces: pieces.length };
+  // Past, delivered purchases from made-up buyers, so piece pages show public reviews.
+  const pieceBySlug = new Map(insertedPieces.map((p) => [p.slug, p]));
+  const reviewers = new Map<string, string>();
+  for (const r of sampleReviews) {
+    if (reviewers.has(r.buyer.email)) continue;
+    const [user] = await database
+      .insert(schema.users)
+      .values({ name: r.buyer.name, email: r.buyer.email, role: 'buyer', isDemo: true })
+      .returning({ id: schema.users.id });
+    reviewers.set(r.buyer.email, user!.id);
+  }
+  for (const r of sampleReviews) {
+    const piece = pieceBySlug.get(r.piece)!;
+    const delivered = daysAgo(r.daysAgo + 1, now)!;
+    const [order] = await database
+      .insert(schema.orders)
+      .values({
+        code: orderCode(),
+        buyerId: reviewers.get(r.buyer.email)!,
+        shopId: piece.shopId,
+        status: 'delivered',
+        subtotalCents: piece.priceCents,
+        shippingCents: piece.shippingCents,
+        totalCents: piece.priceCents + piece.shippingCents,
+        address: {
+          cep: '00000000',
+          street: '—',
+          number: '—',
+          neighborhood: '—',
+          city: '—',
+          state: 'SP',
+        },
+        createdAt: daysAgo(r.daysAgo + 8, now)!,
+        paidAt: daysAgo(r.daysAgo + 8, now),
+        preparingAt: daysAgo(r.daysAgo + 7, now),
+        shippedAt: daysAgo(r.daysAgo + 5, now),
+        deliveredAt: delivered,
+      })
+      .returning({ id: schema.orders.id });
+    await database.insert(schema.orderItems).values({
+      orderId: order!.id,
+      pieceId: piece.id,
+      name: piece.namePt,
+      unitPriceCents: piece.priceCents,
+      quantity: 1,
+    });
+    await database.insert(schema.reviews).values({
+      orderId: order!.id,
+      pieceId: piece.id,
+      buyerId: reviewers.get(r.buyer.email)!,
+      rating: r.rating,
+      comment: r.comment,
+      createdAt: daysAgo(r.daysAgo, now)!,
+    });
+  }
+
+  return {
+    buyer: buyer!,
+    makers: makers.length,
+    pieces: pieces.length,
+    reviews: sampleReviews.length,
+  };
 }

@@ -15,7 +15,8 @@
     "bag": "{count, plural, =0 {Bag, empty} one {Bag, # piece} other {Bag, # pieces}}",
     "language": "Language",
     "themeDark": "Switch to dark theme",
-    "themeLight": "Switch to light theme"
+    "themeLight": "Switch to light theme",
+    "favorites": "Favorites"
   },
   "Home": {
     "eyebrow": "Handmade",
@@ -449,5 +450,43 @@
     "loadError": "We could not load the orders.",
     "retry": "Try again",
     "demoOrders": "In the demo, these orders come from made-up buyers and only show in this browser. Buy something as Marina in this same browser and the order shows up here."
+  },
+  "Reviews": {
+    "title": "Reviews",
+    "summary": "{average} out of 5 · {count, plural, one {# review} other {# reviews}}",
+    "stars": "{rating} out of 5 stars",
+    "empty": "This piece has no reviews yet. The first buyer tells how it went.",
+    "on": "on {piece}",
+    "onlyYou": "Only you (demo)",
+    "formTitle": "Review {piece}",
+    "ratingLegend": "Your rating",
+    "ratingOption": "{rating, plural, one {# star} other {# stars}}",
+    "comment": "Tell us how it went (optional)",
+    "commentHint": "What did you think of the piece and the delivery? Up to 500 characters.",
+    "submit": "Post review",
+    "ratingRequired": "Choose 1 to 5 stars.",
+    "thanks": "Thank you! {maker} will love reading it.",
+    "yourReview": "Your review",
+    "demoNote": "In the demo, your review shows here and in the shop's panel, only in this browser. Reviews from real buyers go to the piece page.",
+    "error": "We could not save your review. Please try again.",
+    "already": "You already reviewed this piece.",
+    "sellerTitle": "Reviews received",
+    "sellerIntro": "What people who bought from you are saying.",
+    "sellerEmpty": "No reviews yet. They show up here as soon as someone reviews a delivered piece.",
+    "seeReviews": "See reviews"
+  },
+  "Favorites": {
+    "title": "Favorites",
+    "save": "Save to favorites",
+    "remove": "Remove {name} from favorites",
+    "removeShort": "Remove",
+    "empty": "You have not saved any pieces yet.",
+    "emptyBody": "Tap the heart on a piece to keep it and come back later.",
+    "browse": "Browse pieces",
+    "unavailable": "Unavailable",
+    "unavailableBody": "This piece was paused or sold out. In the meantime, see other pieces by the same maker.",
+    "count": "{count, plural, one {# saved piece} other {# saved pieces}}",
+    "note": "Your favorites stay in this browser, even after you sign in.",
+    "loading": "Loading your favorites…"
   }
 }

@@ -19,6 +19,8 @@ export interface OrderItem {
   material: Material;
   unitPriceCents: number;
   quantity: number;
+  /** The buyer's review of this piece, once written (US-09). */
+  review?: { rating: number; comment: string | null; createdAt: string } | null;
 }
 
 export interface OrderDetail extends OrderSummary {

@@ -48,3 +48,9 @@ export const MoonIcon = (p: IconProps) => (
     <path d="M20 14.5A8 8 0 0 1 9.5 4a8 8 0 1 0 10.5 10.5Z" />
   </svg>
 );
+
+export const HeartIcon = (p: IconProps) => (
+  <svg {...base} {...p}>
+    <path d="M12 20s-7.5-4.6-9.3-9.2C1.4 7.3 3.6 4 7 4c2 0 3.5 1.1 5 3 1.5-1.9 3-3 5-3 3.4 0 5.6 3.3 4.3 6.8C19.5 15.4 12 20 12 20Z" />
+  </svg>
+);

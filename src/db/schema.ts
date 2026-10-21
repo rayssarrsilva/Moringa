@@ -11,6 +11,7 @@ import {
   primaryKey,
   text,
   timestamp,
+  unique,
   uuid,
 } from 'drizzle-orm/pg-core';
 import { materials } from '../lib/catalog/types';
@@ -175,7 +176,6 @@ export const reviews = pgTable(
     id: uuid('id').primaryKey().defaultRandom(),
     orderId: uuid('order_id')
       .notNull()
-      .unique()
       .references(() => orders.id, { onDelete: 'cascade' }),
     pieceId: uuid('piece_id')
       .notNull()
@@ -185,9 +185,17 @@ export const reviews = pgTable(
       .references(() => users.id),
     rating: integer('rating').notNull(),
     comment: text('comment'),
+    /** Written in a demo session: only that browser sees it, never the public piece page. */
+    demoSessionId: text('demo_session_id'),
+    demoExpiresAt: timestamp('demo_expires_at', { withTimezone: true }),
     createdAt: createdAt(),
   },
-  (t) => [check('reviews_rating_range', sql`${t.rating} between 1 and 5`)],
+  (t) => [
+    check('reviews_rating_range', sql`${t.rating} between 1 and 5`),
+    // One review per piece of an order: a buyer cannot review the same purchase twice (US-09).
+    unique('reviews_order_piece_unique').on(t.orderId, t.pieceId),
+    index('reviews_piece_idx').on(t.pieceId),
+  ],
 );
 
 export const favorites = pgTable(

@@ -13,11 +13,14 @@ import {
   confirmGuestDelivery,
   fetchGuestOrder,
   fetchOrder,
+  postReview,
   type GuestAccess,
   orderKeys,
 } from '@/lib/orders/queries';
 import { buildTimeline, correiosTrackingUrl, isOpen } from '@/lib/orders/timeline';
 import type { OrderDetail, OrderSummary } from '@/lib/orders/types';
+import { ReviewForm } from '@/components/reviews/review-form';
+import { Stars } from '@/components/reviews/stars';
 import { StatusBadge } from './status-badge';
 
 /** How often an open order checks for news, so the timeline moves without a refresh (US-08). */
@@ -26,6 +29,7 @@ export const POLL_MS = 15_000;
 /** `guest`: tracking without an account, with the code and checkout email. */
 export function OrderView({ code, guest }: { code: string; guest?: GuestAccess }) {
   const t = useTranslations('OrderPage');
+  const tr = useTranslations('Reviews');
   const locale = useLocale() as Locale;
   const queryClient = useQueryClient();
   const [message, setMessage] = useState('');
@@ -64,6 +68,26 @@ export function OrderView({ code, guest }: { code: string; guest?: GuestAccess }
         list?.map((o) => (o.code === code ? { ...o, status: updated.status } : o)),
       );
       setMessage(t('confirmed', { maker: updated.shop.name }));
+    },
+  });
+
+  const review = useMutation({
+    mutationFn: (body: { piece: string; rating: number; comment?: string }) =>
+      postReview(code, body),
+    onMutate: () => setMessage(''),
+    onError: () => setMessage(tr('error')),
+    onSuccess: (posted, body) => {
+      queryClient.setQueryData<OrderDetail>(key, (current) =>
+        current
+          ? {
+              ...current,
+              items: current.items.map((i) =>
+                i.slug === body.piece ? { ...i, review: posted } : i,
+              ),
+            }
+          : current,
+      );
+      setMessage(tr('thanks', { maker: order?.shop.name ?? '' }));
     },
   });
 
@@ -169,6 +193,29 @@ export function OrderView({ code, guest }: { code: string; guest?: GuestAccess }
                   {item.quantity} × {item.name[locale]}
                 </Link>
                 <span>{formatPrice(item.unitPriceCents * item.quantity, locale)}</span>
+                {!guest && order.status === 'delivered' && (
+                  <div className="col-span-3">
+                    {item.review ? (
+                      <div className="grid gap-2 rounded-xl bg-bg-surface p-4">
+                        <p className="text-caps text-xs text-text-secondary">{tr('yourReview')}</p>
+                        <Stars
+                          rating={item.review.rating}
+                          label={tr('stars', { rating: item.review.rating })}
+                        />
+                        {item.review.comment && <p>{item.review.comment}</p>}
+                        <p className="text-sm text-text-secondary">{tr('demoNote')}</p>
+                      </div>
+                    ) : (
+                      <ReviewForm
+                        pieceName={item.name[locale]}
+                        pending={review.isPending && review.variables?.piece === item.slug}
+                        onSubmit={(rating, comment) =>
+                          review.mutate({ piece: item.slug, rating, comment: comment || undefined })
+                        }
+                      />
+                    )}
+                  </div>
+                )}
               </li>
             ))}
           </ul>

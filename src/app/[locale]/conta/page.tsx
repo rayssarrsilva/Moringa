@@ -5,6 +5,7 @@ import { getTranslations, setRequestLocale } from 'next-intl/server';
 import { auth, currentViewer } from '@/auth';
 import { OrdersList } from '@/components/account/orders-list';
 import { Button } from '@rayssarrsilva/ipe';
+import { Link } from '@/i18n/navigation';
 import type { Locale } from '@/i18n/routing';
 import { buyerOrders } from '@/lib/orders/buyer';
 import { orderKeys } from '@/lib/orders/queries';
@@ -55,6 +56,7 @@ export default async function AccountPage({ params }: Props) {
     );
   }
 
+  const tf = await getTranslations('Favorites');
   const queryClient = new QueryClient();
   await queryClient.prefetchQuery({
     queryKey: orderKeys.list(),
@@ -68,12 +70,17 @@ export default async function AccountPage({ params }: Props) {
           <p className="text-caps text-text-secondary">{t('title')}</p>
           <h1 className="text-heading-md md:text-display">{t('hello', { name: viewer.name })}</h1>
         </div>
-        <form action={signOutAction}>
-          <input type="hidden" name="locale" value={locale} />
-          <Button type="submit" variant="ghost">
-            {t('signOut')}
+        <div className="flex flex-wrap items-center gap-2">
+          <Button asChild variant="ghost">
+            <Link href="/favoritos">{tf('title')}</Link>
           </Button>
-        </form>
+          <form action={signOutAction}>
+            <input type="hidden" name="locale" value={locale} />
+            <Button type="submit" variant="ghost">
+              {t('signOut')}
+            </Button>
+          </form>
+        </div>
       </div>
       <section aria-labelledby="orders-title" className="grid gap-4">
         <h2 id="orders-title" className="text-heading-sm">

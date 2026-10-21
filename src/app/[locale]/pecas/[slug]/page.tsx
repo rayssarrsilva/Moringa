@@ -2,13 +2,18 @@ import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 import { getTranslations, setRequestLocale } from 'next-intl/server';
 import { AddToBag } from '@/components/bag/add-to-bag';
+import { FavoriteButton } from '@/components/favorites/favorite-button';
 import { PieceDetails } from '@/components/piece-details';
+import { PieceReviews } from '@/components/reviews/piece-reviews';
 import { Breadcrumbs } from '@/components/breadcrumbs';
 import { JsonLd } from '@/components/json-ld';
 import { PieceCard } from '@/components/piece-card';
 import type { Locale } from '@/i18n/routing';
 import { toBagPiece } from '@/lib/bag/bag';
 import { catalog } from '@/lib/catalog';
+import { favoriteOf } from '@/lib/favorites/store';
+import { reviewsRepository } from '@/lib/reviews';
+import { ratingSummary } from '@/lib/reviews/rules';
 import { sampleRepository } from '@/lib/catalog/sample-repository';
 import { formatPrice } from '@/lib/format';
 import { alternates, ogLocale, siteUrl, truncate } from '@/lib/seo';
@@ -55,8 +60,9 @@ export default async function PiecePage({ params }: Props) {
   const piece = await catalog().getPiece(slug);
   if (!piece) notFound();
 
-  const [shop, t, tc, tm] = await Promise.all([
+  const [shop, reviews, t, tc, tm] = await Promise.all([
     catalog().getShop(piece.shop.slug),
+    reviewsRepository().forPiece(piece.slug),
     getTranslations('Piece'),
     getTranslations('Catalog'),
     getTranslations('Materials'),
@@ -75,8 +81,15 @@ export default async function PiecePage({ params }: Props) {
         piece={piece}
         shop={shop}
         locale={locale}
-        action={<AddToBag piece={toBagPiece(piece)} name={piece.name[locale]} />}
+        action={
+          <div className="grid gap-3">
+            <AddToBag piece={toBagPiece(piece)} name={piece.name[locale]} />
+            <FavoriteButton piece={favoriteOf(piece)} />
+          </div>
+        }
       />
+
+      <PieceReviews reviews={reviews} locale={locale} />
 
       {more.length > 0 && (
         <section aria-labelledby="more-title" className="grid gap-6">
@@ -110,6 +123,20 @@ export default async function PiecePage({ params }: Props) {
           image: `${url}/opengraph-image`,
           material: tm(piece.material),
           brand: { '@type': 'Brand', name: piece.shop.name },
+          ...(reviews.length > 0 && {
+            aggregateRating: {
+              '@type': 'AggregateRating',
+              ratingValue: ratingSummary(reviews.map((r) => r.rating)).average,
+              reviewCount: reviews.length,
+            },
+            review: reviews.slice(0, 5).map((r) => ({
+              '@type': 'Review',
+              author: { '@type': 'Person', name: r.author },
+              datePublished: r.createdAt.slice(0, 10),
+              reviewRating: { '@type': 'Rating', ratingValue: r.rating, bestRating: 5 },
+              ...(r.comment && { reviewBody: r.comment }),
+            })),
+          }),
           offers: {
             '@type': 'Offer',
             url,
