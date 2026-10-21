@@ -116,25 +116,41 @@ export default async function SellerHome({ params, searchParams }: Props) {
         ) : (
           <ul className="grid gap-3">
             {pieces.map((p) => (
-              <li key={p.slug}>
-                <Link
-                  href={p.visibility === 'public' ? `/pecas/${p.slug}` : `/loja/pecas/${p.slug}`}
-                  className="group grid grid-cols-[56px_1fr] items-center gap-4 rounded-xl border-[1.5px] border-border-subtle p-3 hover:border-text-primary sm:grid-cols-[64px_1fr_auto]"
-                >
-                  <PiecePhoto material={p.material} />
-                  <span className="grid gap-1">
-                    <span className="text-label underline-offset-4 group-hover:underline">
-                      {p.name[locale]}
-                    </span>
-                    <span className="text-sm text-text-secondary">
-                      {formatPrice(p.priceCents, locale)} · {t('inStock', { count: p.stock })}
-                    </span>
+              <li
+                key={p.slug}
+                className="grid grid-cols-[56px_1fr] items-center gap-4 rounded-xl border-[1.5px] border-border-subtle p-3 sm:grid-cols-[64px_1fr_auto]"
+              >
+                <PiecePhoto
+                  material={p.material}
+                  className={p.status === 'paused' ? 'opacity-50' : ''}
+                />
+                <div className="grid gap-1">
+                  <Link
+                    href={p.visibility === 'public' ? `/pecas/${p.slug}` : `/loja/pecas/${p.slug}`}
+                    className="text-label underline-offset-4 hover:underline"
+                  >
+                    {p.name[locale]}
+                  </Link>
+                  <span className="text-sm text-text-secondary">
+                    {formatPrice(p.priceCents, locale)} · {t('inStock', { count: p.stock })}
                   </span>
-                  <span className="col-start-2 sm:col-start-auto">
+                  <span className="flex flex-wrap gap-2">
                     <Badge tone={p.visibility === 'public' ? 'success' : 'info'} dot>
                       {t(`visibility.${p.visibility}`)}
                     </Badge>
+                    {p.status === 'paused' && (
+                      <Badge tone="neutral" dot>
+                        {t('statusPaused')}
+                      </Badge>
+                    )}
                   </span>
+                </div>
+                <Link
+                  href={`/loja/pecas/${p.slug}/editar`}
+                  aria-label={`${t('edit')}: ${p.name[locale]}`}
+                  className="text-label col-start-2 min-h-11 content-center text-sm underline underline-offset-4 sm:col-start-auto"
+                >
+                  {t('edit')}
                 </Link>
               </li>
             ))}

@@ -6,7 +6,7 @@
 
 [English](./README.md) · **Português**
 
-_Em andamento · dia 4 de 12: base do projeto_
+_Em andamento · dia 11 de 14: gestão de peças e Lighthouse CI_
 
 </div>
 
@@ -87,6 +87,13 @@ Todo build na Vercel roda `npm run db:migrate` antes do `next build`, então o b
 
 - `npm test` roda testes unitários, de componente e de integração com banco. Os de integração sobem um Postgres de verdade em memória com o [PGlite](https://pglite.dev), criam o schema a partir de `src/db/schema.ts` e rodam as mesmas queries do Drizzle que o app manda para o Neon.
 - `npm run test:e2e` roda o Playwright no celular e no desktop, com checagem de acessibilidade do axe nos dois temas.
+- `npm run lhci` gera o build e roda o [Lighthouse CI](https://github.com/GoogleChrome/lighthouse-ci) três vezes em quatro páginas (início, catálogo, peça e loja em inglês). O pull request falha abaixo destas notas:
+
+| Performance | Acessibilidade | Boas práticas | SEO |
+| :---------: | :------------: | :-----------: | :-: |
+|    ≥ 90     |      100       |     ≥ 95      | 100 |
+
+Última rodada: performance 91–99 (celular, 4G lento simulado), acessibilidade 100, boas práticas 100 e SEO 100 nas quatro páginas.
 
 ### Pagamentos (modo de teste da Stripe)
 

@@ -14,9 +14,21 @@ export interface SellerShop extends Shop {
   visibility: Visibility;
 }
 
+export type PieceStatus = 'draft' | 'published' | 'paused';
+
 export interface SellerPiece extends Piece {
   visibility: Visibility;
+  status: PieceStatus;
+  /**
+   * Whether this maker may change it. Demo makers only edit pieces created in their own
+   * browser: the public example pieces are read-only, or one visitor could unpublish them for all.
+   */
+  editable: boolean;
 }
+
+/** US-15: what can go wrong when a maker changes a piece. */
+export type PieceChangeResult =
+  { ok: true; piece: SellerPiece } | { ok: false; reason: 'not_found' | 'read_only' };
 
 export type CreateShopResult = { ok: true; shop: SellerShop } | { ok: false; reason: 'exists' };
 export type CreatePieceResult = { ok: true; piece: SellerPiece } | { ok: false; reason: 'no_shop' };
@@ -27,6 +39,13 @@ export interface SellerRepository {
   listPieces(viewer: SellerViewer): Promise<SellerPiece[]>;
   getPiece(viewer: SellerViewer, slug: string): Promise<SellerPiece | null>;
   createPiece(viewer: SellerViewer, input: PieceInput): Promise<CreatePieceResult>;
+  updatePiece(viewer: SellerViewer, slug: string, input: PieceInput): Promise<PieceChangeResult>;
+  /** Paused pieces leave the catalog; favorites show them as unavailable. */
+  setPieceStatus(
+    viewer: SellerViewer,
+    slug: string,
+    status: 'published' | 'paused',
+  ): Promise<PieceChangeResult>;
 }
 
 /** Every demo account lives under this domain; real accounts never do. */

@@ -29,6 +29,11 @@ export default async function PiecePreviewPage({ params }: Props) {
   return (
     <div className="container-page grid grid-cols-[minmax(0,1fr)] gap-12 pb-16 pt-6 md:pt-10">
       <PreviewBanner visibility={piece.visibility} />
+      {piece.status === 'paused' && (
+        <p role="note" className="rounded-xl bg-bg-surface p-4">
+          {t('pausedBanner')}
+        </p>
+      )}
       <PieceDetails
         piece={piece}
         shop={shop}

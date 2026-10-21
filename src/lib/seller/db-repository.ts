@@ -121,6 +121,8 @@ export const dbSellerRepository: SellerRepository = {
         region: shop.region,
       },
       visibility: p.demoSessionId || shop.demoSessionId ? 'onlyYou' : 'public',
+      status: p.status,
+      editable: !isDemoAccount(viewer.email) || p.demoSessionId === viewer.sid,
     }));
   },
 
@@ -148,6 +150,39 @@ export const dbSellerRepository: SellerRepository = {
         status: 'published',
         ...demoStamp(viewer),
       });
+    return { ok: true, piece: (await this.getPiece(viewer, slug))! };
+  },
+
+  async updatePiece(viewer, slug, input) {
+    const piece = await this.getPiece(viewer, slug);
+    if (!piece) return { ok: false, reason: 'not_found' };
+    if (!piece.editable) return { ok: false, reason: 'read_only' };
+    const shop = (await shopRow(viewer))!;
+    await db()
+      .update(pieces)
+      .set({
+        namePt: input.name,
+        nameEn: input.name,
+        descriptionPt: input.description,
+        descriptionEn: input.description,
+        material: input.material,
+        priceCents: input.priceCents,
+        shippingCents: input.shippingCents,
+        stock: input.stock,
+      })
+      .where(and(eq(pieces.slug, slug), eq(pieces.shopId, shop.id)));
+    return { ok: true, piece: (await this.getPiece(viewer, slug))! };
+  },
+
+  async setPieceStatus(viewer, slug, status) {
+    const piece = await this.getPiece(viewer, slug);
+    if (!piece) return { ok: false, reason: 'not_found' };
+    if (!piece.editable) return { ok: false, reason: 'read_only' };
+    const shop = (await shopRow(viewer))!;
+    await db()
+      .update(pieces)
+      .set({ status })
+      .where(and(eq(pieces.slug, slug), eq(pieces.shopId, shop.id)));
     return { ok: true, piece: (await this.getPiece(viewer, slug))! };
   },
 };

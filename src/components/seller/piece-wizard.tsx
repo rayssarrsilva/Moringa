@@ -238,6 +238,8 @@ export function PieceWizard({
             maxLength={600}
             showCount
             formatCount={(length, max) => t('counter', { length, max })}
+            // The counter starts from the restored draft; react-hook-form fills the field after mount.
+            defaultValue={draft?.description}
             error={message(errors.description?.message)}
             {...register('description')}
           />

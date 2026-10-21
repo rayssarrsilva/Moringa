@@ -28,7 +28,10 @@ export function ShopForm() {
     formState: { errors, isSubmitting },
   } = useForm<ShopFormValues, unknown, ShopInput>({
     resolver: zodResolver(shopSchema),
-    mode: 'onTouched',
+    // Validate on submit, then re-validate as the person types (GOV.UK pattern). Never on blur:
+    // a message appearing on blur pushes the button down during the click, and the click misses.
+    mode: 'onSubmit',
+    reValidateMode: 'onChange',
     shouldFocusError: false,
     defaultValues: { state: '' as ShopFormValues['state'] },
   });

@@ -26,7 +26,8 @@
     "db:seed": "tsx src/db/seed.ts",
     "prepare": "husky",
     "vercel-build": "tsx scripts/migrate.ts && next build",
-    "db:check": "drizzle-kit generate --name schema-drift && git diff --exit-code --stat -- drizzle && test -z \"$(git ls-files --others --exclude-standard drizzle)\""
+    "db:check": "drizzle-kit generate --name schema-drift && git diff --exit-code --stat -- drizzle && test -z \"$(git ls-files --others --exclude-standard drizzle)\"",
+    "lhci": "NEXT_PUBLIC_SITE_URL=http://localhost:3300 next build && lhci autorun"
   },
   "lint-staged": {
     "*.{ts,tsx,js,mjs}": [
@@ -61,6 +62,7 @@
     "@commitlint/cli": "^21.2.4",
     "@commitlint/config-conventional": "^21.2.4",
     "@electric-sql/pglite": "^0.5.10",
+    "@lhci/cli": "^0.15.1",
     "@playwright/test": "^1.64.1",
     "@tailwindcss/postcss": "^4.3.3",
     "@testing-library/jest-dom": "^7.0.1",
