@@ -60,7 +60,10 @@ export function CheckoutForm({
     formState: { errors, isSubmitting, submitCount },
   } = useForm<AddressInput>({
     resolver: zodResolver(addressSchema),
-    mode: 'onTouched',
+    // Validate on submit, then re-validate as the person types (GOV.UK pattern). Never on blur:
+    // a message appearing on blur pushes the button down during the click, and the click misses.
+    mode: 'onSubmit',
+    reValidateMode: 'onChange',
     // We focus the first invalid field in screen order ourselves (see onInvalid).
     shouldFocusError: false,
     defaultValues: account?.demo
