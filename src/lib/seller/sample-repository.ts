@@ -62,6 +62,8 @@ export const sampleSellerRepository: SellerRepository = {
         ? (await catalog.getShop(shop.slug))!.pieces.map((p) => ({
             ...p,
             visibility: 'public' as const,
+            status: 'published' as const,
+            editable: false,
           }))
         : [];
     return [...own, ...published];
@@ -90,8 +92,41 @@ export const sampleSellerRepository: SellerRepository = {
         region: shop.region,
       },
       visibility: 'onlyYou',
+      status: 'published',
+      editable: true,
     };
     session(viewer.sid).pieces.unshift(piece);
     return { ok: true, piece };
+  },
+
+  async updatePiece(viewer, slug, input) {
+    const own = session(viewer.sid).pieces;
+    const index = own.findIndex((p) => p.slug === slug);
+    if (index === -1)
+      return (await this.getPiece(viewer, slug))
+        ? { ok: false, reason: 'read_only' }
+        : { ok: false, reason: 'not_found' };
+    const updated: SellerPiece = {
+      ...own[index]!,
+      name: { pt: input.name, en: input.name },
+      description: { pt: input.description, en: input.description },
+      material: input.material,
+      priceCents: input.priceCents,
+      shippingCents: input.shippingCents,
+      stock: input.stock,
+    };
+    own[index] = updated;
+    return { ok: true, piece: updated };
+  },
+
+  async setPieceStatus(viewer, slug, status) {
+    const own = session(viewer.sid).pieces;
+    const index = own.findIndex((p) => p.slug === slug);
+    if (index === -1)
+      return (await this.getPiece(viewer, slug))
+        ? { ok: false, reason: 'read_only' }
+        : { ok: false, reason: 'not_found' };
+    own[index] = { ...own[index]!, status };
+    return { ok: true, piece: own[index]! };
   },
 };

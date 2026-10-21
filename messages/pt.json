@@ -322,7 +322,7 @@
     "previewIntro": "É assim que a sua peça vai aparecer para quem compra.",
     "previewCard": "No catálogo",
     "previewPage": "Na página da peça",
-    "edit": "Editar {step}",
+    "edit": "Editar",
     "draftRestored": "Recuperamos o rascunho que você começou.",
     "discard": "Começar do zero",
     "previewBanner": "Prévia: é assim que compradores veem esta página.",
@@ -349,7 +349,23 @@
       "generic": "Não conseguimos salvar agora. Seus dados continuam aqui, tente de novo.",
       "exists": "Você já tem uma loja."
     },
-    "inStock": "{count, plural, =0 {Sob encomenda} one {# em estoque} other {# em estoque}}"
+    "inStock": "{count, plural, =0 {Sob encomenda} one {# em estoque} other {# em estoque}}",
+    "editTitle": "Editar {name}",
+    "editIntro": "Mude preço, estoque ou descrição. Quem visitar a peça vê a mudança na hora.",
+    "save": "Salvar alterações",
+    "saved": "Alterações salvas.",
+    "pause": "Pausar peça",
+    "resume": "Voltar a vender",
+    "pausedNow": "Peça pausada. Ela saiu do catálogo e aparece como indisponível nos favoritos.",
+    "resumedNow": "A peça voltou para o catálogo.",
+    "statusPublished": "À venda",
+    "statusPaused": "Pausada",
+    "statusDraft": "Rascunho",
+    "readOnlyTitle": "Peça de exemplo",
+    "readOnlyBody": "Esta peça está no catálogo público da demonstração, então não pode ser alterada por aqui: senão um visitante mudaria a peça para todo mundo. Crie uma peça sua e teste editar, pausar e repor o estoque nela.",
+    "pausedBanner": "Esta peça está pausada: não aparece no catálogo.",
+    "manageTitle": "Situação da peça",
+    "manageHint": "Pausar tira a peça do catálogo sem apagar nada. Volte a vender quando quiser."
   },
   "Lookup": {
     "title": "Acompanhar pedido",

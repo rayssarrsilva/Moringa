@@ -322,7 +322,7 @@
     "previewIntro": "This is how buyers will see your piece.",
     "previewCard": "In the catalog",
     "previewPage": "On the piece page",
-    "edit": "Edit {step}",
+    "edit": "Edit",
     "draftRestored": "We restored the draft you started.",
     "discard": "Start over",
     "previewBanner": "Preview: this is how buyers see this page.",
@@ -349,7 +349,23 @@
       "generic": "We could not save right now. Your details are still here, please try again.",
       "exists": "You already have a shop."
     },
-    "inStock": "{count, plural, =0 {Made to order} other {# in stock}}"
+    "inStock": "{count, plural, =0 {Made to order} other {# in stock}}",
+    "editTitle": "Edit {name}",
+    "editIntro": "Change price, stock or description. Visitors see the change right away.",
+    "save": "Save changes",
+    "saved": "Changes saved.",
+    "pause": "Pause piece",
+    "resume": "Sell again",
+    "pausedNow": "Piece paused. It left the catalog and shows as unavailable in favorites.",
+    "resumedNow": "The piece is back in the catalog.",
+    "statusPublished": "On sale",
+    "statusPaused": "Paused",
+    "statusDraft": "Draft",
+    "readOnlyTitle": "Example piece",
+    "readOnlyBody": "This piece is in the demo's public catalog, so it cannot be changed from here, or one visitor would change it for everyone. Create a piece of your own and try editing, pausing and restocking it.",
+    "pausedBanner": "This piece is paused: it does not show in the catalog.",
+    "manageTitle": "Piece status",
+    "manageHint": "Pausing takes the piece out of the catalog without deleting anything. Sell again whenever you want."
   },
   "Lookup": {
     "title": "Track an order",
