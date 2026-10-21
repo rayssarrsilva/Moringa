@@ -34,7 +34,7 @@ const toShop = (r: typeof shops.$inferSelect): SellerShop => ({
   visibility: r.demoSessionId ? 'onlyYou' : 'public',
 });
 
-async function shopRow(viewer: SellerViewer) {
+export async function shopRow(viewer: Pick<SellerViewer, 'email' | 'sid'>) {
   const [row] = await db()
     .select({ shop: shops })
     .from(shops)

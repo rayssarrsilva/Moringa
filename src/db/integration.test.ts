@@ -19,7 +19,8 @@ const { parseCatalogQuery } = await import('@/lib/catalog/query');
 const { priceCart } = await import('@/lib/checkout/pricing');
 const orders = await import('@/lib/orders/repository');
 const { dbBuyerRepository } = await import('@/lib/orders/db-buyer-repository');
-const { provisionDemoOrders, demoLifetimeMs } = await import('@/lib/orders/demo-orders');
+const { provisionDemoOrders, cleanupExpiredDemoData, demoLifetimeMs } =
+  await import('@/lib/orders/demo-orders');
 const { demoAddress, demoBuyer } = await import('@/lib/orders/sample-orders');
 const { guestViewer } = await import('@/lib/orders/lookup');
 
@@ -130,6 +131,12 @@ describe('orders from checkout to payment (US-07)', () => {
 const marina = (sid: string) => ({ email: demoBuyer.email, sid });
 
 describe('the shared demo account', () => {
+  it('does not copy the demo orders twice for the same browser', async () => {
+    await provisionDemoOrders('session-twice');
+    expect(await provisionDemoOrders('session-twice')).toBe(0);
+    expect(await dbBuyerRepository.listForBuyer(marina('session-twice'))).toHaveLength(3);
+  });
+
   it('gives each sign-in its own copy of the demo orders', async () => {
     await provisionDemoOrders('session-a');
     await provisionDemoOrders('session-b');
@@ -173,7 +180,9 @@ describe('the shared demo account', () => {
   });
 
   it('cleans up demo orders after they expire', async () => {
-    await provisionDemoOrders('session-c', Date.now() + demoLifetimeMs + 60_000);
+    const later = Date.now() + demoLifetimeMs + 60_000;
+    await cleanupExpiredDemoData(later);
+    await provisionDemoOrders('session-c', later);
     expect(await dbBuyerRepository.listForBuyer(marina('session-a'))).toEqual([]);
     expect(await dbBuyerRepository.listForBuyer(marina('session-c'))).toHaveLength(3);
   });

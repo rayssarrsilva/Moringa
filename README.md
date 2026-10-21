@@ -50,7 +50,7 @@ Requires Node.js 22 (see `.nvmrc`).
 ```bash
 npm install
 cp .env.example .env.local   # then fill in DATABASE_URL from Neon
-npm run db:push              # create the tables
+npm run db:migrate           # create or update the tables
 npm run db:seed              # add the demo makers and pieces
 npm run dev                  # http://localhost:3000
 ```
@@ -74,6 +74,12 @@ Skip the `DATABASE_URL` and the app runs on the built-in sample catalog. CI uses
 ### Demo account
 
 The buyer area at `/pt/conta` has a one-click demo login as **Marina**, with orders in every state (paid, shipped with a tracking code, delivered). There are no passwords: a demo login only sees demo data. On Vercel, set `AUTH_SECRET` (run `npx auth secret` to generate one).
+
+### Database migrations
+
+The schema lives in `src/db/schema.ts`. After changing it, run `npm run db:generate` and commit the new file in `drizzle/`. CI fails if the schema and the migrations disagree (`npm run db:check`).
+
+Every Vercel build runs `npm run db:migrate` before `next build`, so the database always matches the code being deployed. Migrations are additive (add first, remove in a later release), so the live site keeps working during a deploy. The first databases were created with `db:push`; the migrate script detects that and records the baseline instead of recreating tables.
 
 ### Tests
 

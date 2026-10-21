@@ -14,11 +14,18 @@ export const isDemoEmail = (email: string) => email.toLowerCase() === demoBuyer.
 /**
  * Gives one demo sign-in its own copy of Marina's orders (paid, shipped, delivered).
  * Visitors can confirm a delivery or buy something without changing what the next visitor sees,
- * and nobody ever sees an address someone else typed. Expired copies are removed on the way.
+ * and nobody ever sees an address someone else typed.
  */
 export async function provisionDemoOrders(sid: string, now = Date.now()) {
   const database = db();
-  await cleanupExpiredDemoData(now);
+  // Idempotent: signing in again on the same browser keeps what the visitor already did.
+  const existing = await database
+    .select({ id: orders.id })
+    .from(orders)
+    .innerJoin(users, eq(orders.buyerId, users.id))
+    .where(and(eq(users.email, demoBuyer.email), eq(orders.demoSessionId, sid)))
+    .limit(1);
+  if (existing.length > 0) return 0;
 
   const [buyer] = await database
     .insert(users)
