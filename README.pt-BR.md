@@ -52,7 +52,7 @@ Requer Node.js 22 (veja `.nvmrc`).
 ```bash
 npm install
 cp .env.example .env.local   # depois preencha o DATABASE_URL da Neon
-npm run db:push              # cria as tabelas
+npm run db:migrate           # cria ou atualiza as tabelas
 npm run db:seed              # adiciona as artesãs, os artesãos e as peças de demonstração
 npm run dev                  # http://localhost:3000
 ```
@@ -76,6 +76,12 @@ Sem o `DATABASE_URL`, o app roda com o catálogo de exemplo embutido. A CI usa e
 ### Conta de demonstração
 
 A área de quem compra, em `/pt/conta`, tem login de demonstração com um clique como **Marina**, com pedidos em todos os estados (pago, enviado com código de rastreio, entregue). Não há senha: o login de demonstração só vê dados de demonstração. Na Vercel, defina `AUTH_SECRET` (gere um com `npx auth secret`).
+
+### Migrações do banco
+
+O schema fica em `src/db/schema.ts`. Depois de mudar, rode `npm run db:generate` e commite o arquivo novo em `drizzle/`. A CI falha se o schema e as migrações não baterem (`npm run db:check`).
+
+Todo build na Vercel roda `npm run db:migrate` antes do `next build`, então o banco sempre acompanha o código que está subindo. As migrações só acrescentam (primeiro adiciona, remove numa versão seguinte), para o site no ar continuar funcionando durante o deploy. Os primeiros bancos foram criados com `db:push`; o script percebe isso e registra o ponto de partida em vez de recriar as tabelas.
 
 ### Testes
 
