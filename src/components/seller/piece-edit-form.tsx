@@ -35,7 +35,9 @@ export function PieceEditForm({
   const t = useTranslations('Seller');
   const tm = useTranslations('Materials');
   const router = useRouter();
-  const [message, setMessage] = useState('');
+  // Each confirmation appears next to the button that caused it, where the person is looking.
+  const [saveMessage, setSaveMessage] = useState('');
+  const [statusMessage, setStatusMessage] = useState('');
   const [pending, startTransition] = useTransition();
 
   const {
@@ -63,7 +65,7 @@ export function PieceEditForm({
 
   async function save(values: PieceForm) {
     const result = await updatePieceAction(slug, values);
-    setMessage(result.ok ? t('saved') : t('errors.generic'));
+    setSaveMessage(result.ok ? t('saved') : t('errors.generic'));
     if (result.ok) router.refresh();
   }
 
@@ -71,7 +73,7 @@ export function PieceEditForm({
     const next = status === 'paused' ? 'published' : 'paused';
     startTransition(async () => {
       const result = await setPieceStatusAction(slug, next);
-      setMessage(
+      setStatusMessage(
         result.ok ? (next === 'paused' ? t('pausedNow') : t('resumedNow')) : t('errors.generic'),
       );
       if (result.ok) router.refresh();
@@ -80,10 +82,6 @@ export function PieceEditForm({
 
   return (
     <div className="grid gap-10">
-      <div role="status" className="min-h-6">
-        {message}
-      </div>
-
       <form
         noValidate
         onSubmit={handleSubmit(save, (invalid) => {
@@ -120,6 +118,8 @@ export function PieceEditForm({
           maxLength={600}
           showCount
           formatCount={(length, max) => t('counter', { length, max })}
+          // The counter starts from this; react-hook-form fills the field after mount.
+          defaultValue={initial.description}
           error={error(errors.description?.message)}
           {...register('description')}
         />
@@ -143,10 +143,11 @@ export function PieceEditForm({
             {...register('stock')}
           />
         </div>
-        <div>
+        <div className="flex flex-wrap items-center gap-x-4 gap-y-2">
           <Button type="submit" size="lg" loading={isSubmitting}>
             {t('save')}
           </Button>
+          <p role="status">{saveMessage}</p>
         </div>
       </form>
 
@@ -166,6 +167,7 @@ export function PieceEditForm({
         >
           {status === 'paused' ? t('resume') : t('pause')}
         </Button>
+        <p role="status">{statusMessage}</p>
       </section>
     </div>
   );

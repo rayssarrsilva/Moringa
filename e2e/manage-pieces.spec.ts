@@ -40,6 +40,9 @@ test.describe('manage pieces (US-15)', () => {
     await page.goto('/pt/loja');
     await page.getByRole('link', { name: 'Editar: Prato fundo' }).click();
     expect((await axe(page)).violations).toEqual([]);
+    // The counter starts from the saved description, not from zero.
+    const description = 'Prato fundo de cerâmica, esmalte verde.';
+    await expect(page.getByText(`${description.length}/600`)).toBeVisible();
 
     await page.getByLabel('Preço (R$)').fill('150,00');
     await page.getByRole('button', { name: 'Salvar alterações' }).click();
