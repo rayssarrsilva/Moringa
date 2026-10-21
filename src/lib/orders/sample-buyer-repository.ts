@@ -2,6 +2,7 @@ import { sampleRepository } from '../catalog/sample-repository';
 import { groupByShop, toBagPiece } from '../bag/bag';
 import { canTransition, type OrderStatus } from '../order-status';
 import { daysAgo, demoAddress, demoBuyer, sampleOrders } from './sample-orders';
+import { demoReviews } from '../reviews/sample-store';
 import type { BuyerOrdersRepository, OrderDetail, Viewer } from './types';
 
 /**
@@ -37,13 +38,21 @@ async function build(viewer: Viewer): Promise<OrderDetail[]> {
       shop: group!.shop,
       itemCount: items.reduce((n, i) => n + i.quantity, 0),
       cover: { name: items[0]!.name, material: items[0]!.material },
-      items: items.map((i) => ({
-        slug: i.slug,
-        name: i.name,
-        material: i.material,
-        unitPriceCents: i.priceCents,
-        quantity: i.quantity,
-      })),
+      items: items.map((i) => {
+        const review = demoReviews.find(
+          (r) => r.sid === viewer.sid && r.code === o.code && r.piece === i.slug,
+        );
+        return {
+          slug: i.slug,
+          name: i.name,
+          material: i.material,
+          unitPriceCents: i.priceCents,
+          quantity: i.quantity,
+          review: review
+            ? { rating: review.rating, comment: review.comment, createdAt: review.createdAt }
+            : null,
+        };
+      }),
       trackingCode: o.trackingCode ?? null,
       address: demoAddress,
       paidAt: iso(daysAgo(o.days.paid)),

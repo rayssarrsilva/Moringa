@@ -40,3 +40,19 @@ export const fetchGuestOrder = (code: string, { email }: GuestAccess) =>
   post('/api/orders/lookup', { code, email }).then(json<OrderDetail>);
 export const confirmGuestDelivery = (code: string, { email }: GuestAccess) =>
   post('/api/orders/lookup/delivered', { code, email }).then(json<OrderDetail>);
+
+export interface PostedReview {
+  rating: number;
+  comment: string | null;
+  createdAt: string;
+}
+
+export const postReview = (
+  code: string,
+  body: { piece: string; rating: number; comment?: string },
+) =>
+  fetch(`/api/me/orders/${encodeURIComponent(code)}/reviews`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(body),
+  }).then(json<PostedReview>);
