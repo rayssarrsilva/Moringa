@@ -1,5 +1,6 @@
 import NextAuth, { type DefaultSession } from 'next-auth';
 import Credentials from 'next-auth/providers/credentials';
+import { isDeviceId } from './lib/demo-device';
 import { demoBuyer } from './lib/orders/sample-orders';
 
 declare module 'next-auth' {
@@ -10,6 +11,8 @@ declare module 'next-auth' {
   }
   interface User {
     role?: 'buyer' | 'seller';
+    /** The demo device id: all demo data of this browser is scoped to it. */
+    device?: string;
   }
 }
 
@@ -32,8 +35,9 @@ export const demoAccounts = {
     role: 'seller' as const,
   }),
   /** A brand-new maker, one per sign-in, who goes through shop onboarding. */
-  nova: () => {
-    const id = crypto.randomUUID().slice(0, 8);
+  nova: (device: string) => {
+    // Derived from the browser, so coming back on the same browser reopens the same new shop.
+    const id = device.slice(0, 8);
     return {
       id: `demo-nova-${id}`,
       name: 'Nova artesã',
@@ -61,21 +65,27 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
     Credentials({
       id: 'demo',
       name: 'Demo',
-      credentials: { account: {} },
+      credentials: { account: {}, device: {} },
       authorize: (credentials) =>
-        isDemoAccountName(credentials?.account) ? demoAccounts[credentials.account]() : null,
+        isDemoAccountName(credentials?.account) && isDeviceId(credentials?.device)
+          ? { ...demoAccounts[credentials.account](credentials.device), device: credentials.device }
+          : null,
     }),
   ],
   callbacks: {
     async jwt({ token, user }) {
       if (user) {
         token.role = user.role ?? 'buyer';
-        token.sid = crypto.randomUUID();
-        // With a database: clear expired demo data, and give the demo buyer her own orders.
+        token.sid = user.device ?? crypto.randomUUID();
+        // With a database: clear expired demo data and give this browser its demo orders, once.
         if (process.env.DATABASE_URL) {
           const demo = await import('./lib/orders/demo-orders');
+          await demo.cleanupExpiredDemoData();
           if (user.email === demoBuyer.email) await demo.provisionDemoOrders(String(token.sid));
-          else await demo.cleanupExpiredDemoData();
+          if (user.email === demoAccounts.lucia().email) {
+            const { provisionDemoShopOrders } = await import('./lib/seller/demo-shop-orders');
+            await provisionDemoShopOrders(String(token.sid));
+          }
         }
       }
       return token;
