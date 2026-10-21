@@ -1,4 +1,5 @@
 import { useTranslations } from 'next-intl';
+import { Link } from '@/i18n/navigation';
 
 export function SiteFooter() {
   const t = useTranslations('Footer');
@@ -12,6 +13,11 @@ export function SiteFooter() {
           <p className="text-sm text-text-secondary">{t('demo')}</p>
         </div>
         <ul className="grid content-start gap-2 text-label">
+          <li>
+            <Link className="underline underline-offset-4" href="/pedido/acompanhar">
+              {t('track')}
+            </Link>
+          </li>
           <li>
             <a
               className="underline underline-offset-4"

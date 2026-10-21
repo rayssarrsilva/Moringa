@@ -8,7 +8,14 @@ import { Button } from '@rayssarrsilva/ipe';
 import { Link } from '@/i18n/navigation';
 import type { Locale } from '@/i18n/routing';
 import { formatDate, formatPrice } from '@/lib/format';
-import { confirmDelivery, fetchOrder, orderKeys } from '@/lib/orders/queries';
+import {
+  confirmDelivery,
+  confirmGuestDelivery,
+  fetchGuestOrder,
+  fetchOrder,
+  type GuestAccess,
+  orderKeys,
+} from '@/lib/orders/queries';
 import { buildTimeline, correiosTrackingUrl, isOpen } from '@/lib/orders/timeline';
 import type { OrderDetail, OrderSummary } from '@/lib/orders/types';
 import { StatusBadge } from './status-badge';
@@ -16,28 +23,30 @@ import { StatusBadge } from './status-badge';
 /** How often an open order checks for news, so the timeline moves without a refresh (US-08). */
 export const POLL_MS = 15_000;
 
-export function OrderView({ code }: { code: string }) {
+/** `guest`: tracking without an account, with the code and checkout email. */
+export function OrderView({ code, guest }: { code: string; guest?: GuestAccess }) {
   const t = useTranslations('OrderPage');
   const locale = useLocale() as Locale;
   const queryClient = useQueryClient();
   const [message, setMessage] = useState('');
 
+  const key = guest ? orderKeys.guest(code, guest.email) : orderKeys.detail(code);
   const { data: order } = useQuery({
-    queryKey: orderKeys.detail(code),
-    queryFn: () => fetchOrder(code),
+    queryKey: key,
+    queryFn: () => (guest ? fetchGuestOrder(code, guest) : fetchOrder(code)),
     refetchInterval: (query) =>
       query.state.data && isOpen(query.state.data.status) ? POLL_MS : false,
   });
 
   const confirm = useMutation({
-    mutationFn: () => confirmDelivery(code),
+    mutationFn: () => (guest ? confirmGuestDelivery(code, guest) : confirmDelivery(code)),
     // Optimistic: show "Delivered" right away, roll back if the server says no.
     onMutate: async () => {
       setMessage('');
-      await queryClient.cancelQueries({ queryKey: orderKeys.detail(code) });
-      const previous = queryClient.getQueryData<OrderDetail>(orderKeys.detail(code));
+      await queryClient.cancelQueries({ queryKey: key });
+      const previous = queryClient.getQueryData<OrderDetail>(key);
       if (previous) {
-        queryClient.setQueryData<OrderDetail>(orderKeys.detail(code), {
+        queryClient.setQueryData<OrderDetail>(key, {
           ...previous,
           status: 'delivered',
           deliveredAt: new Date().toISOString(),
@@ -46,11 +55,11 @@ export function OrderView({ code }: { code: string }) {
       return { previous };
     },
     onError: (_error, _vars, context) => {
-      if (context?.previous) queryClient.setQueryData(orderKeys.detail(code), context.previous);
+      if (context?.previous) queryClient.setQueryData(key, context.previous);
       setMessage(t('confirmError'));
     },
     onSuccess: (updated) => {
-      queryClient.setQueryData(orderKeys.detail(code), updated);
+      queryClient.setQueryData(key, updated);
       queryClient.setQueryData<OrderSummary[]>(orderKeys.list(), (list) =>
         list?.map((o) => (o.code === code ? { ...o, status: updated.status } : o)),
       );
