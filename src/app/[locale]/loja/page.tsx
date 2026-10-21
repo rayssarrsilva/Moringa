@@ -7,7 +7,9 @@ import { PiecePhoto } from '@/components/material-art';
 import { Link } from '@/i18n/navigation';
 import type { Locale } from '@/i18n/routing';
 import { formatPrice } from '@/lib/format';
-import { sellerRepository } from '@/lib/seller';
+import { ShopOverview } from '@/components/seller/shop-overview';
+import { sellerRepository, shopOrders } from '@/lib/seller';
+import { summarize } from '@/lib/seller/summary';
 import { signInDemo, signOutAction } from '../conta/actions';
 
 type Props = {
@@ -33,7 +35,11 @@ export default async function SellerHome({ params, searchParams }: Props) {
   const shop = await repo.getShop(viewer);
   if (!shop) redirect(`/${locale}/loja/comecar`);
 
-  const [pieces, notice] = await Promise.all([repo.listPieces(viewer), searchParams]);
+  const [pieces, orders, notice] = await Promise.all([
+    repo.listPieces(viewer),
+    shopOrders().list(viewer),
+    searchParams,
+  ]);
   const shopHref = shop.visibility === 'public' ? `/lojas/${shop.slug}` : '/loja/previa';
 
   return (
@@ -79,6 +85,8 @@ export default async function SellerHome({ params, searchParams }: Props) {
           </Link>
         </div>
       )}
+
+      <ShopOverview summary={summarize(orders)} locale={locale} />
 
       <div className="flex flex-wrap gap-3">
         <Button asChild size="lg">
