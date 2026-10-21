@@ -23,6 +23,8 @@ jobs:
       - run: npm run format:check
       - run: npm run lint
       - run: npm run typecheck
+      - name: Database schema has a migration
+        run: npm run db:check
       - run: npm test
       - run: npm run build
 
