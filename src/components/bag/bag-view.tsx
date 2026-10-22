@@ -10,6 +10,8 @@ import { type BagItem, groupByShop } from '@/lib/bag/bag';
 import { useBag, useHydrated } from '@/lib/bag/store';
 import { formatPrice } from '@/lib/format';
 import { BagSummary } from './bag-summary';
+import { BagChanges } from './bag-changes';
+import { useBagSync } from './use-bag-sync';
 
 export function BagView() {
   const t = useTranslations('Bag');
@@ -17,6 +19,7 @@ export function BagView() {
   const items = useBag((s) => s.items);
   const [status, setStatus] = useState('');
   const headingRef = useRef<HTMLHeadingElement>(null);
+  const { changes } = useBagSync();
 
   const heading = (
     <h1
@@ -41,6 +44,7 @@ export function BagView() {
     return (
       <div className="grid gap-6">
         {heading}
+        <BagChanges changes={changes} />
         <div className="grid justify-items-start gap-3 rounded-xl border-[1.5px] border-border-subtle p-6 md:p-10">
           <p className="text-heading-sm">{t('emptyTitle')}</p>
           <p className="max-w-[52ch] text-text-secondary">{t('emptyBody')}</p>
@@ -58,6 +62,7 @@ export function BagView() {
   return (
     <div className="grid gap-8">
       {heading}
+      <BagChanges changes={changes} />
       <div className="grid items-start gap-8 lg:grid-cols-[1fr_360px]">
         <div className="grid gap-8">
           {groupByShop(items).map((group) => (

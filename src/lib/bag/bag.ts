@@ -100,3 +100,48 @@ export function bagTotals(items: BagItem[]) {
     totalCents: subtotalCents + shippingCents,
   };
 }
+
+export type BagChange =
+  | {
+      slug: string;
+      name: Localized;
+      kind: 'price' | 'shipping' | 'stock';
+      from: number;
+      to: number;
+    }
+  | { slug: string; name: Localized; kind: 'removed' };
+
+/**
+ * Brings the saved bag up to date with the catalog: current price, shipping and stock, and
+ * pieces no longer on sale removed. Returns what changed, so the buyer is told before paying.
+ * `current` holds only the pieces on sale; anything missing from it was paused or sold out.
+ */
+export function syncItems(
+  items: BagItem[],
+  current: BagPiece[],
+): { items: BagItem[]; changes: BagChange[] } {
+  const changes: BagChange[] = [];
+  const next = items.flatMap((item): BagItem[] => {
+    const piece = current.find((p) => p.slug === item.slug);
+    const { slug, name } = item;
+    if (!piece || piece.stock === 0) {
+      changes.push({ slug, name, kind: 'removed' });
+      return [];
+    }
+    if (piece.priceCents !== item.priceCents)
+      changes.push({ slug, name, kind: 'price', from: item.priceCents, to: piece.priceCents });
+    if (piece.shippingCents !== item.shippingCents)
+      changes.push({
+        slug,
+        name,
+        kind: 'shipping',
+        from: item.shippingCents,
+        to: piece.shippingCents,
+      });
+    const quantity = clamp(item.quantity, piece.stock);
+    if (quantity !== item.quantity)
+      changes.push({ slug, name, kind: 'stock', from: item.quantity, to: quantity });
+    return [{ ...piece, quantity }];
+  });
+  return changes.length === 0 ? { items, changes } : { items: next, changes };
+}

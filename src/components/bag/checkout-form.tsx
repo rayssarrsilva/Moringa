@@ -16,6 +16,8 @@ import { demoAddress } from '@/lib/orders/sample-orders';
 import { formatPrice } from '@/lib/format';
 import { regions, stateNames, statesByRegion } from '@/lib/regions';
 import { BagSummary } from './bag-summary';
+import { BagChanges } from './bag-changes';
+import { useBagSync } from './use-bag-sync';
 
 const fieldOrder: (keyof AddressInput)[] = [
   'name',
@@ -30,7 +32,7 @@ const fieldOrder: (keyof AddressInput)[] = [
 ];
 
 type CepStatus = 'idle' | 'looking' | 'found' | 'notFound' | 'offline';
-type Problem = 'stock' | 'payment' | 'invalid' | 'rate_limited' | null;
+type Problem = 'changed' | 'payment' | 'invalid' | 'rate_limited' | null;
 
 export function CheckoutForm({
   account,
@@ -46,6 +48,7 @@ export function CheckoutForm({
   const hydrated = useHydrated();
   const items = useBag((s) => s.items);
   const setQuantity = useBag((s) => s.setQuantity);
+  const { changes, refresh } = useBagSync();
 
   const [cepStatus, setCepStatus] = useState<CepStatus>('idle');
   const [found, setFound] = useState({ street: '', city: '' });
@@ -131,7 +134,13 @@ export function CheckoutForm({
     setProblem(null);
     const result = await startCheckout({
       locale,
-      items: items.map(({ slug, quantity }) => ({ slug, quantity })),
+      // The prices the buyer is looking at: the server refuses to charge anything else.
+      items: items.map(({ slug, quantity, priceCents, shippingCents }) => ({
+        slug,
+        quantity,
+        priceCents,
+        shippingCents,
+      })),
       address,
     });
     if (result.ok) {
@@ -139,8 +148,12 @@ export function CheckoutForm({
       else window.location.assign(result.url);
       return;
     }
-    if (result.error === 'stock') {
-      for (const p of result.problems) setQuantity(p.slug, p.reason === 'stock' ? p.available : 0);
+    if (result.error === 'changed') {
+      for (const p of result.problems) {
+        if (p.reason === 'stock') setQuantity(p.slug, p.available);
+        if (p.reason === 'missing') setQuantity(p.slug, 0);
+      }
+      await refresh();
     }
     setProblem(result.error);
   }
@@ -150,6 +163,7 @@ export function CheckoutForm({
   if (items.length === 0) {
     return (
       <div className="grid justify-items-start gap-3 rounded-xl border-[1.5px] border-border-subtle p-6 md:p-10">
+        <BagChanges changes={changes} />
         <p className="text-heading-sm">{tb('emptyTitle')}</p>
         <Button asChild>
           <Link href="/pecas">{tb('browse')}</Link>
@@ -165,6 +179,7 @@ export function CheckoutForm({
   return (
     <div className="grid items-start gap-8 lg:grid-cols-[1fr_360px]">
       <form onSubmit={handleSubmit(onValid, onInvalid)} noValidate className="grid gap-8">
+        <BagChanges changes={changes} />
         {problem && (
           <div
             ref={problemRef}
@@ -172,9 +187,9 @@ export function CheckoutForm({
             role="alert"
             className="rounded-lg border-[1.5px] border-feedback-danger p-4"
           >
-            {problem === 'stock' && (
+            {problem === 'changed' && (
               <>
-                {t('stockProblem')}{' '}
+                {t('changedProblem')}{' '}
                 <Link href="/sacola" className="text-label underline underline-offset-4">
                   {tb('title')}
                 </Link>

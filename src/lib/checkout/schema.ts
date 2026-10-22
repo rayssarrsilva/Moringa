@@ -29,6 +29,9 @@ export const cartSchema = z
     z.object({
       slug: z.string().min(1).max(120),
       quantity: z.number().int().min(1).max(99),
+      // What the buyer saw. The server never charges from these; it only checks they still hold.
+      priceCents: z.number().int().min(0).optional(),
+      shippingCents: z.number().int().min(0).optional(),
     }),
   )
   .min(1)

@@ -3,7 +3,9 @@ import type { Piece } from '../catalog/types';
 import type { CartLine } from './schema';
 
 export type PricingProblem =
-  { slug: string; reason: 'missing' } | { slug: string; reason: 'stock'; available: number };
+  | { slug: string; reason: 'missing' }
+  | { slug: string; reason: 'stock'; available: number }
+  | { slug: string; reason: 'price'; priceCents: number; shippingCents: number };
 
 export type PricedCart =
   | { ok: true; groups: ShopGroup[]; totals: ReturnType<typeof bagTotals> }
@@ -22,6 +24,17 @@ export function priceCart(lines: CartLine[], pieces: Piece[]): PricedCart {
     if (!piece) problems.push({ slug: line.slug, reason: 'missing' });
     else if (piece.stock < line.quantity)
       problems.push({ slug: line.slug, reason: 'stock', available: piece.stock });
+    // The price shown on the pay button must be the price charged (CDC, art. 30 and 31).
+    else if (
+      (line.priceCents !== undefined && line.priceCents !== piece.priceCents) ||
+      (line.shippingCents !== undefined && line.shippingCents !== piece.shippingCents)
+    )
+      problems.push({
+        slug: line.slug,
+        reason: 'price',
+        priceCents: piece.priceCents,
+        shippingCents: piece.shippingCents,
+      });
     else items.push({ ...toBagPiece(piece), quantity: line.quantity });
   }
 

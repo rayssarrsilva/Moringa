@@ -6,6 +6,7 @@ import {
   groupByShop,
   removeItem,
   setQuantity,
+  syncItems,
   toBagPiece,
 } from './bag';
 import { sampleRepository } from '../catalog/sample-repository';
@@ -110,5 +111,39 @@ describe('groupByShop and bagTotals', () => {
 
   it('is all zeros for an empty bag', () => {
     expect(bagTotals([])).toEqual({ count: 0, subtotalCents: 0, shippingCents: 0, totalCents: 0 });
+  });
+});
+
+describe('syncItems (BUG-001: the bag kept the price of the day the piece was added)', () => {
+  it('takes the current price and shipping, and says what changed', async () => {
+    const cesto = await piece('cesto-de-palha'); // R$ 120, shipping R$ 20
+    const bag: BagItem[] = [{ ...cesto, priceCents: 9000, shippingCents: 1500, quantity: 1 }];
+    const { items, changes } = syncItems(bag, [cesto]);
+    expect(items[0]).toMatchObject({ priceCents: 12000, shippingCents: 2000, quantity: 1 });
+    expect(changes).toEqual([
+      { slug: 'cesto-de-palha', name: cesto.name, kind: 'price', from: 9000, to: 12000 },
+      { slug: 'cesto-de-palha', name: cesto.name, kind: 'shipping', from: 1500, to: 2000 },
+    ]);
+  });
+
+  it('lowers the quantity to the stock left, and removes pieces no longer on sale', async () => {
+    const cesto = await piece('cesto-de-palha'); // 3 in stock
+    const tigela = await piece('tigela-de-ceramica');
+    const bag: BagItem[] = [
+      { ...cesto, quantity: 500 },
+      { ...tigela, quantity: 1 },
+    ];
+    const { items, changes } = syncItems(bag, [cesto]);
+    expect(items).toEqual([{ ...cesto, quantity: 3 }]);
+    expect(changes).toEqual([
+      { slug: 'cesto-de-palha', name: cesto.name, kind: 'stock', from: 500, to: 3 },
+      { slug: 'tigela-de-ceramica', name: tigela.name, kind: 'removed' },
+    ]);
+  });
+
+  it('changes nothing when the bag is up to date', async () => {
+    const cesto = await piece('cesto-de-palha');
+    const bag: BagItem[] = [{ ...cesto, quantity: 2 }];
+    expect(syncItems(bag, [cesto])).toEqual({ items: bag, changes: [] });
   });
 });
