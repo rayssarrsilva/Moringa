@@ -5,6 +5,7 @@ import '@fontsource/instrument-sans/600.css';
 import '../globals.css';
 
 import type { Metadata } from 'next';
+import { headers } from 'next/headers';
 import { notFound } from 'next/navigation';
 import { hasLocale, NextIntlClientProvider } from 'next-intl';
 import { getTranslations, setRequestLocale } from 'next-intl/server';
@@ -17,10 +18,6 @@ import { routing } from '@/i18n/routing';
 import { siteUrl } from '@/lib/seo';
 
 const htmlLang = { pt: 'pt-BR', en: 'en' } as const;
-
-export function generateStaticParams() {
-  return routing.locales.map((locale) => ({ locale }));
-}
 
 export async function generateMetadata({
   params,
@@ -53,12 +50,14 @@ export default async function LocaleLayout({
   const { locale } = await params;
   if (!hasLocale(routing.locales, locale)) notFound();
   setRequestLocale(locale);
+  // Set by src/proxy.ts. Reading it makes pages render per request, so each gets its own nonce.
+  const nonce = (await headers()).get('x-nonce') ?? undefined;
 
   return (
     // The theme script sets data-theme before React loads, hence suppressHydrationWarning.
     <html lang={htmlLang[locale]} suppressHydrationWarning>
       <head>
-        <script dangerouslySetInnerHTML={{ __html: themeScript }} />
+        <script nonce={nonce} dangerouslySetInnerHTML={{ __html: themeScript }} />
       </head>
       <body className="flex min-h-dvh flex-col">
         <NextIntlClientProvider>
