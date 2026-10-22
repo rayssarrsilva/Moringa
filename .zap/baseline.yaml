@@ -1,0 +1,57 @@
+# OWASP ZAP baseline scan (Automation Framework). Runs on every pull request against a
+# production build: spiders the site, runs the passive rules, writes a report and fails
+# the job on any Medium or High alert. Same plan locally and in CI.
+env:
+  contexts:
+    - name: moringa
+      urls: ['http://localhost:3000/pt']
+      includePaths: ['http://localhost:3000.*']
+      excludePaths:
+        # Auth.js and Stripe endpoints are not pages; the webhook only accepts signed POSTs.
+        - 'http://localhost:3000/api/auth/.*'
+        - 'http://localhost:3000/api/stripe/.*'
+  parameters:
+    failOnError: true
+    progressToStdout: true
+
+jobs:
+  - type: passiveScan-config
+    parameters:
+      maxAlertsPerRule: 10
+      scanOnlyInScope: true
+
+  - type: alertFilter
+    alertFilters:
+      # Justified exceptions, each documented in docs/security/THREAT-MODEL.md.
+      # 10062 "PII disclosure": the number it finds is Stripe's public test card (4242…), shown
+      # on purpose so visitors can try the checkout. It is not anyone's card.
+      - ruleId: 10062
+        newRisk: False Positive
+        evidence: '4242 4242 4242 4242'
+        evidenceRegex: false
+      # 10202 "Absence of anti-CSRF tokens": the catalog filter is a GET form. Writes use Server
+      # Actions (Next.js checks the origin) or POST routes with origin checks and SameSite cookies.
+      - ruleId: 10202
+        newRisk: Info
+
+  - type: spider
+    parameters:
+      context: moringa
+      maxDuration: 2
+      maxDepth: 4
+
+  - type: passiveScan-wait
+    parameters:
+      maxDuration: 5
+
+  - type: report
+    parameters:
+      template: traditional-html
+      reportDir: /zap/wrk
+      reportFile: zap-report.html
+    risks: [high, medium, low, info]
+
+  - type: exitStatus
+    parameters:
+      errorLevel: Medium
+      warnLevel: Low
