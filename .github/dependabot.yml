@@ -14,6 +14,14 @@ updates:
       # One pull request for small updates; majors come one by one, to be read and tested.
       minor-and-patch:
         update-types: [minor, patch]
+    ignore:
+      # TypeScript 7 (the native port) is not supported by typescript-eslint yet. Lift this when it is.
+      - dependency-name: typescript
+        update-types: [version-update:semver-major]
+      # Types must match the Node.js that runs the app (.nvmrc). Newer types would allow APIs
+      # that do not exist in production. Bump together with .nvmrc.
+      - dependency-name: '@types/node'
+        update-types: [version-update:semver-major]
 
   - package-ecosystem: github-actions
     directory: /

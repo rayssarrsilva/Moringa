@@ -138,7 +138,12 @@
     "checkout": "Continue to delivery",
     "keepBrowsing": "Keep shopping",
     "loading": "Loading your bag…",
-    "removeShort": "Remove"
+    "removeShort": "Remove",
+    "changesTitle": "We updated your bag with today's values:",
+    "changePrice": "{name}: the price changed from {from} to {to}.",
+    "changeShipping": "{name}: shipping changed from {from} to {to}.",
+    "changeStock": "{name}: {count, plural, one {only # piece left} other {only # pieces left}}, so we adjusted the quantity.",
+    "changeRemoved": "{name} left the fair (paused or sold out) and was taken out of your bag."
   },
   "Checkout": {
     "title": "Delivery and payment",
@@ -164,7 +169,6 @@
     "paying": "Opening the payment…",
     "stripeNote": "Payment happens on Stripe's page, by card or Pix. This is a portfolio project: use the test card 4242 4242 4242 4242, nothing is really charged.",
     "errorSummary": "{count, plural, one {Check the highlighted field.} other {Check the # highlighted fields.}}",
-    "stockProblem": "Some pieces changed stock while you were shopping. We adjusted your bag, take a look before paying.",
     "paymentProblem": "We could not open the payment right now. Your bag is still here, try again in a moment.",
     "invalidProblem": "Some details did not pass our check. Review the form and try again.",
     "errors": {
@@ -174,7 +178,8 @@
       "cep": "Enter the 8 digits of the CEP, like 01310-100.",
       "tooLong": "This field is too long."
     },
-    "demoNote": "You are in Marina's demo account, so her made-up address is already filled in. Please do not use real details here."
+    "demoNote": "You are in Marina's demo account, so her made-up address is already filled in. Please do not use real details here.",
+    "changedProblem": "Something changed since you opened this page. We updated your bag: check the total and pay again."
   },
   "Order": {
     "paidTitle": "Order confirmed!",

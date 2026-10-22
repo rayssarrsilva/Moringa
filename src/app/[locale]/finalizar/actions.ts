@@ -22,7 +22,7 @@ import { stripe, stripeEnabled } from '@/lib/stripe';
 export type CheckoutResult =
   | { ok: true; url: string }
   | { ok: false; error: 'invalid' | 'payment' | 'rate_limited' }
-  | { ok: false; error: 'stock'; problems: PricingProblem[] };
+  | { ok: false; error: 'changed'; problems: PricingProblem[] };
 
 /**
  * Validates the address again, re-prices the bag from the database, creates one
@@ -36,7 +36,7 @@ export async function startCheckout(raw: unknown): Promise<CheckoutResult> {
 
   const pieces = await catalog().getPiecesBySlugs(input.items.map((i) => i.slug));
   const priced = priceCart(input.items, pieces);
-  if (!priced.ok) return { ok: false, error: 'stock', problems: priced.problems };
+  if (!priced.ok) return { ok: false, error: 'changed', problems: priced.problems };
 
   // Signed in: the order belongs to the account, whatever email was typed.
   const viewer = await currentViewer();

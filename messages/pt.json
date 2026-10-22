@@ -138,7 +138,12 @@
     "checkout": "Continuar para a entrega",
     "keepBrowsing": "Continuar comprando",
     "loading": "Carregando a sacola…",
-    "removeShort": "Remover"
+    "removeShort": "Remover",
+    "changesTitle": "Atualizamos sua sacola com os valores de agora:",
+    "changePrice": "{name}: o preço mudou de {from} para {to}.",
+    "changeShipping": "{name}: o frete mudou de {from} para {to}.",
+    "changeStock": "{name}: {count, plural, one {só resta # peça} other {só restam # peças}}, então ajustamos a quantidade.",
+    "changeRemoved": "{name} saiu da feira (pausada ou esgotada) e foi tirada da sacola."
   },
   "Checkout": {
     "title": "Entrega e pagamento",
@@ -164,7 +169,6 @@
     "paying": "Abrindo o pagamento…",
     "stripeNote": "O pagamento acontece na página da Stripe, com cartão ou Pix. Este é um projeto de portfólio: use o cartão de teste 4242 4242 4242 4242, nenhuma cobrança é real.",
     "errorSummary": "{count, plural, one {Confira o campo destacado.} other {Confira os # campos destacados.}}",
-    "stockProblem": "Algumas peças mudaram de estoque enquanto você comprava. Ajustamos a sua sacola, dê uma olhada antes de pagar.",
     "paymentProblem": "Não conseguimos abrir o pagamento agora. Sua sacola continua aqui, tente de novo em instantes.",
     "invalidProblem": "Alguns dados não passaram na verificação. Confira o formulário e tente de novo.",
     "errors": {
@@ -174,7 +178,8 @@
       "cep": "Digite os 8 números do CEP, como 01310-100.",
       "tooLong": "Este campo está longo demais."
     },
-    "demoNote": "Você está na conta de demonstração da Marina, então o endereço fictício dela já vem preenchido. Não use dados reais aqui."
+    "demoNote": "Você está na conta de demonstração da Marina, então o endereço fictício dela já vem preenchido. Não use dados reais aqui.",
+    "changedProblem": "Algo mudou desde que você abriu esta página. Atualizamos a sacola: confira o total e pague de novo."
   },
   "Order": {
     "paidTitle": "Pedido confirmado!",

@@ -41,4 +41,25 @@ describe('priceCart', () => {
       ],
     });
   });
+
+  it('stops when the price or shipping changed since the buyer saw it (BUG-001)', async () => {
+    const result = priceCart(
+      [{ slug: 'cesto-de-palha', quantity: 1, priceCents: 9000, shippingCents: 2000 }],
+      await all(),
+    );
+    expect(result).toEqual({
+      ok: false,
+      problems: [
+        { slug: 'cesto-de-palha', reason: 'price', priceCents: 12000, shippingCents: 2000 },
+      ],
+    });
+  });
+
+  it('goes on when the buyer saw the current price', async () => {
+    const result = priceCart(
+      [{ slug: 'cesto-de-palha', quantity: 1, priceCents: 12000, shippingCents: 2000 }],
+      await all(),
+    );
+    expect(result.ok).toBe(true);
+  });
 });

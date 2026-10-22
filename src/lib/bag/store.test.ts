@@ -46,3 +46,16 @@ describe('bag store', () => {
     expect(useBag.getState().items).toEqual([]);
   });
 });
+
+describe('sync notices (BUG-001)', () => {
+  it('keeps what changed until the buyer adds something', async () => {
+    const cesto = toBagPiece((await sampleRepository.getPiece('cesto-de-palha'))!);
+    useBag.setState({ items: [{ ...cesto, priceCents: 1, quantity: 1 }], notices: [] });
+    useBag.getState().sync([cesto]);
+    useBag.getState().sync([cesto]); // a second check finds nothing new
+    expect(useBag.getState().notices).toHaveLength(1);
+    expect(useBag.getState().items[0]!.priceCents).toBe(cesto.priceCents);
+    useBag.getState().add(cesto);
+    expect(useBag.getState().notices).toEqual([]);
+  });
+});
