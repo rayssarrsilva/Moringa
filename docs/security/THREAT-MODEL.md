@@ -50,6 +50,19 @@ Browser ──HTTPS──▶ ViaCEP (address from the CEP, read-only)
 - **Demo accounts are public on purpose.** Their data lives 7 days, scoped to one browser.
 - **ZAP exceptions** (in [`.zap/baseline.yaml`](../../.zap/baseline.yaml)): the "PII" match is Stripe's public test card, shown on purpose; "no anti-CSRF token" points at the catalog's GET filter form, which changes nothing.
 
+## Dependency alerts with no fix
+
+`npm audit --omit=dev` (what ships to users) has no findings, and CI blocks any High or Critical there. Development tools are handled like this:
+
+- **Fixed by forcing a safe version** (`overrides` in `package.json`): `tmp`, `basic-ftp` and `uuid` inside Lighthouse CI, and `esbuild` inside drizzle-kit. Lint, migrations, unit tests and Lighthouse CI were run again with the forced versions.
+- **No patched version exists yet**, so the alerts are dismissed in GitHub with the reason below, and checked again when Dependabot opens an update:
+
+| Package                         | Advisory                                                                                                                                                                   | Reaches it                           | Why it is not exploitable here                                                                       |
+| ------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------ | ---------------------------------------------------------------------------------------------------- |
+| `braces` ≤ 3.0.3 (High)         | [GHSA-vfj7-8cjw-p6xm](https://github.com/advisories/GHSA-vfj7-8cjw-p6xm), denial of service on crafted patterns                                                            | ESLint config of Next.js             | Only expands the project's own glob patterns while linting; never sees outside input                 |
+| `extract-zip` ≤ 2.0.1 (High)    | [GHSA-jmr9-qjv8-65gv](https://github.com/advisories/GHSA-jmr9-qjv8-65gv), [GHSA-7pqw-9j4j-h8q3](https://github.com/advisories/GHSA-7pqw-9j4j-h8q3), symlink path traversal | Puppeteer inside Lighthouse CI       | Only unzips a browser Puppeteer downloads; Lighthouse CI here uses the Chrome already on the machine |
+| `sprintf-js` ≤ 1.1.3 (Moderate) | [GHSA-hp3w-g68c-fv3c](https://github.com/advisories/GHSA-hp3w-g68c-fv3c), denial of service on unbounded precision                                                         | Argument parser inside Lighthouse CI | Formats the tool's own help and error messages, not outside input                                    |
+
 ## How it is verified
 
 | Check                                                                        | When                          | Result                    |
