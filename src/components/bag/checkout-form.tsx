@@ -212,28 +212,31 @@ export function CheckoutForm({
 
         <fieldset className="grid gap-4">
           <legend className="text-heading-sm mb-4">{t('address')}</legend>
-          <div className="grid gap-2 sm:max-w-60">
-            <Input
-              label={t('cep')}
-              inputMode="numeric"
-              autoComplete="postal-code"
-              maxLength={9}
-              placeholder="00000-000"
-              hint={t('cepHint')}
-              error={message(errors.cep?.message)}
-              {...cep}
-              onChange={(event) => {
-                void cep.onChange(event);
-                void onCepChange(event.target.value);
-              }}
-            />
+          <div className="grid gap-2">
+            <div className="sm:max-w-60">
+              <Input
+                label={t('cep')}
+                inputMode="numeric"
+                autoComplete="postal-code"
+                maxLength={9}
+                placeholder="00000-000"
+                hint={t('cepHint')}
+                error={message(errors.cep?.message)}
+                {...cep}
+                onChange={(event) => {
+                  void cep.onChange(event);
+                  void onCepChange(event.target.value);
+                }}
+              />
+            </div>
+            {/* Space kept for the lookup message, so the fields below never jump while typing. */}
+            <p role="status" className="min-h-5 text-sm">
+              {cepStatus === 'looking' && t('cepLooking')}
+              {cepStatus === 'found' && t('cepFound', found)}
+              {cepStatus === 'notFound' && t('cepNotFound')}
+              {cepStatus === 'offline' && t('cepOffline')}
+            </p>
           </div>
-          <p role="status" className="min-h-6 text-sm">
-            {cepStatus === 'looking' && t('cepLooking')}
-            {cepStatus === 'found' && t('cepFound', found)}
-            {cepStatus === 'notFound' && t('cepNotFound')}
-            {cepStatus === 'offline' && t('cepOffline')}
-          </p>
 
           <div className="grid gap-4 sm:grid-cols-[1fr_140px]">
             <Input

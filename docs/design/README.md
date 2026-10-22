@@ -40,6 +40,22 @@
 - **Charts have a table.** The seller sales chart has a "Show as table" toggle with the same numbers.
 - **Plain words for makers.** "Ship today", not "Fulfillment queue".
 
+## Design and code parity
+
+The prototype covered the main flows before any code existed. Some screens were then designed directly in code, on the same Ipê components and tokens, and checked with axe and screenshots instead of a Figma round first. They are listed here so nobody mistakes them for gaps.
+
+| Built in code after the prototype                        | Story | Based on                                    |
+| -------------------------------------------------------- | ----- | ------------------------------------------- |
+| Edit, pause and resume a piece; read-only example pieces | US-15 | S10 (new piece) form and the S11 piece list |
+| Reviews on the piece page and the review form            | US-09 | S03 (piece) and S08 (order timeline)        |
+| The maker's reviews                                      | US-16 | S11 (shop overview)                         |
+| Favorites                                                | US-03 | S03 (piece) and the catalog grid            |
+| Guest order tracking and the system status page          | US-08 | S08 (order timeline)                        |
+| Dark theme in charcoal                                   | —     | [THEME.md](./THEME.md)                      |
+| Rate-limit and error messages                            | —     | Ipê feedback tokens                         |
+
+**Dark theme:** the charcoal dark theme was designed in code after the Figma screens. Its values and contrast checks live in [`theme.css`](../../src/app/theme.css) and [THEME.md](./THEME.md), which are the source of truth until the next Figma pass.
+
 ## Found while designing
 
 - The Ipê Badge tones Success, Danger and Info lose their 16% tint when instanced in Figma and render as solid color with dark text. The coded component is not affected (it uses `color-mix`). Fixed by hand in these screens; to be fixed in the Ipê Figma library.

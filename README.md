@@ -4,9 +4,15 @@
 
 **An online fair for people who make things by hand in Brazil.**
 
-**English** · [Português](./README.pt-BR.md)
+**[Open the live site](https://moringa-silk.vercel.app/en)** · **English** · [Português](./README.pt-BR.md)
 
-_In progress · day 12 of 14: security_
+[![CI](https://github.com/rayssarrsilva/Moringa/actions/workflows/ci.yml/badge.svg)](https://github.com/rayssarrsilva/Moringa/actions/workflows/ci.yml)
+[![CodeQL](https://github.com/rayssarrsilva/Moringa/actions/workflows/codeql.yml/badge.svg)](https://github.com/rayssarrsilva/Moringa/actions/workflows/codeql.yml)
+[![Mozilla Observatory: A+](<https://img.shields.io/badge/Mozilla_Observatory-A%2B_(135%2F100)-2e7d4f>)](https://developer.mozilla.org/en-US/observatory/analyze?host=moringa-silk.vercel.app)
+[![Security headers: A+](https://img.shields.io/badge/securityheaders.com-A%2B-2e7d4f)](https://securityheaders.com/?q=https%3A%2F%2Fmoringa-silk.vercel.app%2F&followRedirects=on)
+[![License: MIT](https://img.shields.io/badge/license-MIT-blue)](./LICENSE)
+
+<img src="./docs/screenshots/home-desktop.jpg" alt="Moringa home page: the headline 'Handmade in Brazil, with the story of who made it', a search field, region filters and the week's new pieces." width="860">
 
 </div>
 
@@ -20,10 +26,45 @@ A moringa is the handmade clay jar that keeps water cool. In many Brazilian home
 
 A marketplace with two sides, each with its own panel:
 
-- **Buyers** find pieces by region, material and price, read the story of who made them, pay through Stripe (test mode) and follow every step of the order.
-- **Makers** open a shop with their story, list pieces in a guided form and ship orders. When they add a tracking code, the buyer sees it right away.
+- **Buyers** find pieces by region, material and price, read the story of who made them, save favorites, pay through Stripe (test mode, card or Pix), follow every step of the order and review what arrived.
+- **Makers** open a shop with their story, list pieces in a guided form, edit or pause them, see their sales and ship orders. When they add a tracking code, the buyer sees it right away.
 
-Built with the [Ipê Design System](https://github.com/rayssarrsilva/Ipe).
+Everything works in Portuguese and English, in a light and a dark theme, on a phone or a desktop, with a keyboard or a screen reader.
+
+Built with the [Ipê Design System](https://github.com/rayssarrsilva/Ipe), also mine.
+
+## Try it
+
+No sign-up: each demo account is one click, and what you do stays in your browser for 7 days.
+
+| Who                      | Where                                                 | What to try                                                                                   |
+| ------------------------ | ----------------------------------------------------- | --------------------------------------------------------------------------------------------- |
+| **Marina**, buyer        | [/en/conta](https://moringa-silk.vercel.app/en/conta) | Orders in every state, the live timeline, "I got my order", reviews                           |
+| **Dona Lúcia**, ceramist | [/en/loja](https://moringa-silk.vercel.app/en/loja)   | Sales chart (with a table view), ship an order with a tracking code, edit or pause a piece    |
+| **A new maker**          | [/en/loja](https://moringa-silk.vercel.app/en/loja)   | Open a shop from zero and publish the first piece                                             |
+| **Anyone**               | [/en/pecas](https://moringa-silk.vercel.app/en/pecas) | Filter, add to the bag, pay with the test card `4242 4242 4242 4242`, any future date and CVC |
+
+## Quality at a glance
+
+Measured on the live site and on every pull request. Last checked on October 22, 2026.
+
+| Area                  | Result                                                                                                                                                                                                                                                               | How it is checked                                                                                                 |
+| --------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------- |
+| Performance           | Lighthouse 90–100 on mobile (slow 4G simulated)                                                                                                                                                                                                                      | [Lighthouse CI](./lighthouserc.cjs), 4 pages × 3 runs, on every PR                                                |
+| Accessibility         | Lighthouse 100 · 0 axe violations · WCAG 2.2 AA                                                                                                                                                                                                                      | axe on every page in both themes, plus keyboard and focus tests in Playwright; screen reader pass in the QA cycle |
+| SEO                   | Lighthouse 100                                                                                                                                                                                                                                                       | hreflang, canonical, Open Graph images, sitemap, Product and Review JSON-LD                                       |
+| Security headers      | [Mozilla Observatory **A+** (135/100, 12/12 tests)](https://developer.mozilla.org/en-US/observatory/analyze?host=moringa-silk.vercel.app) · [securityheaders.com **A+**](https://securityheaders.com/?q=https%3A%2F%2Fmoringa-silk.vercel.app%2F&followRedirects=on) | Third-party scanners on the live site                                                                             |
+| Vulnerability scan    | OWASP ZAP baseline: 0 high · 0 medium · 0 low                                                                                                                                                                                                                        | [ZAP plan](./.zap/baseline.yaml) on every PR                                                                      |
+| Code and dependencies | CodeQL `security-extended` · `npm audit`: 0 vulnerabilities                                                                                                                                                                                                          | [CodeQL](./.github/workflows/codeql.yml), Dependabot                                                              |
+| Tests                 | 173 unit and integration · 150 end-to-end (mobile and desktop)                                                                                                                                                                                                       | Vitest, PGlite (real Postgres), Playwright                                                                        |
+
+## Screenshots
+
+|                                                                                                                                                                                              |                                                                                                                                                                                                         |
+| :------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------: | :-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------: |
+|  <img src="./docs/screenshots/piece-desktop.jpg" alt="Piece page: clay jar with price, stock, shipping, the maker's story and reviews." width="420"><br>Piece page, with the maker's story   | <img src="./docs/screenshots/order-timeline-desktop.jpg" alt="Order timeline: paid, preparing, shipped with a tracking code, and delivered still to come." width="420"><br>Order timeline, updated live |
+| <img src="./docs/screenshots/maker-panel-dark.jpg" alt="Maker panel in the dark theme: orders to ship, sales in 30 days and a weekly revenue chart." width="420"><br>Maker panel, dark theme |                            <img src="./docs/screenshots/maker-orders-dark.jpg" alt="Maker orders board in the dark theme, grouped by status." width="420"><br>Orders to ship                            |
+|                         <img src="./docs/screenshots/catalog-mobile.jpg" alt="Catalog on a phone: filters and a grid of pieces." width="220"><br>Catalog on a phone                          |                      <img src="./docs/screenshots/checkout-mobile.jpg" alt="Checkout on a phone: name, email and address filled from the CEP." width="220"><br>Checkout on a phone                      |
 
 ## Discovery
 
@@ -41,7 +82,15 @@ Built with the [Ipê Design System](https://github.com/rayssarrsilva/Ipe).
 
 ## Stack
 
-Next.js (App Router) · TypeScript · Ipê + Tailwind CSS v4 · next-intl · Auth.js · Drizzle + Postgres (Neon) · Zustand · TanStack Query · React Hook Form + Zod · Stripe Checkout · Vitest + Testing Library · Playwright · Lighthouse CI · GitHub Actions · Vercel
+| Layer             | Tools                                                                                       |
+| ----------------- | ------------------------------------------------------------------------------------------- |
+| App               | Next.js 16 (App Router, Server Components, Server Actions) · React 19 · TypeScript (strict) |
+| UI                | Ipê Design System 2.0 · Tailwind CSS 4 · next-intl (pt-BR, en)                              |
+| Data              | Postgres on Neon · Drizzle ORM with versioned migrations · TanStack Query · Zustand         |
+| Forms             | React Hook Form · Zod (one schema in the browser and on the server)                         |
+| Auth and payments | Auth.js v5 (JWT) · Stripe Checkout in test mode (card and Pix) with a signed webhook        |
+| Quality           | Vitest · Testing Library · PGlite · Playwright · axe · Lighthouse CI · OWASP ZAP · CodeQL   |
+| Delivery          | GitHub Actions · Dependabot · Vercel                                                        |
 
 ## Run it locally
 
@@ -85,13 +134,11 @@ Every Vercel build runs `npm run db:migrate` before `next build`, so the databas
 
 - `npm test` runs unit, component and database integration tests. The integration tests start a real Postgres in memory with [PGlite](https://pglite.dev), create the schema from `src/db/schema.ts` and run the same Drizzle queries the app sends to Neon.
 - `npm run test:e2e` runs Playwright on mobile and desktop, with axe accessibility checks in both themes.
-- `npm run lhci` builds the site and runs [Lighthouse CI](https://github.com/GoogleChrome/lighthouse-ci) three times on four pages (home, catalog, piece, shop in English). The pull request fails below these scores:
+- `npm run lhci` builds the site and runs [Lighthouse CI](https://github.com/GoogleChrome/lighthouse-ci) three times on four pages (home, catalog, piece, shop in English). The pull request fails below these scores (latest results in [Quality at a glance](#quality-at-a-glance)):
 
 | Performance | Accessibility | Best practices | SEO |
 | :---------: | :-----------: | :------------: | :-: |
 |    ≥ 90     |      100      |      ≥ 95      | 100 |
-
-Latest run: performance 91–99 (mobile, slow 4G simulated), accessibility 100, best practices 100, SEO 100 on all four pages.
 
 ### Payments (Stripe test mode)
 
@@ -122,11 +169,13 @@ Built against the [OWASP Top 10](https://owasp.org/Top10/) and [ASVS level 2](ht
 - **Supply chain:** CodeQL, Dependabot, `npm audit` gate, GitHub Actions pinned by commit, read-only workflow token.
 - Found a problem? See [SECURITY.md](./SECURITY.md) or [`/.well-known/security.txt`](https://datatracker.ietf.org/doc/html/rfc9116).
 
-| Check                                                                  | Result                    |
-| ---------------------------------------------------------------------- | ------------------------- |
-| [OWASP ZAP](https://www.zaproxy.org) baseline scan, every pull request | 0 high · 0 medium · 0 low |
-| `npm audit` (production dependencies)                                  | 0 vulnerabilities         |
-| CSP violations in the browser (Playwright)                             | 0                         |
+| Check                                                                                                                        | Result                                   |
+| ---------------------------------------------------------------------------------------------------------------------------- | ---------------------------------------- |
+| [Mozilla HTTP Observatory](https://developer.mozilla.org/en-US/observatory/analyze?host=moringa-silk.vercel.app), live site  | **A+** · 135/100 · 12 of 12 tests passed |
+| [securityheaders.com](https://securityheaders.com/?q=https%3A%2F%2Fmoringa-silk.vercel.app%2F&followRedirects=on), live site | **A+**                                   |
+| [OWASP ZAP](https://www.zaproxy.org) baseline scan, every pull request                                                       | 0 high · 0 medium · 0 low                |
+| `npm audit` (production dependencies)                                                                                        | 0 vulnerabilities                        |
+| CSP violations in the browser (Playwright)                                                                                   | 0                                        |
 
 ## Author
 
