@@ -504,5 +504,8 @@
     "count": "{count, plural, one {# peça salva} other {# peças salvas}}",
     "note": "Seus favoritos ficam guardados neste navegador, mesmo depois de entrar na sua conta.",
     "loading": "Carregando seus favoritos…"
+  },
+  "Security": {
+    "rateLimited": "Muitas tentativas em pouco tempo. Espere alguns minutos e tente de novo."
   }
 }

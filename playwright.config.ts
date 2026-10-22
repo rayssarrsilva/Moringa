@@ -27,6 +27,8 @@ export default defineConfig({
     command: `npm run start -- -p ${port}`,
     port,
     reuseExistingServer: !process.env.CI,
+    // Dozens of sign-ins from one address; see src/lib/security/rate-limit.ts.
+    env: { RATE_LIMIT_SCALE: '1000' },
     timeout: 120_000,
   },
 });

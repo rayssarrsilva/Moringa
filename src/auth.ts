@@ -2,6 +2,7 @@ import NextAuth, { type DefaultSession } from 'next-auth';
 import Credentials from 'next-auth/providers/credentials';
 import { isDeviceId } from './lib/demo-device';
 import { demoBuyer } from './lib/orders/sample-orders';
+import { clientId, rateLimit } from './lib/security/rate-limit';
 
 declare module 'next-auth' {
   interface Session {
@@ -66,10 +67,13 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
       id: 'demo',
       name: 'Demo',
       credentials: { account: {}, device: {} },
-      authorize: (credentials) =>
-        isDemoAccountName(credentials?.account) && isDeviceId(credentials?.device)
+      // The sign-in endpoint can be called without the page, so it has its own limit.
+      authorize: async (credentials, request) => {
+        if (!(await rateLimit('authorize', await clientId(request.headers))).ok) return null;
+        return isDemoAccountName(credentials?.account) && isDeviceId(credentials?.device)
           ? { ...demoAccounts[credentials.account](credentials.device), device: credentials.device }
-          : null,
+          : null;
+      },
     }),
   ],
   callbacks: {

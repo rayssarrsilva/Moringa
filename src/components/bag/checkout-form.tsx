@@ -30,7 +30,7 @@ const fieldOrder: (keyof AddressInput)[] = [
 ];
 
 type CepStatus = 'idle' | 'looking' | 'found' | 'notFound' | 'offline';
-type Problem = 'stock' | 'payment' | 'invalid' | null;
+type Problem = 'stock' | 'payment' | 'invalid' | 'rate_limited' | null;
 
 export function CheckoutForm({
   account,
@@ -40,6 +40,7 @@ export function CheckoutForm({
   const t = useTranslations('Checkout');
   const tb = useTranslations('Bag');
   const tr = useTranslations('Regions');
+  const ts = useTranslations('Security');
   const locale = useLocale() as Locale;
   const router = useRouter();
   const hydrated = useHydrated();
@@ -181,6 +182,7 @@ export function CheckoutForm({
             )}
             {problem === 'payment' && t('paymentProblem')}
             {problem === 'invalid' && t('invalidProblem')}
+            {problem === 'rate_limited' && ts('rateLimited')}
           </div>
         )}
         {submitCount > 0 && errorCount > 0 && (

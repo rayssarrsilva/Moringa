@@ -7,6 +7,7 @@ import { PiecePhoto } from '@/components/material-art';
 import { Link } from '@/i18n/navigation';
 import type { Locale } from '@/i18n/routing';
 import { formatPrice } from '@/lib/format';
+import { RateLimitNotice } from '@/components/rate-limit-notice';
 import { ShopOverview } from '@/components/seller/shop-overview';
 import { sellerRepository, shopOrders } from '@/lib/seller';
 import { summarize } from '@/lib/seller/summary';
@@ -14,7 +15,7 @@ import { signInDemo, signOutAction } from '../conta/actions';
 
 type Props = {
   params: Promise<{ locale: Locale }>;
-  searchParams: Promise<{ publicada?: string; nome?: string; loja?: string }>;
+  searchParams: Promise<{ publicada?: string; nome?: string; loja?: string; limite?: string }>;
 };
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
@@ -33,7 +34,13 @@ export default async function SellerHome({ params, searchParams }: Props) {
   ]);
 
   if (!viewer || viewer.role !== 'seller')
-    return <Landing locale={locale} buyer={Boolean(viewer)} />;
+    return (
+      <Landing
+        locale={locale}
+        buyer={Boolean(viewer)}
+        limited={Boolean((await searchParams).limite)}
+      />
+    );
 
   const repo = sellerRepository();
   const shop = await repo.getShop(viewer);
@@ -161,7 +168,15 @@ export default async function SellerHome({ params, searchParams }: Props) {
   );
 }
 
-async function Landing({ locale, buyer }: { locale: Locale; buyer: boolean }) {
+async function Landing({
+  locale,
+  buyer,
+  limited,
+}: {
+  locale: Locale;
+  buyer: boolean;
+  limited: boolean;
+}) {
   const t = await getTranslations('Seller');
   const accounts = [
     {
@@ -179,6 +194,7 @@ async function Landing({ locale, buyer }: { locale: Locale; buyer: boolean }) {
         <h1 className="text-heading-md md:text-display">{t('landingTitle')}</h1>
         <p className="max-w-[60ch] text-lg text-text-secondary">{t('landingBody')}</p>
       </div>
+      {limited && <RateLimitNotice />}
       {buyer && (
         <p role="status" className="rounded-lg bg-bg-surface p-4">
           {t('buyerSignedIn')}

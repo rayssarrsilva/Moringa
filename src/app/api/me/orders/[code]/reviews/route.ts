@@ -1,6 +1,7 @@
 import { currentViewer } from '@/auth';
 import { reviewsRepository } from '@/lib/reviews';
 import { reviewSchema } from '@/lib/reviews/rules';
+import { guardPost } from '@/lib/security/guard';
 
 const status = {
   not_found: 404,
@@ -11,6 +12,8 @@ const status = {
 
 /** The buyer reviews a piece of a delivered order (US-09). */
 export async function POST(request: Request, { params }: { params: Promise<{ code: string }> }) {
+  const blocked = await guardPost(request);
+  if (blocked) return blocked;
   const viewer = await currentViewer();
   if (!viewer) return Response.json({ error: 'unauthorized' }, { status: 401 });
   const parsed = reviewSchema.safeParse(await request.json().catch(() => null));

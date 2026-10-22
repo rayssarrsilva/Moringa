@@ -212,6 +212,20 @@ export const favorites = pgTable(
   (t) => [primaryKey({ columns: [t.userId, t.pieceId] })],
 );
 
+/**
+ * Request counters for rate limiting (OWASP ASVS 2.2.1, 11.1.4). One row per action and client,
+ * shared by every server instance. The client is a salted hash of the IP: no raw IP is stored.
+ */
+export const rateLimits = pgTable(
+  'rate_limits',
+  {
+    key: text().primaryKey(),
+    count: integer().notNull(),
+    resetAt: timestamp('reset_at', { withTimezone: true }).notNull(),
+  },
+  (t) => [index('rate_limits_reset_idx').on(t.resetAt)],
+);
+
 export const usersRelations = relations(users, ({ one, many }) => ({
   shop: one(shops, { fields: [users.id], references: [shops.ownerId] }),
   orders: many(orders),
