@@ -1,3 +1,5 @@
+import { revalidateTag } from 'next/cache';
+import { catalogTag } from '@/lib/catalog';
 import { handleCheckoutEvent } from '@/lib/checkout/webhook';
 import { cancelBySession, markPaidBySession, ordersEnabled } from '@/lib/orders/repository';
 import { stripe, stripeEnabled } from '@/lib/stripe';
@@ -28,5 +30,7 @@ export async function POST(request: Request) {
     markPaid: markPaidBySession,
     cancel: cancelBySession,
   });
+  // A paid order takes stock: refresh the cached catalog in the background.
+  if (outcome === 'paid') revalidateTag(catalogTag, 'max');
   return Response.json({ received: true, outcome });
 }
