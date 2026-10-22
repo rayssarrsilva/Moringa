@@ -11,7 +11,8 @@ const queryOf =
   (text, params) =>
     client.query<Record<string, unknown>>(text, params).then((r) => r.rows);
 
-describe('migrations on a database created with "push"', () => {
+// Each test starts its own Postgres in memory (PGlite), which takes a few seconds on CI machines.
+describe('migrations on a database created with "push"', { timeout: 30_000 }, () => {
   it('records the baseline once, then migrate leaves the existing tables alone', async () => {
     const client = new PGlite();
     // A database made by `drizzle-kit push`: tables exist, no migration history.
