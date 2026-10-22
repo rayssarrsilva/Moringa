@@ -56,7 +56,7 @@ Medido no site no ar e em todo pull request. Última conferência em 22 de outub
 | Cabeçalhos de segurança       | [Mozilla Observatory **A+** (135/100, 12/12 testes)](https://developer.mozilla.org/en-US/observatory/analyze?host=moringa-silk.vercel.app) · [securityheaders.com **A+**](https://securityheaders.com/?q=https%3A%2F%2Fmoringa-silk.vercel.app%2F&followRedirects=on) | Ferramentas externas, no site no ar                                                                                |
 | Varredura de vulnerabilidades | OWASP ZAP baseline: 0 alto · 0 médio · 0 baixo                                                                                                                                                                                                                        | [Plano do ZAP](./.zap/baseline.yaml) em todo PR                                                                    |
 | Código e dependências         | CodeQL `security-extended` · `npm audit`: 0 vulnerabilidades                                                                                                                                                                                                          | [CodeQL](./.github/workflows/codeql.yml), Dependabot                                                               |
-| Testes                        | 173 unitários e de integração · 150 ponta a ponta (celular e desktop)                                                                                                                                                                                                 | Vitest, PGlite (Postgres de verdade), Playwright                                                                   |
+| Testes                        | 179 unitários e de integração · 158 ponta a ponta (celular e desktop) · [ciclo de QA](./docs/qa/TEST-SUMMARY.md)                                                                                                                                                      | Vitest, PGlite (Postgres de verdade), Playwright                                                                   |
 
 ## Telas
 
@@ -158,6 +158,14 @@ Cada artesã recebe o seu próprio pedido. Os pedidos nascem como `pending` e o 
 - Toda mudança passa por uma branch e um pull request. O CI roda lint, tipos, testes unitários, build, E2E, Lighthouse, a varredura do ZAP, `npm audit` e CodeQL em cada um.
 - As mensagens de commit seguem o [Conventional Commits](https://www.conventionalcommits.org/pt-br) e são verificadas pelo commitlint.
 - O trabalho é planejado no [quadro do projeto](https://github.com/users/rayssarrsilva/projects/4) em sprints de uma semana.
+
+## Garantia de qualidade (QA)
+
+Um ciclo completo de QA rodou antes do lançamento: [plano de teste](./docs/qa/TEST-PLAN.md) baseado na ISO/IEC/IEEE 29119-3, [58 casos de teste ligados às histórias de usuário](./docs/qa/TEST-CASES.md), [8 sessões de teste exploratório](./docs/qa/EXPLORATORY-SESSIONS.md), [relatórios de bug](./docs/qa/BUG-REPORTS.md) e um [relatório final frente aos critérios de saída](./docs/qa/TEST-SUMMARY.md). Os documentos estão em inglês, o idioma mais usado em times de QA.
+
+O teste exploratório achou o **BUG-001** (severidade alta): depois que a artesã mudava um preço, uma sacola aberta antes ainda mostrava o valor antigo no botão de pagar. A correção tem duas camadas, a sacola se atualiza sozinha e o servidor se recusa a cobrar um preço que a pessoa não viu, e quatro testes de regressão impedem que ele volte.
+
+O pipeline foi pensado para continuar rápido conforme a suíte cresce: **um único build de produção** compartilhado pelos jobs de E2E, Lighthouse e ZAP, **cache** do build do Next.js e do navegador do Playwright, e os testes E2E **divididos em duas máquinas** (sharding) rodando ao mesmo tempo, com um relatório único no final.
 
 ## Segurança
 

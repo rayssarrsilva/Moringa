@@ -56,7 +56,7 @@ Measured on the live site and on every pull request. Last checked on October 22,
 | Security headers      | [Mozilla Observatory **A+** (135/100, 12/12 tests)](https://developer.mozilla.org/en-US/observatory/analyze?host=moringa-silk.vercel.app) · [securityheaders.com **A+**](https://securityheaders.com/?q=https%3A%2F%2Fmoringa-silk.vercel.app%2F&followRedirects=on) | Third-party scanners on the live site                                                                             |
 | Vulnerability scan    | OWASP ZAP baseline: 0 high · 0 medium · 0 low                                                                                                                                                                                                                        | [ZAP plan](./.zap/baseline.yaml) on every PR                                                                      |
 | Code and dependencies | CodeQL `security-extended` · `npm audit`: 0 vulnerabilities                                                                                                                                                                                                          | [CodeQL](./.github/workflows/codeql.yml), Dependabot                                                              |
-| Tests                 | 173 unit and integration · 150 end-to-end (mobile and desktop)                                                                                                                                                                                                       | Vitest, PGlite (real Postgres), Playwright                                                                        |
+| Tests                 | 179 unit and integration · 158 end-to-end (mobile and desktop) · [QA cycle](./docs/qa/TEST-SUMMARY.md)                                                                                                                                                               | Vitest, PGlite (real Postgres), Playwright                                                                        |
 
 ## Screenshots
 
@@ -156,6 +156,14 @@ Each maker gets their own order. Orders start as `pending` and the webhook moves
 - Every change goes through a branch and a pull request. CI runs lint, types, unit tests, build, E2E, Lighthouse, the ZAP scan, `npm audit` and CodeQL on each one.
 - Commit messages follow [Conventional Commits](https://www.conventionalcommits.org) and are checked by commitlint.
 - Work is planned on the [project board](https://github.com/users/rayssarrsilva/projects/4) in one-week sprints.
+
+## Quality assurance
+
+A full QA cycle ran before release: a [test plan](./docs/qa/TEST-PLAN.md) based on ISO/IEC/IEEE 29119-3, [58 test cases traced to the user stories](./docs/qa/TEST-CASES.md), [8 exploratory sessions](./docs/qa/EXPLORATORY-SESSIONS.md), [bug reports](./docs/qa/BUG-REPORTS.md) and a [summary against the exit criteria](./docs/qa/TEST-SUMMARY.md).
+
+The exploratory sessions found **BUG-001** (severity High): after a maker edited a price, a bag opened earlier still showed the old price on the pay button. It is fixed in two layers, the bag updates itself and the server refuses to charge a price the buyer did not see, and four regression tests keep it from coming back.
+
+The pipeline is built to stay fast as the suite grows: **one production build** shared by the E2E, Lighthouse and ZAP jobs, **caches** for the Next.js build and the Playwright browser, and the E2E suite **split into two shards** that run at the same time and merge into one report.
 
 ## Security
 
