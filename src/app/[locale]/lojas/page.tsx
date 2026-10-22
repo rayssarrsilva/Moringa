@@ -9,8 +9,6 @@ import { alternates } from '@/lib/seo';
 
 type Props = { params: Promise<{ locale: Locale }> };
 
-export const revalidate = 300;
-
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { locale } = await params;
   const t = await getTranslations({ locale, namespace: 'Shops' });

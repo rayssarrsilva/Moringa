@@ -504,5 +504,8 @@
     "count": "{count, plural, one {# saved piece} other {# saved pieces}}",
     "note": "Your favorites stay in this browser, even after you sign in.",
     "loading": "Loading your favorites…"
+  },
+  "Security": {
+    "rateLimited": "Too many attempts in a short time. Wait a few minutes and try again."
   }
 }

@@ -11,8 +11,6 @@ import { regions } from '@/lib/regions';
 
 type Props = { params: Promise<{ locale: Locale }> };
 
-export const revalidate = 300;
-
 export async function generateMetadata({ params }: Props) {
   const { locale } = await params;
   return { alternates: alternates(locale, '') };

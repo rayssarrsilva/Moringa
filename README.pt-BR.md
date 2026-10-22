@@ -6,7 +6,7 @@
 
 [English](./README.md) · **Português**
 
-_Em andamento · dia 11 de 14: gestão de peças e Lighthouse CI_
+_Em andamento · dia 12 de 14: segurança_
 
 </div>
 
@@ -108,9 +108,27 @@ Cada artesã recebe o seu próprio pedido. Os pedidos nascem como `pending` e o 
 
 ### Fluxo de trabalho
 
-- Toda mudança passa por uma branch e um pull request. O CI roda lint, tipos, testes unitários, build e E2E em cada um.
+- Toda mudança passa por uma branch e um pull request. O CI roda lint, tipos, testes unitários, build, E2E, Lighthouse, a varredura do ZAP, `npm audit` e CodeQL em cada um.
 - As mensagens de commit seguem o [Conventional Commits](https://www.conventionalcommits.org/pt-br) e são verificadas pelo commitlint.
 - O trabalho é planejado no [quadro do projeto](https://github.com/users/rayssarrsilva/projects/4) em sprints de uma semana.
+
+## Segurança
+
+Feito com base no [OWASP Top 10](https://owasp.org/Top10/) e no [ASVS nível 2](https://owasp.org/www-project-application-security-verification-standard/). O [modelo de ameaças](./docs/security/THREAT-MODEL.md) lista cada risco, o que o impede e onde isso está no código.
+
+- **Content Security Policy com um nonce novo a cada requisição.** Só rodam os scripts daquela resposta: nada de script inline, `eval`, outras origens ou o site dentro de um iframe.
+- **HSTS (preload), `nosniff`, `Referrer-Policy`, `Permissions-Policy` e `Cross-Origin-Opener-Policy`** em todas as páginas, rotas da API e arquivos.
+- **Limite de tentativas** no login, no checkout, no acompanhamento de pedido sem conta e em toda escrita, guardado no Postgres para valer entre as instâncias serverless. O visitante é identificado por um hash do IP com sal, nunca pelo IP.
+- **Checagem de origem** em toda rota POST, além dos cookies `SameSite` e da checagem que o Next.js já faz nas Server Actions.
+- **Regras no servidor:** preço recalculado, dono conferido em toda consulta, uma única máquina de estados do pedido, webhook da Stripe assinado e idempotente.
+- **Cadeia de dependências:** CodeQL, Dependabot, `npm audit` na CI, GitHub Actions fixadas por commit e token dos workflows só de leitura.
+- Achou um problema? Veja o [SECURITY.md](./SECURITY.md) ou o [`/.well-known/security.txt`](https://datatracker.ietf.org/doc/html/rfc9116).
+
+| Verificação                                                                      | Resultado                  |
+| -------------------------------------------------------------------------------- | -------------------------- |
+| Varredura baseline do [OWASP ZAP](https://www.zaproxy.org), em todo pull request | 0 alto · 0 médio · 0 baixo |
+| `npm audit` (dependências de produção)                                           | 0 vulnerabilidades         |
+| Violações de CSP no navegador (Playwright)                                       | 0                          |
 
 ## Autora
 

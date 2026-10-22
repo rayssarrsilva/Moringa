@@ -1,10 +1,12 @@
 'use server';
 
+import { updateTag } from 'next/cache';
 import { headers } from 'next/headers';
 import { currentViewer } from '@/auth';
-import { catalog } from '@/lib/catalog';
+import { catalog, catalogTag } from '@/lib/catalog';
 import { priceCart, type PricingProblem } from '@/lib/checkout/pricing';
 import { checkoutSchema } from '@/lib/checkout/schema';
+import { limitAction } from '@/lib/security/action-limit';
 import { buildSessionParams } from '@/lib/checkout/stripe-session';
 import {
   attachSession,
@@ -19,7 +21,7 @@ import { stripe, stripeEnabled } from '@/lib/stripe';
 
 export type CheckoutResult =
   | { ok: true; url: string }
-  | { ok: false; error: 'invalid' | 'payment' }
+  | { ok: false; error: 'invalid' | 'payment' | 'rate_limited' }
   | { ok: false; error: 'stock'; problems: PricingProblem[] };
 
 /**
@@ -29,6 +31,7 @@ export type CheckoutResult =
 export async function startCheckout(raw: unknown): Promise<CheckoutResult> {
   const parsed = checkoutSchema.safeParse(raw);
   if (!parsed.success) return { ok: false, error: 'invalid' };
+  if (!(await limitAction('checkout')).ok) return { ok: false, error: 'rate_limited' };
   const input = parsed.data;
 
   const pieces = await catalog().getPiecesBySlugs(input.items.map((i) => i.slug));
@@ -53,6 +56,7 @@ export async function startCheckout(raw: unknown): Promise<CheckoutResult> {
       demoSession,
     );
     await markPaidBySession(demoSession);
+    updateTag(catalogTag);
     return { ok: true, url: `/${input.locale}/pedido/confirmado?demo=1&session_id=${demoSession}` };
   }
 

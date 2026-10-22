@@ -6,19 +6,9 @@ import { JsonLd } from '@/components/json-ld';
 import { ShopProfile } from '@/components/shop-profile';
 import type { Locale } from '@/i18n/routing';
 import { catalog } from '@/lib/catalog';
-import { sampleRepository } from '@/lib/catalog/sample-repository';
 import { alternates, ogLocale, siteUrl, truncate } from '@/lib/seo';
 
 type Props = { params: Promise<{ locale: Locale; slug: string }> };
-
-export const revalidate = 300;
-
-export async function generateStaticParams() {
-  const shops = await catalog()
-    .listShops()
-    .catch(() => sampleRepository.listShops());
-  return shops.map((s) => ({ slug: s.slug }));
-}
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { locale, slug } = await params;

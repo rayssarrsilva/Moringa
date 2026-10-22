@@ -14,21 +14,10 @@ import { catalog } from '@/lib/catalog';
 import { favoriteOf } from '@/lib/favorites/store';
 import { reviewsRepository } from '@/lib/reviews';
 import { ratingSummary } from '@/lib/reviews/rules';
-import { sampleRepository } from '@/lib/catalog/sample-repository';
 import { formatPrice } from '@/lib/format';
 import { alternates, ogLocale, siteUrl, truncate } from '@/lib/seo';
 
 type Props = { params: Promise<{ locale: Locale; slug: string }> };
-
-/** Pages are rebuilt at most every 5 minutes, so stock and prices stay fresh. */
-export const revalidate = 300;
-
-export async function generateStaticParams() {
-  const pieces = await catalog()
-    .listPieces({ sort: 'new' })
-    .catch(() => sampleRepository.listPieces({ sort: 'new' }));
-  return pieces.map((p) => ({ slug: p.slug }));
-}
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { locale, slug } = await params;

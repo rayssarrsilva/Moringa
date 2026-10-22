@@ -1,6 +1,6 @@
 import 'server-only';
 import { cache } from 'react';
-import { dbRepository } from './db-repository';
+import { cachedRepository } from './cached-repository';
 import { sampleRepository } from './sample-repository';
 import type { CatalogRepository } from './types';
 
@@ -9,7 +9,8 @@ import type { CatalogRepository } from './types';
  * the E2E tests in CI and a fresh clone all work without a database.
  */
 export const catalog = cache((): CatalogRepository =>
-  process.env.DATABASE_URL ? dbRepository : sampleRepository,
+  process.env.DATABASE_URL ? cachedRepository : sampleRepository,
 );
 
+export { catalogTag } from './cached-repository';
 export * from './types';

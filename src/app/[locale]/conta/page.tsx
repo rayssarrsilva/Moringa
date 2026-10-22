@@ -4,6 +4,7 @@ import { redirect } from 'next/navigation';
 import { getTranslations, setRequestLocale } from 'next-intl/server';
 import { auth, currentViewer } from '@/auth';
 import { OrdersList } from '@/components/account/orders-list';
+import { RateLimitNotice } from '@/components/rate-limit-notice';
 import { Button } from '@rayssarrsilva/ipe';
 import { Link } from '@/i18n/navigation';
 import type { Locale } from '@/i18n/routing';
@@ -11,7 +12,10 @@ import { buyerOrders } from '@/lib/orders/buyer';
 import { orderKeys } from '@/lib/orders/queries';
 import { signInDemo, signOutAction } from './actions';
 
-type Props = { params: Promise<{ locale: Locale }> };
+type Props = {
+  params: Promise<{ locale: Locale }>;
+  searchParams: Promise<{ limite?: string }>;
+};
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { locale } = await params;
@@ -19,7 +23,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   return { title: t('title'), robots: { index: false } };
 }
 
-export default async function AccountPage({ params }: Props) {
+export default async function AccountPage({ params, searchParams }: Props) {
   const { locale } = await params;
   setRequestLocale(locale);
   const [session, viewer, t] = await Promise.all([
@@ -37,6 +41,7 @@ export default async function AccountPage({ params }: Props) {
           <h1 className="text-heading-md md:text-display">{t('signInTitle')}</h1>
           <p className="max-w-[60ch] text-lg text-text-secondary">{t('signInBody')}</p>
         </div>
+        {(await searchParams).limite && <RateLimitNotice />}
         <section
           aria-labelledby="demo-title"
           className="grid justify-items-start gap-3 rounded-xl border-[1.5px] border-border-subtle p-6 md:p-8"

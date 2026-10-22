@@ -26,3 +26,9 @@ test-results/
 
 # typescript
 *.tsbuildinfo
+
+# OWASP ZAP report
+zap-report.html
+
+# Written by `next dev` for coding assistants
+AGENTS.md

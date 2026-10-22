@@ -6,7 +6,7 @@
 
 **English** · [Português](./README.pt-BR.md)
 
-_In progress · day 11 of 14: managing pieces and Lighthouse CI_
+_In progress · day 12 of 14: security_
 
 </div>
 
@@ -106,9 +106,27 @@ Each maker gets their own order. Orders start as `pending` and the webhook moves
 
 ### Workflow
 
-- Every change goes through a branch and a pull request. CI runs lint, types, unit tests, build and E2E on each one.
+- Every change goes through a branch and a pull request. CI runs lint, types, unit tests, build, E2E, Lighthouse, the ZAP scan, `npm audit` and CodeQL on each one.
 - Commit messages follow [Conventional Commits](https://www.conventionalcommits.org) and are checked by commitlint.
 - Work is planned on the [project board](https://github.com/users/rayssarrsilva/projects/4) in one-week sprints.
+
+## Security
+
+Built against the [OWASP Top 10](https://owasp.org/Top10/) and [ASVS level 2](https://owasp.org/www-project-application-security-verification-standard/). The [threat model](./docs/security/THREAT-MODEL.md) lists each risk, what stops it and where in the code.
+
+- **Content Security Policy with a fresh nonce on every request.** Only this response's scripts run: no inline script, no `eval`, no other origins, no framing.
+- **HSTS (preload), `nosniff`, `Referrer-Policy`, `Permissions-Policy`, `Cross-Origin-Opener-Policy`** on every page, API route and file.
+- **Rate limits** on sign-in, checkout, guest order tracking and every write, stored in Postgres so they hold across serverless instances. The client is a salted hash of the IP, never the IP itself.
+- **Origin checks** on every POST route, on top of `SameSite` cookies and the built-in check of Server Actions.
+- **Server-side rules:** prices re-calculated, ownership checked in every query, one order state machine, signed and idempotent Stripe webhook.
+- **Supply chain:** CodeQL, Dependabot, `npm audit` gate, GitHub Actions pinned by commit, read-only workflow token.
+- Found a problem? See [SECURITY.md](./SECURITY.md) or [`/.well-known/security.txt`](https://datatracker.ietf.org/doc/html/rfc9116).
+
+| Check                                                                  | Result                    |
+| ---------------------------------------------------------------------- | ------------------------- |
+| [OWASP ZAP](https://www.zaproxy.org) baseline scan, every pull request | 0 high · 0 medium · 0 low |
+| `npm audit` (production dependencies)                                  | 0 vulnerabilities         |
+| CSP violations in the browser (Playwright)                             | 0                         |
 
 ## Author
 

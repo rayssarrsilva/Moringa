@@ -5,6 +5,16 @@ on:
   push:
     branches: [main]
 
+# Least privilege: jobs only read the code unless a job asks for more.
+permissions:
+  contents: read
+
+env:
+  # GitHub's runners sometimes drop a download mid-way (ECONNRESET). Retry instead of failing.
+  npm_config_fetch_retries: 5
+  npm_config_fetch_retry_mintimeout: 20000
+  npm_config_fetch_retry_maxtimeout: 120000
+
 concurrency:
   group: ci-${{ github.ref }}
   cancel-in-progress: true
@@ -14,8 +24,8 @@ jobs:
     name: Lint, typecheck, unit tests and build
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4.4.0
+      - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4.4.0
         with:
           node-version-file: .nvmrc
           cache: npm
@@ -32,8 +42,8 @@ jobs:
     name: End-to-end and accessibility tests (Playwright)
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4.4.0
+      - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4.4.0
         with:
           node-version-file: .nvmrc
           cache: npm
@@ -41,7 +51,7 @@ jobs:
       - run: npx playwright install --with-deps chromium
       - run: npm run build
       - run: npm run test:e2e
-      - uses: actions/upload-artifact@v4
+      - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
         if: failure()
         with:
           name: playwright-report
@@ -52,11 +62,51 @@ jobs:
     name: Lighthouse (performance, accessibility, best practices, SEO)
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4.4.0
+      - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4.4.0
         with:
           node-version-file: .nvmrc
           cache: npm
       - run: npm ci
       # Builds for localhost:3300, starts the server, audits 4 pages 3 times, asserts the gates.
       - run: npm run lhci
+
+  zap:
+    name: OWASP ZAP baseline scan
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4.4.0
+      - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4.4.0
+        with:
+          node-version-file: .nvmrc
+          cache: npm
+      - run: npm ci
+      - run: npm run build
+      - name: Start the production build
+        run: |
+          npm run start -- -p 3000 &
+          for i in $(seq 1 30); do curl -sf -o /dev/null http://localhost:3000/pt && exit 0; sleep 2; done
+          exit 1
+      # Spiders the site, runs ZAP's passive rules and fails on any Medium or High alert.
+      # The plan, with its documented exceptions, is in .zap/baseline.yaml.
+      - name: Scan
+        run: |
+          docker run --rm --network host -v "$PWD:/zap/wrk:rw" -u root \
+            ghcr.io/zaproxy/zaproxy:stable zap.sh -cmd -autorun /zap/wrk/.zap/baseline.yaml
+      - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
+        if: always()
+        with:
+          name: zap-report
+          path: zap-report.html
+          retention-days: 14
+
+  audit:
+    name: Dependency audit (production)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4.4.0
+      - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4.4.0
+        with:
+          node-version-file: .nvmrc
+      # Fails on a high or critical vulnerability in what ships to users.
+      - run: npm audit --omit=dev --audit-level=high
