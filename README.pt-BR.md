@@ -4,9 +4,15 @@
 
 **Uma feira online de quem produz à mão no Brasil.**
 
-[English](./README.md) · **Português**
+**[Abrir o site](https://moringa-silk.vercel.app/pt)** · [English](./README.md) · **Português**
 
-_Em andamento · dia 12 de 14: segurança_
+[![CI](https://github.com/rayssarrsilva/Moringa/actions/workflows/ci.yml/badge.svg)](https://github.com/rayssarrsilva/Moringa/actions/workflows/ci.yml)
+[![CodeQL](https://github.com/rayssarrsilva/Moringa/actions/workflows/codeql.yml/badge.svg)](https://github.com/rayssarrsilva/Moringa/actions/workflows/codeql.yml)
+[![Mozilla Observatory: A+](<https://img.shields.io/badge/Mozilla_Observatory-A%2B_(135%2F100)-2e7d4f>)](https://developer.mozilla.org/en-US/observatory/analyze?host=moringa-silk.vercel.app)
+[![Security headers: A+](https://img.shields.io/badge/securityheaders.com-A%2B-2e7d4f)](https://securityheaders.com/?q=https%3A%2F%2Fmoringa-silk.vercel.app%2F&followRedirects=on)
+[![Licença: MIT](https://img.shields.io/badge/licen%C3%A7a-MIT-blue)](./LICENSE)
+
+<img src="./docs/screenshots/home-desktop.jpg" alt="Página inicial da Moringa: o título 'Feito à mão no Brasil, com a história de quem fez', a busca, os filtros por região e as novidades da semana." width="860">
 
 </div>
 
@@ -20,10 +26,45 @@ A moringa é o pote de barro feito à mão que mantém a água fresquinha. Em mu
 
 Uma feira com dois lados, cada um com seu painel:
 
-- **Quem compra** encontra peças por região, material e preço, lê a história de quem fez, paga pelo Stripe (em modo de teste) e acompanha cada etapa do pedido.
-- **Quem produz** abre a loja com a sua história, cadastra peças num formulário guiado e despacha os pedidos. Quando adiciona o código de rastreio, quem comprou vê na hora.
+- **Quem compra** encontra peças por região, material e preço, lê a história de quem fez, salva favoritos, paga pela Stripe (modo de teste, cartão ou Pix), acompanha cada etapa do pedido e avalia o que chegou.
+- **Quem produz** abre a loja com a sua história, cadastra peças num formulário guiado, edita ou pausa cada uma, vê as vendas e despacha os pedidos. Quando adiciona o código de rastreio, quem comprou vê na hora.
 
-Feita com o [Ipê Design System](https://github.com/rayssarrsilva/Ipe).
+Tudo funciona em português e inglês, nos temas claro e escuro, no celular e no computador, pelo teclado ou com leitor de tela.
+
+Feita com o [Ipê Design System](https://github.com/rayssarrsilva/Ipe), também meu.
+
+## Experimente
+
+Sem cadastro: cada conta de demonstração é um clique, e o que você fizer fica só no seu navegador por 7 dias.
+
+| Quem                      | Onde                                                  | O que testar                                                                                                    |
+| ------------------------- | ----------------------------------------------------- | --------------------------------------------------------------------------------------------------------------- |
+| **Marina**, compradora    | [/pt/conta](https://moringa-silk.vercel.app/pt/conta) | Pedidos em todas as etapas, a linha do tempo ao vivo, "Recebi meu pedido", avaliações                           |
+| **Dona Lúcia**, ceramista | [/pt/loja](https://moringa-silk.vercel.app/pt/loja)   | Gráfico de vendas (com versão em tabela), despachar um pedido com código de rastreio, editar ou pausar uma peça |
+| **Uma loja nova**         | [/pt/loja](https://moringa-silk.vercel.app/pt/loja)   | Abrir uma loja do zero e publicar a primeira peça                                                               |
+| **Qualquer pessoa**       | [/pt/pecas](https://moringa-silk.vercel.app/pt/pecas) | Filtrar, pôr na sacola e pagar com o cartão de teste `4242 4242 4242 4242`, qualquer data futura e CVC          |
+
+## Qualidade em números
+
+Medido no site no ar e em todo pull request. Última conferência em 22 de outubro de 2026.
+
+| Área                          | Resultado                                                                                                                                                                                                                                                             | Como é verificado                                                                                                  |
+| ----------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------ |
+| Performance                   | Lighthouse 90–100 no celular (4G lento simulado)                                                                                                                                                                                                                      | [Lighthouse CI](./lighthouserc.cjs), 4 páginas × 3 rodadas, em todo PR                                             |
+| Acessibilidade                | Lighthouse 100 · 0 violações no axe · WCAG 2.2 AA                                                                                                                                                                                                                     | axe em todas as páginas nos dois temas, mais testes de teclado e foco no Playwright; leitor de tela no ciclo de QA |
+| SEO                           | Lighthouse 100                                                                                                                                                                                                                                                        | hreflang, canonical, imagens de Open Graph, sitemap, JSON-LD de produto e avaliações                               |
+| Cabeçalhos de segurança       | [Mozilla Observatory **A+** (135/100, 12/12 testes)](https://developer.mozilla.org/en-US/observatory/analyze?host=moringa-silk.vercel.app) · [securityheaders.com **A+**](https://securityheaders.com/?q=https%3A%2F%2Fmoringa-silk.vercel.app%2F&followRedirects=on) | Ferramentas externas, no site no ar                                                                                |
+| Varredura de vulnerabilidades | OWASP ZAP baseline: 0 alto · 0 médio · 0 baixo                                                                                                                                                                                                                        | [Plano do ZAP](./.zap/baseline.yaml) em todo PR                                                                    |
+| Código e dependências         | CodeQL `security-extended` · `npm audit`: 0 vulnerabilidades                                                                                                                                                                                                          | [CodeQL](./.github/workflows/codeql.yml), Dependabot                                                               |
+| Testes                        | 173 unitários e de integração · 150 ponta a ponta (celular e desktop)                                                                                                                                                                                                 | Vitest, PGlite (Postgres de verdade), Playwright                                                                   |
+
+## Telas
+
+|                                                                                                                                                                                                                   |                                                                                                                                                                                                                        |
+| :---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------: | :--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------: |
+| <img src="./docs/screenshots/piece-desktop.jpg" alt="Página da peça: moringa de barro com preço, estoque, frete, a história de quem fez e avaliações." width="420"><br>Página da peça, com a história de quem fez | <img src="./docs/screenshots/order-timeline-desktop.jpg" alt="Linha do tempo do pedido: pago, em preparo, enviado com código de rastreio, e entregue ainda por vir." width="420"><br>Linha do tempo do pedido, ao vivo |
+|    <img src="./docs/screenshots/maker-panel-dark.jpg" alt="Painel da loja no tema escuro: pedidos para enviar, vendas em 30 dias e gráfico de receita por semana." width="420"><br>Painel da loja, tema escuro    |                              <img src="./docs/screenshots/maker-orders-dark.jpg" alt="Quadro de pedidos da loja no tema escuro, separado por etapa." width="420"><br>Pedidos para enviar                               |
+|                                     <img src="./docs/screenshots/catalog-mobile.jpg" alt="Catálogo no celular: filtros e grade de peças." width="220"><br>Catálogo no celular                                     |                             <img src="./docs/screenshots/checkout-mobile.jpg" alt="Checkout no celular: nome, e-mail e endereço preenchido pelo CEP." width="220"><br>Checkout no celular                              |
 
 ## Descoberta
 
@@ -43,7 +84,15 @@ Os documentos de descoberta estão em inglês, o idioma mais usado em times de p
 
 ## Stack
 
-Next.js (App Router) · TypeScript · Ipê + Tailwind CSS v4 · next-intl · Auth.js · Drizzle + Postgres (Neon) · Zustand · TanStack Query · React Hook Form + Zod · Stripe Checkout · Vitest + Testing Library · Playwright · Lighthouse CI · GitHub Actions · Vercel
+| Camada             | Ferramentas                                                                                 |
+| ------------------ | ------------------------------------------------------------------------------------------- |
+| App                | Next.js 16 (App Router, Server Components, Server Actions) · React 19 · TypeScript (strict) |
+| Interface          | Ipê Design System 2.0 · Tailwind CSS 4 · next-intl (pt-BR, en)                              |
+| Dados              | Postgres no Neon · Drizzle ORM com migrações versionadas · TanStack Query · Zustand         |
+| Formulários        | React Hook Form · Zod (o mesmo schema no navegador e no servidor)                           |
+| Login e pagamentos | Auth.js v5 (JWT) · Stripe Checkout em modo de teste (cartão e Pix) com webhook assinado     |
+| Qualidade          | Vitest · Testing Library · PGlite · Playwright · axe · Lighthouse CI · OWASP ZAP · CodeQL   |
+| Entrega            | GitHub Actions · Dependabot · Vercel                                                        |
 
 ## Rodando na sua máquina
 
@@ -87,13 +136,11 @@ Todo build na Vercel roda `npm run db:migrate` antes do `next build`, então o b
 
 - `npm test` roda testes unitários, de componente e de integração com banco. Os de integração sobem um Postgres de verdade em memória com o [PGlite](https://pglite.dev), criam o schema a partir de `src/db/schema.ts` e rodam as mesmas queries do Drizzle que o app manda para o Neon.
 - `npm run test:e2e` roda o Playwright no celular e no desktop, com checagem de acessibilidade do axe nos dois temas.
-- `npm run lhci` gera o build e roda o [Lighthouse CI](https://github.com/GoogleChrome/lighthouse-ci) três vezes em quatro páginas (início, catálogo, peça e loja em inglês). O pull request falha abaixo destas notas:
+- `npm run lhci` gera o build e roda o [Lighthouse CI](https://github.com/GoogleChrome/lighthouse-ci) três vezes em quatro páginas (início, catálogo, peça e loja em inglês). O pull request falha abaixo destas notas (resultados atuais em [Qualidade em números](#qualidade-em-números)):
 
 | Performance | Acessibilidade | Boas práticas | SEO |
 | :---------: | :------------: | :-----------: | :-: |
 |    ≥ 90     |      100       |     ≥ 95      | 100 |
-
-Última rodada: performance 91–99 (celular, 4G lento simulado), acessibilidade 100, boas práticas 100 e SEO 100 nas quatro páginas.
 
 ### Pagamentos (modo de teste da Stripe)
 
@@ -124,11 +171,13 @@ Feito com base no [OWASP Top 10](https://owasp.org/Top10/) e no [ASVS nível 2](
 - **Cadeia de dependências:** CodeQL, Dependabot, `npm audit` na CI, GitHub Actions fixadas por commit e token dos workflows só de leitura.
 - Achou um problema? Veja o [SECURITY.md](./SECURITY.md) ou o [`/.well-known/security.txt`](https://datatracker.ietf.org/doc/html/rfc9116).
 
-| Verificação                                                                      | Resultado                  |
-| -------------------------------------------------------------------------------- | -------------------------- |
-| Varredura baseline do [OWASP ZAP](https://www.zaproxy.org), em todo pull request | 0 alto · 0 médio · 0 baixo |
-| `npm audit` (dependências de produção)                                           | 0 vulnerabilidades         |
-| Violações de CSP no navegador (Playwright)                                       | 0                          |
+| Verificação                                                                                                                   | Resultado                          |
+| ----------------------------------------------------------------------------------------------------------------------------- | ---------------------------------- |
+| [Mozilla HTTP Observatory](https://developer.mozilla.org/en-US/observatory/analyze?host=moringa-silk.vercel.app), site no ar  | **A+** · 135/100 · 12 de 12 testes |
+| [securityheaders.com](https://securityheaders.com/?q=https%3A%2F%2Fmoringa-silk.vercel.app%2F&followRedirects=on), site no ar | **A+**                             |
+| Varredura baseline do [OWASP ZAP](https://www.zaproxy.org), em todo pull request                                              | 0 alto · 0 médio · 0 baixo         |
+| `npm audit` (dependências de produção)                                                                                        | 0 vulnerabilidades                 |
+| Violações de CSP no navegador (Playwright)                                                                                    | 0                                  |
 
 ## Autora
 
